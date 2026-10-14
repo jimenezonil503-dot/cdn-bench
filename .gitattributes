@@ -3,3 +3,4 @@
 *.jpg binary
 *.webp binary
 *.ico binary
+assets/logos/*.svg -text
