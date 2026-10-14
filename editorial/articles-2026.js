@@ -1,0 +1,14786 @@
+// Compiled from the reviewed bilingual editorial source. Rebuild with tools/build-editorial.mjs.
+export const NEW_ARTICLES = [
+  {
+    "id": "ddos-cdn-providers-2026",
+    "seriesOrder": 1,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN哪家好？2026年主流高防CDN服务商推荐与对比",
+      "en": "Which DDoS-Protected CDN Should You Choose? A 2026 Provider Comparison"
+    },
+    "excerpt": {
+      "zh": "高防CDN的选择取决于业务入口、攻击类型、用户线路与账单边界。本文以公开产品资料比较CDN5、Cloudflare、Akamai、YewSafe等候选，并给出可执行的验证方法。",
+      "en": "Choose a protected CDN around application protocols, attack exposure, user networks and billing boundaries. This comparison distinguishes published capabilities from evidence you still need to collect."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先回答哪家好：看业务能否在攻击中完成交易",
+          "en": "Choose around completed transactions, not advertised capacity"
+        },
+        "paragraphs": [
+          {
+            "zh": "面向中文团队、需要安全加速与协助接入的网站，可以优先把[高防CDN](https://www.cdn5.com/)服务商CDN5放进试用名单；面向全球的标准Web业务，应同时比较Cloudflare；已有复杂企业安全流程的组织，可以评估Akamai与YewSafe。这里的推荐依据是产品定位和运维需求，不是未做过的速度排名。采购者真正需要回答的是：正常用户在攻击期间能否登录、支付、下载，以及故障时由谁处理。",
+            "en": "For Chinese-language teams needing assisted onboarding and protected web delivery, put [CDN5](https://www.cdn5.com/) on the evaluation list. Compare Cloudflare for conventional global web delivery, and assess Akamai or YewSafe when procurement and security operations are more complex. These are workload-based recommendations, not a speed ranking. The outcome that matters is whether legitimate users can finish login, payment and downloads during an incident."
+          },
+          {
+            "zh": "所谓高防并不是一个统一技术认证。有的套餐主要提供HTTP反向代理，有的包括应用层行为分析，有的另售网络清洗。Tbps常用于描述全网资源，Gbps可能是单套餐标示，QPS又是应用请求数量，三个数不能互相替代。必须把保护对象、协议、资源共享方式和超过阈值后的处理写进需求表，才能比较报价。",
+            "en": "Protected CDN is not a uniform certification. Some products proxy HTTP; others add behavioral controls or separate network scrubbing. Aggregate Tbps capacity, a plan’s Gbps allowance and application QPS describe different things. Record the protected protocols, resource-sharing model and behavior above limits before comparing offers."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "四种候选定位，适合四种采购方式",
+          "en": "Four provider positions and procurement models"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN5官网在2026年10月14日查阅时列有标准版每月499美元、商业版每月1999美元，分别标示150Gbps与400Gbps防护，以及30000与50000QPS的CC防御参数。这些是厂商套餐描述，不能理解为任意攻击组合下的业务吞吐保证。其BGP/CN2、多线和WebSocket说明可以作为询价起点，但香港节点分配、运营商覆盖及清洗切换方式仍需书面确认。",
+            "en": "On 14 October 2026, CDN5’s page listed Standard at US$499 per month and Business at US$1,999, with advertised protection values of 150/400 Gbps and CC figures of 30,000/50,000 QPS. These are vendor plan descriptions, not guarantees for arbitrary attack mixes. Ask for the assigned Hong Kong endpoints, carrier coverage and mitigation behavior in writing."
+          },
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)的Pro与Business按月付款标示为25与250美元，年付折算月价不同，企业合同另议。[Akamai应用与API防护](https://www.akamai.com/products/app-and-api-protector)适合需要托管规则和企业支持的采购流程。[YewSafe](https://www.yewsafe.com/)公开介绍SCDN、Anycast CDN和DDoS产品，企业方案需询价；没有同条件测试，不能据此认定它在中国大陆线路上快于其他厂商。",
+            "en": "[Cloudflare’s plans](https://www.cloudflare.com/plans/) list Pro and Business at US$25 and US$250 when billed monthly; annual billing differs. [Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector) addresses enterprise application protection. [YewSafe](https://www.yewsafe.com/) describes SCDN, Anycast CDN and DDoS products, with enterprise pricing by quotation. None of these descriptions proves superior mainland reachability."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-providers-2026-flow.svg",
+            "alt": {
+              "zh": "高防选型的四道门槛示意图：业务协议、可信回源、合法用户、事件恢复",
+              "en": "Four protection selection gates: Protocols, Trusted origin, Legitimate users, Recovery"
+            },
+            "caption": {
+              "zh": "路径示意：业务协议 → 可信回源 → 合法用户 → 事件恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Protocols → Trusted origin → Legitimate users → Recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把缓存、动态请求和非HTTP业务拆开",
+          "en": "Separate cache delivery, dynamic requests and other protocols"
+        },
+        "paragraphs": [
+          {
+            "zh": "静态图片和脚本可以在边缘直接返回，源站得到的是未命中流量；登录、订单和余额查询通常仍要回源。不能把首页图片下载快等同于支付接口受保护。为每条路径记录能否缓存、鉴权依赖、写操作和失败后果，再选择缓存规则与WAF策略。带用户身份的响应默认不要进入共享缓存，除非业务已经证明缓存键和隔离机制正确。",
+            "en": "Images and scripts can be served from cache, while login, orders and balances usually reach the origin. A fast image download says little about payment protection. Classify each route by cacheability, authentication, write behavior and failure consequences before configuring rules. Keep personalized responses out of shared caches unless identity isolation and cache keys have been verified."
+          },
+          {
+            "zh": "游戏TCP、UDP、数据库与邮件服务不是普通HTTP CDN的默认覆盖对象。它们可能需要高防IP、协议代理或网络清洗。使用[厂商目录](providers/)核对产品范围，并结合[三类防护方案比较](article/cdn-ip-scrubbing-comparison/)做架构拆分。DNS保护也要单独确认：解析被打断时，即使Web边缘节点仍可用，新用户也无法找到入口。",
+            "en": "Game TCP/UDP, databases and email are not automatically covered by an HTTP CDN. They may require protected IP forwarding or network scrubbing. Use the [provider directory](providers/) and [architecture comparison](article/cdn-ip-scrubbing-comparison/) to separate these requirements. DNS availability is another independent dependency: functioning edge servers cannot help new users whose resolver cannot locate the service."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "试用时只测有意义的业务样本",
+          "en": "Evaluate representative workloads"
+        },
+        "paragraphs": [
+          {
+            "zh": "测试应分为缓存命中、首次回源和动态接口三组，在相同对象大小、压缩方式和证书条件下比较。大陆用户需覆盖电信、联通、移动，并观察晚高峰；海外业务则按实际订单来源选地区。记录DNS、TCP/TLS、TTFB、总耗时、P95、错误率和命中状态。只比较成功样本会掩盖大量超时，失败请求必须进入可用性统计。",
+            "en": "Compare cache hits, cold fetches and dynamic endpoints separately using identical payloads, compression and certificate settings. Mainland trials should include China Telecom, Unicom and Mobile during busy hours; overseas probes should follow actual customers. Record DNS, connection/TLS time, TTFB, completion time, P95, errors and cache status. Failed requests belong in availability statistics."
+          },
+          {
+            "zh": "Anycast把一个地址从多个地点宣告，BGP决定可达路径，但它不承诺地理距离最近，也不自动避开所有拥塞。运营商互联、IPv6与IPv4路由差异、源站位置都可能改变结果。浏览器跨域计时还受到Timing-Allow-Origin限制，可在[实测工具](lab/)先理解当前网络表现，再设计多地区监测；攻击压测必须取得授权，并事先确认服务商的测试规则。",
+            "en": "Anycast advertises an address from multiple locations, but BGP does not guarantee the nearest or least congested path. Peering, IPv4/IPv6 differences and origin placement matter. Cross-origin browser timing may require Timing-Allow-Origin. Start with the [measurement lab](lab/), then plan regional monitoring. Obtain authorization before any attack simulation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "账单和故障条款决定长期成本",
+          "en": "Billing and incident terms shape the long-term cost"
+        },
+        "paragraphs": [
+          {
+            "zh": "价格不能只写一个月费。应拆出正常流量、攻击流量、请求数、回源带宽、日志、WAF规则、Bot分析、域名数量和紧急支持。按量CDN与包月安全套餐的收费对象不同；[AWS Shield定价](https://aws.amazon.com/shield/pricing/)也说明，安全订阅与承载资源的常规费用需要分别理解。高防值大并不代表流量、请求或所有应用功能无限使用。",
+            "en": "A monthly fee is only part of the cost. Separate legitimate delivery, attack traffic, requests, origin transfer, logs, WAF rules, bot analysis, domain limits and incident support. Metered CDNs and bundled security subscriptions charge for different resources. [AWS Shield pricing](https://aws.amazon.com/shield/pricing/) also illustrates why protection subscriptions and ordinary infrastructure charges must be assessed separately."
+          },
+          {
+            "zh": "合同中要确认超阈值后是否黑洞、封禁多久、谁能解除、是否通知，以及故障日志能保留多久。所谓赔付一般受SLA统计口径、免责条件和申请期限约束，不能拿来替代恢复能力。若业务停机损失远高于月费，应优先购买能联系到的应急支持、可操作的源站隔离和可验证的切换流程。",
+            "en": "Ask whether exceeding limits triggers blackholing, how long it lasts, who can reverse it and what notice is provided. SLA credits depend on measurement definitions and exclusions; they do not replace recovery capability. When downtime is expensive, accessible incident support and a tested failover process deserve more weight than a headline protection number."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防住入口之前，先检查源站是否真的被藏好",
+          "en": "Verify the origin boundary before relying on the edge"
+        },
+        "paragraphs": [
+          {
+            "zh": "只改CNAME并不能隐藏过去公开的IP。历史DNS、邮件共用主机、旧子域名、监控地址以及错误页面，都可能暴露源站。应盘点这些入口，让源站业务端口只接收合法边缘回源，管理面使用独立网络和身份验证。如果回源IP范围会更新，必须有可靠的同步机制，不能一份旧名单永久使用。",
+            "en": "Changing a CNAME does not erase previously exposed IPs. Historical DNS, shared mail hosting, old subdomains, monitoring URLs and error pages can reveal an origin. Restrict business ingress to authorized edge traffic and isolate administration. If trusted proxy ranges change, maintain a reliable update process."
+          },
+          {
+            "zh": "客户端IP也有信任边界：源站不能无条件相信任何请求里的X-Forwarded-For。攻击者直连源站时可以自行填写该头，影响日志和限速；应仅从可信代理读取约定字段，并限制代理链解析方式。相同原则适用于回源鉴权头、证书和Host校验。需要检查的不是后台开关是否打开，而是绕过边缘的请求能否仍被源站接受。",
+            "en": "Do not trust arbitrary X-Forwarded-For values. A direct attacker can supply that header and distort logs or rate controls. Accept client identity only from trusted proxies, with an explicit chain-parsing policy. Apply the same discipline to origin authentication, certificate validation and Host checks. Test whether requests bypassing the edge are actually rejected."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "采购中的常见争议，应怎样留证",
+          "en": "Evidence for common procurement disputes"
+        },
+        "paragraphs": [
+          {
+            "zh": "若防护开启后正常用户频繁被验证，不能只看被拦截请求数判断成功。把真实业务成功率、挑战通过率、客户端类型与客服工单关联起来，核查是否伤及搜索爬虫、企业出口、无浏览器SDK或支付回调。对于API，浏览器验证码往往不是可行的处置方式，宜结合身份、路径成本和业务限额制定规则。",
+            "en": "Blocked-request counts do not establish successful protection. Correlate legitimate transaction completion, challenge outcomes, client types and support tickets. Check search crawlers, corporate egress, browserless SDKs and payment callbacks. APIs often need identity- and cost-aware rules rather than browser CAPTCHA."
+          },
+          {
+            "zh": "遇到超时则保存时间段、地区、运营商、请求ID、状态码及DNS结果，让厂商能定位到边缘和回源链路。IP地址等日志可能涉及个人信息，应限制保存期限和访问权限。试用到期前约定验收标准，明确哪个问题会导致不采购、哪个属于可修复配置。这样的记录比笼统评价某家稳定或不稳定更适合后续审计，也能避免双方把源站故障和线路故障混在一起。",
+            "en": "For failures, preserve timestamps, regions, carriers, request IDs, status codes and DNS answers so the provider can trace edge and origin behavior. Limit access and retention for logs containing personal data. Agree acceptance criteria before the trial ends, distinguishing disqualifying gaps from fixable configuration issues. This evidence is more useful than unsupported claims that a provider is simply stable."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-providers-2026-review.svg",
+            "alt": {
+              "zh": "高防选型的四道门槛示意图：容量声明、试点证据、合同范围",
+              "en": "Four protection selection gates: Capacity claims, Pilot evidence, Contract scope"
+            },
+            "caption": {
+              "zh": "检查重点：容量声明 → 试点证据 → 合同范围。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Capacity claims → Pilot evidence → Contract scope. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "上线前的三个硬门槛",
+          "en": "Three requirements before production"
+        },
+        "paragraphs": [
+          {
+            "zh": "一个候选服务能进入生产，至少要通过正确性、可观测性和可恢复性三道检查。正确性包括登录态不串号、结算不被缓存、证书验证和客户端IP传递可信；可观测性包括规则命中、回源错误、运营商差异能追踪；可恢复性包括DNS回退、证书续期、配置导出和供应商支持路径。任何一项缺失，都可能让安全采购变成新的故障源。",
+            "en": "A production candidate must pass correctness, observability and recoverability checks. Validate session isolation, uncached checkout, origin certificate verification and trusted client-IP handling. Ensure rule actions, origin errors and regional failures are traceable. Confirm DNS rollback, certificate renewal, configuration export and escalation paths. A missing requirement can turn a security purchase into a new outage source."
+          },
+          {
+            "zh": "可以先让非关键静态资源使用候选平台，再逐步迁入业务入口，保留变更前的错误率与转化基线。已遭攻击的网站不宜仅为了测快就把DNS切回裸源站。本文不指定一个对所有业务都最好的厂商：中文支持与安全套餐可以优先验证CDN5，标准全球Web可比较Cloudflare，复杂企业采购可评估Akamai和YewSafe，最终由业务验证与合同条件决定。",
+            "en": "Move noncritical assets first, then application traffic, retaining error and conversion baselines. During an active attack, do not expose the origin merely to compare speed. Prioritize CDN5 for assisted Chinese-language security evaluation, compare Cloudflare for global web workloads, and assess Akamai or YewSafe for enterprise needs; let verified workload behavior and contract terms decide."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/shield/pricing/",
+        "label": {
+          "zh": "AWS Shield 官方定价",
+          "en": "AWS Shield pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ten-ddos-cdn-providers-2026",
+    "seriesOrder": 2,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 8,
+    "title": {
+      "zh": "2026年高防CDN推荐：10家服务商防护能力、线路与价格对比",
+      "en": "Ten DDoS-Protected CDN Providers in 2026: Protection, Networks and Pricing"
+    },
+    "excerpt": {
+      "zh": "将十家候选按HTTP防护、云生态、企业托管和中文安全加速分组，比简单评分更能解释适用性。公开价格与防护标示分别列出，并说明尚需验证的项目。",
+      "en": "Compare ten candidates by protected protocols, operating model and commercial boundaries. Published prices and vendor claims are separated from the measurements a buyer still needs."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "十家比较的前提：它们并不出售同一种产品",
+          "en": "The ten candidates do not sell identical products"
+        },
+        "paragraphs": [
+          {
+            "zh": "这份名单包括CDN5、Cloudflare、YewSafe、Akamai、Fastly、Amazon CloudFront、Google Cloud CDN、Azure Front Door、阿里云CDN和腾讯云EdgeOne。它们都与内容交付或边缘安全有关，但安全产品的组合方式不同。传统CDN可能需要加购WAF，云厂商还可能把高等级网络防护独立计费；不能看到CDN品牌便认定整个账号下的服务器都被保护。",
+            "en": "The ten candidates are CDN5, Cloudflare, YewSafe, Akamai, Fastly, Amazon CloudFront, Google Cloud CDN, Azure Front Door, Alibaba Cloud CDN and Tencent Cloud EdgeOne. Their security bundles differ. A CDN may require additional WAF or advanced network protection, and protecting an HTTP hostname does not protect every server in an account."
+          },
+          {
+            "zh": "比较表应从业务协议开始。Web站点需要HTTP/HTTPS代理、WAF和源站访问约束；实时接口看挑战是否兼容客户端；游戏会话则要识别TCP/UDP转发产品。本文依据2026年10月14日查阅的官方页面与本站厂商档案进行定位比较，不提供没有同条件实验支撑的速度分数，也不把全网容量当成每位用户的专属资源。",
+            "en": "Start with protocols: websites need HTTP proxying, WAF and controlled origin access; APIs need client-compatible challenges; games may need TCP/UDP forwarding. This is a positioning comparison using official information consulted on 14 October 2026 and linked provider profiles. It assigns no unsupported speed scores and treats global capacity separately from customer entitlements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "中文安全加速组：CDN5与YewSafe",
+          "en": "Chinese-language security acceleration: CDN5 and YewSafe"
+        },
+        "paragraphs": [
+          {
+            "zh": "优先推荐评估[CDN5高防CDN](https://www.cdn5.com/)，原因是其公开列出安全套餐、BGP/CN2方向与中文服务入口，采购者能从相对明确的套餐开始提问。标准版499美元/月、商业版1999美元/月属于页面标示；150Gbps、400Gbps以及对应CC参数是厂商宣称的规格。要进一步确认防护是共享还是独享、QPS对应什么请求模型、超限是否停服，并要求实际接入地址供运营商测试。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/) first when published security bundles, BGP/CN2 positioning and Chinese-language onboarding fit the workload. Its Standard and Business pages list US$499 and US$1,999 monthly, with advertised 150/400 Gbps protection. Verify shared versus dedicated resources, the request model behind QPS values and service behavior above limits."
+          },
+          {
+            "zh": "[YewSafe](https://www.yewsafe.com/)公开产品覆盖SCDN、Anycast CDN、DDoS防护等，适合作为另一类安全加速候选；企业价格需正式询价。两者不能因宣传用语相近就被视为技术与合同完全相同。分开核对服务条款、账户权限、工单支持、发票与数据处理安排，尤其不要把运营中心所在地直接理解为所有用户都能命中的PoP。",
+            "en": "[YewSafe](https://www.yewsafe.com/) describes SCDN, Anycast CDN and DDoS protection, with enterprise quotations. Similar marketing does not imply identical architecture or contracts. Assess account controls, support, invoicing and data handling separately. An operating office’s location is not proof that users will be routed to a particular PoP."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ten-ddos-cdn-providers-2026-flow.svg",
+            "alt": {
+              "zh": "十家候选的比较顺序示意图：硬性需求、产品初筛、同条件试点、采购决定",
+              "en": "Comparing ten candidates: Requirements, Product shortlist, Comparable pilot, Decision"
+            },
+            "caption": {
+              "zh": "路径示意：硬性需求 → 产品初筛 → 同条件试点 → 采购决定。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Requirements → Product shortlist → Comparable pilot → Decision. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "十家候选的对照表",
+          "en": "A practical ten-provider comparison"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表比较采购与技术边界，不按防护强弱排序。云厂商的安全服务可能独立购买；企业产品也可能通过合同组合交付。表中的核查项目是采购动作，不能当作厂商缺少该功能的证明。",
+            "en": "The table compares procurement and technical boundaries without ranking mitigation strength. Cloud security services may be separate subscriptions, while enterprise contracts can bundle capabilities. Verification questions are purchasing tasks, not proof that a provider lacks a feature."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "候选定位与验收问题；价格以对应官方页面及正式报价为准",
+            "en": "Candidate positioning and acceptance questions; confirm prices on the linked sources"
+          },
+          "columns": [
+            {
+              "zh": "候选",
+              "en": "Candidate"
+            },
+            {
+              "zh": "公开定位与采购重点",
+              "en": "Published position and procurement focus"
+            },
+            {
+              "zh": "上线前必须核实",
+              "en": "Verify before production"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "官网列有高防CDN、安全套餐及BGP/CN2方向，适合从中文接入支持和包月预算开始评估。",
+                "en": "Published security bundles and BGP/CN2 positioning; evaluate assisted onboarding and monthly budgets."
+              },
+              {
+                "zh": "确认分配节点、清洗范围、回源保护、超阈值处理与WebSocket套餐边界，不能把套餐标示当实测成绩。",
+                "en": "Confirm assigned endpoints, mitigation scope, origin security, over-limit handling and WebSocket plan eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "站点套餐结合内容分发与基础安全管理，公开月付、年付和合同采购方式；高级功能按套餐核对。",
+                "en": "Website delivery and security with monthly, annual and contract plans; check advanced feature eligibility."
+              },
+              {
+                "zh": "API挑战兼容性、Bot能力与日志权限分开确认，中国网络不是全球套餐默认自动获得的节点。",
+                "en": "Verify API challenge compatibility, bots and log access; China Network is a separate offering."
+              }
+            ],
+            [
+              {
+                "zh": "YewSafe",
+                "en": "YewSafe"
+              },
+              {
+                "zh": "提供SCDN、Anycast CDN、DDoS等公开产品入口，企业采购应以正式方案说明具体资源与支持责任。",
+                "en": "Published SCDN, Anycast CDN and DDoS products; define resources and support in the proposal."
+              },
+              {
+                "zh": "不能从宣传容量推断专属防护，要求地区清单、演练条件、故障工单升级及报价有效期。",
+                "en": "Confirm regions, resource entitlement, exercise conditions, escalation and quote validity."
+              }
+            ],
+            [
+              {
+                "zh": "Akamai",
+                "en": "Akamai"
+              },
+              {
+                "zh": "应用与API安全适合企业托管策略评估，内容交付、安全产品及服务响应可按合同配置组合。",
+                "en": "Enterprise application/API security, with contract-specific delivery and managed-service combinations."
+              },
+              {
+                "zh": "明确安全产品名称和受保护资产，核对托管响应职责、规则变更权限及回源连接的安排。",
+                "en": "Define protected assets, managed response responsibilities, rule controls and origin connectivity."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "重视可编程交付与实时运维，公开分发、请求、DDoS及其他安全功能的不同计费项目。",
+                "en": "Programmable delivery and operational visibility; delivery, requests and security have distinct pricing components."
+              },
+              {
+                "zh": "按所需安全组件询价，评估失效操作与日志延迟，别把分发免费额度理解成全部安全功能免费。",
+                "en": "Price required security components and evaluate purge/log behavior; delivery allowances do not make all security free."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront",
+                "en": "CloudFront"
+              },
+              {
+                "zh": "适合AWS资源集成，固定月费与按量方案并存，安全功能、日志和数据额度需按选定方案阅读。",
+                "en": "AWS integration with flat-rate and metered choices; read security, log and usage terms for the chosen plan."
+              },
+              {
+                "zh": "确认分发级别保护与账号资源区别，评估S3、负载均衡和源站出网是否还有独立费用。",
+                "en": "Distinguish distribution protection from account-wide assets and include S3, load-balancer and origin fees."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN",
+                "en": "Google Cloud CDN"
+              },
+              {
+                "zh": "围绕Google云负载均衡与缓存交付设计，缓存出网、填充和查找计费需要分别建模。",
+                "en": "Google Cloud load-balancing and cache delivery with separate delivery, fill and lookup billing."
+              },
+              {
+                "zh": "Cloud Armor的政策范围、资源适用性和网络层防护条件另查，香港计费区域不等于所有请求固定落点。",
+                "en": "Verify Cloud Armor policy scope and network eligibility; a Hong Kong billing region is not a routing guarantee."
+              }
+            ],
+            [
+              {
+                "zh": "Azure Front Door",
+                "en": "Azure Front Door"
+              },
+              {
+                "zh": "适合微软云应用的全球HTTP入口，Standard与Premium在安全及源站集成方面存在选择条件。",
+                "en": "A global HTTP entrance for Azure applications; Standard/Premium security and origin integration differ."
+              },
+              {
+                "zh": "按实际SKU确认WAF、私有回源和地域费率，验证故障切换是否符合应用会话和状态要求。",
+                "en": "Verify WAF, private origins, regional rates and failover behavior for application state."
+              }
+            ],
+            [
+              {
+                "zh": "阿里云CDN",
+                "en": "Alibaba Cloud CDN"
+              },
+              {
+                "zh": "可结合阿里云资源与区域交付需求选择，标准分发能力和额外安全服务应分项核对。",
+                "en": "Evaluate alongside Alibaba Cloud resources and regional delivery needs; separate standard CDN from security add-ons."
+              },
+              {
+                "zh": "区分大陆和境外服务范围、备案条件、计费周期与安全产品，避免用普通CDN承诺替代高防合同。",
+                "en": "Check mainland/offshore scope, ICP conditions, billing and the actual protection product."
+              }
+            ],
+            [
+              {
+                "zh": "腾讯云EdgeOne",
+                "en": "Tencent Cloud EdgeOne"
+              },
+              {
+                "zh": "边缘加速、安全与计算的相关产品体系，采购时需要明确可用地域、套餐功能与使用量范围。",
+                "en": "Related edge acceleration, security and compute capabilities; define region, feature and usage scope."
+              },
+              {
+                "zh": "HTTP与四层业务分别验收，确认免费或付费计划的地域条件、请求费用以及攻击后的处置方式。",
+                "en": "Accept HTTP and layer-4 workloads separately; verify region, request charges and incident handling."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "全球Web与企业组：Cloudflare、Akamai、Fastly",
+          "en": "Global web and enterprise platforms"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare](https://www.cloudflare.com/plans/)把CDN与基础DDoS防护纳入站点套餐，Pro和Business月付页面分别标示25与250美元；高级Bot、企业功能和中国网络需按产品条件确认。它适合希望用统一入口管理常见Web规则的团队，但不能因此承诺大陆三网访问一致，更不能把套餐价格当成所有安全产品的总价。",
+            "en": "[Cloudflare](https://www.cloudflare.com/plans/) bundles CDN and baseline DDoS protection into website plans. Its monthly Pro/Business prices are US$25/US$250; advanced bots, contract features and China Network require separate checks. A unified dashboard does not establish equal performance across mainland carriers or include every security product."
+          },
+          {
+            "zh": "[Akamai](providers/akamai/)的应用与API防护适合企业采购和托管安全需求，应询价确认产品组合。Fastly偏重可编程交付、实时配置与边缘可观测性，[其价格页](https://www.fastly.com/pricing)把分发、DDoS、WAF等项目分开列示；免费额度与用量收费不能直接和包月高防值相比。需要频繁发布规则或缓存失效的业务，应把变更传播和回退测试纳入评估。",
+            "en": "[Akamai](providers/akamai/) suits enterprise application protection and managed security procurement. Fastly emphasizes programmable delivery and observability. [Its pricing page](https://www.fastly.com/pricing) lists delivery and security components separately; allowances cannot be compared directly with a bundled protection ceiling. Test configuration propagation, purging and rollback if rapid changes matter."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "云生态组：五家服务与各自的依赖",
+          "en": "Five cloud ecosystem candidates and their dependencies"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Amazon CloudFront](https://aws.amazon.com/cloudfront/pricing/)既有按量计费，也公开列出按分发配置的固定月费方案；查阅时Free、Pro、Business、Premium分别为0、15、200、1000美元/月，包含内容交付与指定安全功能，额度和适用条件必须一起阅读。不要沿用早年的免费层规则给2026年新套餐估价。[Google Cloud CDN](https://cloud.google.com/cdn/pricing)拆分缓存出网、缓存填充与查找请求，Cloud Armor的适用资源和订阅另查。",
+            "en": "[CloudFront](https://aws.amazon.com/cloudfront/pricing/) offers usage-based billing and flat-rate plans per distribution. At consultation, Free, Pro, Business and Premium were listed at US$0, US$15, US$200 and US$1,000 monthly, with allowances and conditions. Do not apply an old free-tier rule to a new plan. [Google Cloud CDN](https://cloud.google.com/cdn/pricing) separates cache delivery, fill and lookups; Cloud Armor eligibility is distinct."
+          },
+          {
+            "zh": "[Azure Front Door](providers/azure-front-door/)与微软云的路由、安全及源站集成相关，Standard与Premium的功能边界需逐项比较。[阿里云CDN](providers/alibaba-cloud-cdn/)适合结合其资源及区域计费评估，安全增强另按产品确认。[腾讯云EdgeOne](providers/tencent-edgeone/)则将边缘加速、安全和计算放在相关产品体系中，需明确套餐地域、用量和防护对象。已有哪家云资源，会显著影响迁移与运维成本。",
+            "en": "[Azure Front Door](providers/azure-front-door/) integrates routing and security with Azure, with Standard/Premium differences. [Alibaba Cloud CDN](providers/alibaba-cloud-cdn/) requires region and security-product checks. [Tencent Cloud EdgeOne](providers/tencent-edgeone/) combines related edge capabilities, subject to plan region and usage boundaries. Existing cloud infrastructure strongly influences operational and migration costs."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "线路比较要留下能复查的证据",
+          "en": "Make network comparisons reproducible"
+        },
+        "paragraphs": [
+          {
+            "zh": "把各家的测试对象放到同一源站，以相同响应头、大小和版本提供服务，分别测热缓存、冷缓存和动态请求。按用户来源地区设置权重，而不是让自己办公室的一条宽带决定采购。网络样本要覆盖晚高峰，统计P50与P95并同时保留超时率、HTTP错误与挑战结果。少量成功请求的平均值很漂亮，仍可能掩盖特定运营商的失败。",
+            "en": "Serve identical objects and headers from one origin, separating hot cache, cold fetch and dynamic traffic. Weight regions by customers rather than one office broadband connection. Include busy-hour P50/P95, timeouts, HTTP failures and challenge outcomes. An attractive average of successful requests can hide a carrier-specific outage."
+          },
+          {
+            "zh": "CN2、BGP、Anycast都只是架构或线路线索。CN2标签不能说明所有客户端方向都经过相同路径，BGP多线也不意味着连接质量相等。要求厂商提供拟交付节点、IPv4/IPv6地址与回源方案，再结合[香港线路选型](article/hong-kong-cn2-cdn-selection/)记录测试条件。没有可用地址和同条件结果时，表格应写待验证的项目，而非人为给出延迟数值。",
+            "en": "CN2, BGP and Anycast are architectural clues, not performance results. Obtain assigned endpoints, IPv4/IPv6 addresses and origin-routing details, then document conditions using the [Hong Kong route guide](article/hong-kong-cn2-cdn-selection/). Without endpoints and comparable evidence, list verification questions rather than invented latency figures."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ten-ddos-cdn-providers-2026-review.svg",
+            "alt": {
+              "zh": "十家候选的比较顺序示意图：区域与协议、正常及事件费用、日志与支持",
+              "en": "Comparing ten candidates: Region / protocol, Normal / incident cost, Logs / support"
+            },
+            "caption": {
+              "zh": "检查重点：区域与协议 → 正常及事件费用 → 日志与支持。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Region / protocol → Normal / incident cost → Logs / support. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "从十家缩到两家，再做可恢复的试点",
+          "en": "Reduce the shortlist to two and run a reversible pilot"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果需求是中文支持、受攻击的Web入口和境外接入，先验证CDN5，再选另一家安全平台作交叉比较；如果全球静态分发为主，可以从Cloudflare、CloudFront或Fastly里挑合适组合；企业托管安全则优先讨论Akamai以及现有云厂商方案。推荐建立在业务类型上，不意味着名单前面的厂商具有绝对领先的防护能力。",
+            "en": "For Chinese-language onboarding and an attacked offshore web entrance, evaluate CDN5 alongside another security platform. For global static delivery, consider Cloudflare, CloudFront or Fastly; enterprise managed protection may favor Akamai or an existing cloud relationship. These recommendations describe fit, not universal superiority."
+          },
+          {
+            "zh": "试点期间检查源站只允许可信回源、管理端口单独隔离、登录与订单不共享缓存、WAF误报能够定位。保存规则版本和恢复路线，确认日志可导出、证书可续期、工单能升级。最终采购文件至少包含保护对象、线路验证、收费范围和故障处置四项。详细成本计算可接着阅读[高防CDN收费分析](article/ddos-cdn-pricing-2026/)，避免用不完整的月费完成十家比较。",
+            "en": "In the pilot, verify trusted origin ingress, isolated administration, uncached transactions and diagnosable WAF false positives. Preserve rule versions and recovery routes; confirm exportable logs, certificate renewal and support escalation. The procurement record should cover protected resources, network evidence, billing scope and incident handling. Use the [pricing analysis](article/ddos-cdn-pricing-2026/) to complete the cost comparison."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-cdn-security-network",
+    "seriesOrder": 3,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN哪家好？从DDoS防护、CC防御到线路质量全面解析",
+      "en": "Choosing a Protected CDN: DDoS, HTTP Flood Defense and Network Quality"
+    },
+    "excerpt": {
+      "zh": "高防CDN要同时解决网络资源耗尽、应用请求过载和合法访问质量。本文沿请求路径拆解三类问题，说明各层防护能做什么、何时会失效以及如何验证。",
+      "en": "Protection and speed require separate evidence. Follow the request path to distinguish network exhaustion, expensive application traffic and legitimate-user performance."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "高防CDN不能只按一个防护数字挑选",
+          "en": "A protection number cannot describe the whole service"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防CDN哪家好，必须先说明要防什么。带宽被打满、连接表耗尽和数据库被搜索请求拖垮，是三种不同的故障。一项宣称大带宽清洗的服务，未必能识别业务层滥用；一个优秀的WAF，也无法在源站上游链路已经饱和时凭空恢复带宽。采购时应画出DNS、边缘、回源和应用之间的路径，再标记每个环节的控制能力。",
+            "en": "Start by identifying the failure: saturated bandwidth, exhausted connection state or expensive queries are different problems. Large network scrubbing capacity does not establish application-abuse detection. A WAF at the origin cannot restore a saturated upstream link. Map DNS, edge, origin transport and application controls before buying."
+          },
+          {
+            "zh": "对于中文网站，可以优先评估[CDN5高防CDN](https://www.cdn5.com/)的安全套餐与支持模式，再用本文的方法验证。它的公开参数是合同讨论的起点，不是对未知攻击的万能承诺。Cloudflare、Akamai等平台也应按具体产品、套餐和受保护对象比较。没有相同业务请求和线路条件的测试，单凭宣传容量给厂商排性能名次没有依据。",
+            "en": "For Chinese-language websites, evaluate [CDN5](https://www.cdn5.com/) as a candidate, then verify it using the criteria below. Published figures start a contract discussion; they do not promise protection against every attack. Apply the same product- and asset-specific evaluation to Cloudflare and Akamai. Marketing capacity cannot justify a performance ranking."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "L3和L4：保护带宽、连接与协议状态",
+          "en": "Layers 3 and 4: bandwidth, connections and protocol state"
+        },
+        "paragraphs": [
+          {
+            "zh": "网络层攻击常以大量数据包争夺链路资源，传输层攻击也可能利用TCP连接状态等资源。防护发生在哪里很关键：在边缘或上游完成过滤，和在已经拥堵的源站本机过滤，效果不同。[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)将网络层和HTTP层防护分别说明，采购表也应维持这种区分，别把所有攻击都写成一个CC开关。",
+            "en": "Network attacks can consume bandwidth and packet-processing resources; transport attacks can exhaust connection state. Upstream filtering differs from filtering on an origin whose link is already congested. [Cloudflare’s DDoS documentation](https://developers.cloudflare.com/ddos-protection/) separates network and HTTP protection, and your procurement matrix should do the same."
+          },
+          {
+            "zh": "关注过滤后合法流量的交付路径、回源带宽上限以及黑洞机制。清洗切换可能改变路由和源地址，长连接也可能重建。需要厂商说明哪些协议、端口和地址受到保护，哪些只属于普通交付。对外展示的全网容量不是你独享的线路保证，防护节点的余量、调度策略以及合同响应都会影响事件结果。",
+            "en": "Ask about legitimate traffic delivery after filtering, origin bandwidth limits and blackholing. Mitigation changes may alter routes and reconnect long-lived sessions. Define the protected protocols, ports and addresses. Aggregate network capacity is not a dedicated entitlement; available resources, scheduling and contract response affect the outcome."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-security-network-flow.svg",
+            "alt": {
+              "zh": "分层防护与请求路径示意图：用户请求、网络缓解、应用规则、源站预算",
+              "en": "Layered protection path: Client request, Network mitigation, Application rules, Origin budget"
+            },
+            "caption": {
+              "zh": "路径示意：用户请求 → 网络缓解 → 应用规则 → 源站预算。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Client request → Network mitigation → Application rules → Origin budget. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "L7和CC：识别昂贵请求，而非追求最大拦截数",
+          "en": "Layer 7: identify costly requests"
+        },
+        "paragraphs": [
+          {
+            "zh": "CC通常指向应用层资源消耗，HTTP Flood则描述大量HTTP请求的流量形态，两者可能重叠，但并非每个高QPS事件都是恶意。一条复杂搜索的成本可能远高于一张缓存图片；大量正常促销用户也会形成突发。应按路径、方法、身份、会话与响应成本区分请求，结合错误率和应用耗时判断，不宜只按IP数量下结论。",
+            "en": "CC commonly describes application resource exhaustion; HTTP Flood describes a high-volume HTTP traffic pattern. Neither term proves that every high-QPS event is hostile. An expensive search may cost far more than a cached image. Classify paths, methods, identities, sessions and response costs alongside application latency and errors."
+          },
+          {
+            "zh": "[速率限制规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)和[Bot管理](https://developers.cloudflare.com/bots/)可以形成不同控制层：限速约束频率，Bot能力帮助识别自动化，WAF处理攻击特征。浏览器挑战不能直接套给支付回调或移动SDK。规则先观察，再小范围启用，并为可信回调设置可审计的身份验证，而不是简单把一个来源永久放行。",
+            "en": "[Rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) constrain frequency, while [bot management](https://developers.cloudflare.com/bots/) addresses automation and WAF rules inspect attack patterns. Browser challenges may break payment callbacks or SDKs. Observe before enforcing, roll out narrowly and authenticate trusted callbacks rather than permanently exempting an address without accountability."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "线路质量为什么会让同一套餐表现不同",
+          "en": "Why the same plan behaves differently across networks"
+        },
+        "paragraphs": [
+          {
+            "zh": "用户到边缘、边缘到源站是两段独立链路。香港节点距离大陆较近，却仍可能受到运营商互联、跨境出口、晚高峰拥塞以及DNS调度影响。BGP是一种路由机制；Anycast是一种地址宣告和选路安排；CN2是线路线索。任何一个词都不能代替电信、联通、移动各自的实际访问证据。",
+            "en": "User-to-edge and edge-to-origin paths are independent. Hong Kong proximity does not remove peering, border-routing, congestion or DNS effects. BGP, Anycast and CN2 describe different network properties, not measured performance for Telecom, Unicom and Mobile subscribers."
+          },
+          {
+            "zh": "同时测IPv4与IPv6，因为地址族可能命中不同节点或路由。看HTTPS请求的成功率、P95与长连接稳定性，不只看ping。出现单一运营商超时，先保存解析结果、TCP连接与TLS握手阶段，再决定是否更换线路。关于所谓移动墙的排查，可阅读[移动网络访问异常指南](article/china-mobile-cdn-troubleshooting/)，不要把一切故障都理解为同一种拦截。",
+            "en": "Test IPv4 and IPv6 separately, using HTTPS success rates, P95 and connection stability rather than ping alone. For carrier-specific failures, retain DNS answers and connection/TLS stages before changing routes. The [Mobile network troubleshooting guide](article/china-mobile-cdn-troubleshooting/) explains why different failures should not be reduced to a single blocking mechanism."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "HTTP/3能改善什么，又不能改善什么",
+          "en": "What HTTP/3 can and cannot improve"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 9114](https://www.rfc-editor.org/rfc/rfc9114.html)定义的HTTP/3运行在QUIC上，减少不同流之间受到传输层队头阻塞的影响，但这不等于所有请求都会更快。终端支持、UDP可达性、丢包、握手和回源协议都会影响收益。不能把边缘支持HTTP/3当成源站也走同一协议，更不能把协议升级当成跨境线路拥塞的修复。",
+            "en": "[RFC 9114](https://www.rfc-editor.org/rfc/rfc9114.html) defines HTTP/3 over QUIC. It reduces transport-level interference between streams, but gains depend on clients, UDP reachability, loss and connection setup. Edge HTTP/3 support does not establish the origin protocol or remove congested cross-border routes."
+          },
+          {
+            "zh": "部署应保留合理的协议回退，并记录不同协议下的成功率与业务完成时间。如果某些网络的UDP路径异常，先核查连接建立与回退行为。TLS握手优化也不能减少数据库本身的计算成本。对高防采购而言，协议支持属于兼容性与性能验证项，网络清洗、HTTP行为过滤和业务限额仍然各自承担不同职责。",
+            "en": "Keep fallback behavior and compare success rates and business completion time by protocol. If UDP is unreliable on a network, inspect connection and fallback behavior. TLS improvements do not reduce database processing. Protocol support is a compatibility and performance criterion; network filtering and application controls remain separate requirements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存命中率高，不等于动态业务安全",
+          "en": "Cache hits do not establish transaction protection"
+        },
+        "paragraphs": [
+          {
+            "zh": "边缘缓存能减少回源压力，但命中率的分母必须写清，是请求命中还是字节命中，是否只统计可缓存资源。静态站可能依靠缓存承担大部分访问，API站则常常需要动态回源。给所有URL统一长缓存，可能造成个人信息泄露和价格过期；完全关闭缓存，又可能让每次请求都进入昂贵的应用计算。",
+            "en": "State whether hit ratio measures requests or bytes and whether it covers only cacheable objects. Static sites benefit strongly from edge caching; dynamic APIs still need origin work. Blanket long TTLs can leak personal data or serve stale prices, while disabling all caching pushes every request into application processing."
+          },
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)理解共享缓存与响应控制，列出版本化静态资源、匿名页面、登录接口和写操作的不同策略。使用请求合并、合适的过期时间与可控的失效操作，减少缓存穿透和同时回源。想区分速度问题与配置问题，可以结合[高防CDN性能分析](article/ddos-cdn-performance/)检查热缓存、冷缓存和动态请求。",
+            "en": "Use [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) to distinguish versioned assets, anonymous pages, authenticated endpoints and writes. Appropriate TTLs, request coalescing and controlled purging can reduce miss storms. The [performance guide](article/ddos-cdn-performance/) separates hot cache, cold fetch and dynamic behavior."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "回源保护是高防方案的验收项",
+          "en": "Origin protection belongs in acceptance testing"
+        },
+        "paragraphs": [
+          {
+            "zh": "攻击者若能直连源站，就可以绕过边缘策略。需要检查旧解析、备用子域名、共用服务与开放管理端口，业务入口尽量只允许可信回源。回源TLS应校验证书与主机名，不能为了消除错误就永久关闭验证；客户端IP只从可信代理读取，避免伪造请求头导致限速和日志判断失真。",
+            "en": "A reachable origin lets attackers bypass edge policies. Audit historical DNS, alternate hostnames, shared services and management ports. Restrict ingress to trusted origin traffic, verify TLS certificates and hostnames, and accept client-IP headers only from trusted proxies."
+          },
+          {
+            "zh": "限制源站入口时要保留合法健康检查、证书验证和紧急管理路径，并确保名单更新不会断流。应用仍需要并发控制、数据库索引、连接池和超时预算，CDN不能修复所有业务瓶颈。如果边缘已成功拦截大量请求，但订单接口仍被少量昂贵操作拖慢，应调整业务限额，而不是继续抬高外部QPS阈值。",
+            "en": "Preserve legitimate health checks and emergency administration when applying restrictions, and maintain address lists. The application still needs concurrency limits, indexes, pools and timeout budgets. A CDN cannot fix every backend bottleneck. If a small number of expensive operations overload checkout, use business-aware limits rather than merely raising an edge QPS threshold."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-security-network-review.svg",
+            "alt": {
+              "zh": "分层防护与请求路径示意图：连接与字节、路径与身份、计算与队列",
+              "en": "Layered protection path: Connections / bytes, Route / identity, Compute / queues"
+            },
+            "caption": {
+              "zh": "检查重点：连接与字节 → 路径与身份 → 计算与队列。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Connections / bytes → Route / identity → Compute / queues. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把三层能力写成一份验收清单",
+          "en": "Create an acceptance record for all three dimensions"
+        },
+        "paragraphs": [
+          {
+            "zh": "正常场景检查登录、支付、爬虫、下载、移动客户端和WebSocket；资源层面检查命中状态、连接数、回源请求和应用队列；事件层面检查规则日志、告警、支持响应和恢复动作。测试数据必须注明时间、地区、对象和配置版本，同一批比较保留失败结果。未进行授权压力测试的内容，只能说明公开能力和普通访问表现。",
+            "en": "Acceptance should cover login, payments, crawlers, downloads, mobile clients and WebSocket, plus cache state, connections, origin requests and application queues. Verify rule logs, alerts, escalation and recovery. Record time, region, objects and configuration versions, retaining failed outcomes. Without an authorized stress exercise, describe published capabilities and ordinary access only."
+          },
+          {
+            "zh": "采购结论可以写成：这家满足哪些业务路径、还有哪些限制、出现什么条件时需要升级或迁移。中文安全加速需求可优先验证CDN5，其他候选参考[厂商档案](providers/)补齐公开证据。若预算紧，应先堵住源站绕过和昂贵接口，再选择适合威胁的产品。防护、线路与业务正确性都通过验收，才有理由认为一项高防CDN方案适合长期使用。",
+            "en": "Write a decision stating supported business paths, remaining limitations and upgrade or exit conditions. Evaluate CDN5 for suitable Chinese-language security needs and use the [provider profiles](providers/) to fill evidence gaps. With limited budgets, close origin bypasses and costly-endpoint abuse first. A sustainable choice passes security, network and application-correctness checks."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/bots/",
+        "label": {
+          "zh": "Cloudflare Bot 产品文档",
+          "en": "Cloudflare bot documentation"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9114.html",
+        "label": {
+          "zh": "IETF RFC 9114：HTTP/3",
+          "en": "IETF RFC 9114: HTTP/3"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-cdn-pricing-2026",
+    "seriesOrder": 4,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN价格多少钱？2026年套餐费用与收费标准对比",
+      "en": "DDoS-Protected CDN Pricing in 2026: Plans, Charges and Cost Boundaries"
+    },
+    "excerpt": {
+      "zh": "2026年高防CDN并没有统一月费标准。本文核对公开套餐，把防护订阅、内容分发、请求、回源和附加安全费用拆开，解释为什么同一业务会得到不同报价。",
+      "en": "There is no universal protected-CDN price. Compare verified published plans with delivery, requests, origin transfer and security add-ons, then model the workload rather than the headline fee."
+    },
+    "category": {
+      "zh": "价格与成本",
+      "en": "Pricing and costs"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先给价格范围，再说明为什么不能直接比大小",
+          "en": "Published prices are a starting point"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防CDN既有免费基础入口，也有数百至数千美元的月费套餐和企业询价方案。差异并不全来自防护强弱，还涉及域名数量、协议、地区、正常流量、支持与责任范围。本文价格来自2026年10月14日查阅的官方页面，统一保留美元标示，不做未经核实的汇率换算；税费、优惠、续费和合同价格以购买时确认结果为准。",
+            "en": "Protected delivery ranges from free baseline access to monthly security bundles costing hundreds or thousands of dollars, plus enterprise quotations. Differences include domains, protocols, regions, delivery allowances, support and responsibility. Prices below were consulted on 14 October 2026 and retain the published US-dollar amounts; confirm taxes, renewal and contract terms at purchase."
+          },
+          {
+            "zh": "推荐中文团队优先询问[CDN5高防CDN](https://www.cdn5.com/)的公开套餐，但应从实际业务需求计算总成本。静态内容每月出网、动态接口请求、回源与日志，都可能形成不同费用。一个防护月费较低的产品，叠加功能后未必便宜；一个月费高的服务，如果包含有效支持与业务需要的资源，也不应只凭数字排除。",
+            "en": "For Chinese-language teams, start by evaluating [CDN5](https://www.cdn5.com/) against the actual workload. Include static delivery, dynamic requests, origin transfer and logs. A low subscription can become expensive after add-ons; a higher fee may cover resources and incident support that the business needs."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "六种公开报价口径，必须连同条件阅读",
+          "en": "Six published pricing models"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表不是高防能力排行榜。CloudFront的固定套餐、Cloudflare的站点套餐与按量安全服务，保护对象与额度都不同。尤其不能拿CloudFront的Pro名称与Cloudflare的Pro名称作功能一一对应；不同厂商的同名等级没有行业统一定义。",
+            "en": "This is not a mitigation ranking. Distribution plans, website subscriptions and metered security protect different resources. Identically named tiers across providers are not equivalent."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "官方页面价格摘录，查阅日期2026-10-14，币种美元",
+            "en": "Official price excerpts consulted 2026-10-14; USD"
+          },
+          "columns": [
+            {
+              "zh": "服务",
+              "en": "Service"
+            },
+            {
+              "zh": "公开月费或费用",
+              "en": "Published monthly price or charge"
+            },
+            {
+              "zh": "比较前的限制",
+              "en": "Boundary to confirm"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5标准版 / 商业版",
+                "en": "CDN5 Standard / Business"
+              },
+              {
+                "zh": "499 / 1999美元；年付另有报价",
+                "en": "US$499 / US$1,999; annual pricing differs"
+              },
+              {
+                "zh": "页面分别标示150 / 400Gbps及CC参数；确认共享资源、清洗口径、普通流量额度、节点和超限动作，不能当独立实测。",
+                "en": "Advertised 150/400 Gbps and CC figures; confirm resource sharing, traffic allowances, endpoints and over-limit handling."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare Pro / Business",
+                "en": "Cloudflare Pro / Business"
+              },
+              {
+                "zh": "月付25 / 250美元；年付折算20 / 200美元每月",
+                "en": "Monthly US$25/250; annual equivalent US$20/200 per month"
+              },
+              {
+                "zh": "站点套餐包含的WAF、Bot、日志和支持级别不同；中国网络等产品有独立条件，不能认定所有功能都包含。",
+                "en": "WAF, bots, logs and support vary; China Network and other products have separate conditions."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront固定月费",
+                "en": "CloudFront flat-rate plans"
+              },
+              {
+                "zh": "Free 0、Pro 15、Business 200、Premium 1000美元，按分发",
+                "en": "Free US$0, Pro US$15, Business US$200, Premium US$1,000 per distribution"
+              },
+              {
+                "zh": "阅读请求、流量与功能额度及使用条件；固定月费与按量服务并存，不能套用旧免费层或把其他AWS资源费用一并抹掉。",
+                "en": "Read allowances and plan conditions; metered offerings coexist and other AWS resource fees still require review."
+              }
+            ],
+            [
+              {
+                "zh": "AWS WAF按量项目",
+                "en": "AWS WAF metered components"
+              },
+              {
+                "zh": "官方基础示例：ACL 5美元/月、规则1美元/月、请求0.60美元/百万",
+                "en": "Official base example: US$5/ACL/month, US$1/rule/month, US$0.60/million requests"
+              },
+              {
+                "zh": "地区和附加功能影响报价；Bot、验证码、额外容量及Marketplace规则另查。WAF不是服务器全部协议的网络清洗。",
+                "en": "Region and add-ons affect costs; verify bots, CAPTCHA, capacity and marketplace rules. WAF is not network scrubbing for all protocols."
+              }
+            ],
+            [
+              {
+                "zh": "Azure Front Door",
+                "en": "Azure Front Door"
+              },
+              {
+                "zh": "Standard基础35美元/月；Premium基础330美元/月",
+                "en": "Standard base US$35/month; Premium base US$330/month"
+              },
+              {
+                "zh": "基础费之外还有区域出网和请求等项目；安全能力按SKU确认。不能用基础费当成攻击期间全部交付费用。",
+                "en": "Regional delivery and requests add costs; security differs by SKU. Base fees are not the full incident-period bill."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "分发与DDoS等分别按量列价；企业方案询价",
+                "en": "Delivery and DDoS components are listed separately; enterprise quotes available"
+              },
+              {
+                "zh": "免费额度不是无限安全服务；分发地区、请求与所需安全组件分别计算，套餐也可能限制适用内容和流量地区占比。",
+                "en": "Allowances are not unlimited security; model regions, requests and components, including package workload restrictions."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-pricing-2026-flow.svg",
+            "alt": {
+              "zh": "高防账单的组成示意图：基础套餐、合法交付、安全附加、事件恢复",
+              "en": "Protected delivery cost components: Base plan, Legitimate delivery, Security add-ons, Recovery"
+            },
+            "caption": {
+              "zh": "路径示意：基础套餐 → 合法交付 → 安全附加 → 事件恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Base plan → Legitimate delivery → Security add-ons → Recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "年付、免费与升级：三个容易误读的价格条件",
+          "en": "Annual terms, free plans and upgrades"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN5公开页面的标准版月付499美元，年付5000美元；直接相乘，十二个月月付为5988美元，差额988美元。这只是同一页面标价的算术比较，并不意味着所有使用场景都应年付。商业版的1999美元月付与22000美元年付也应分别阅读。续费价格、降级退款和剩余周期如何处理，需要在购买前确认，不能假设按天线性退还。",
+            "en": "CDN5 lists Standard at US$499 monthly or US$5,000 annually. Twelve monthly payments total US$5,988, a US$988 difference at the listed prices; that arithmetic is not a reason for every workload to prepay. Business lists US$1,999 monthly or US$22,000 annually. Confirm renewal, downgrade and refund treatment rather than assuming linear prorating."
+          },
+          {
+            "zh": "免费入口尤其要看功能。CDN5查阅时的免费版标示网络加速、多线网络和WebSocket不支持，因此不适合作为其付费加速能力的等价样本。Cloudflare与CloudFront的免费方案也有不同定位、额度及条件。试用成功不表示可以在免费计划中长期承载任意规模业务，反过来，免费功能有限也不证明付费产品性能差。",
+            "en": "At consultation, CDN5’s free plan listed network acceleration, multihoming and WebSocket as unsupported. It is therefore not an equivalent trial of paid acceleration. Cloudflare and CloudFront free plans have different scope and conditions. Neither successful trial access nor limited free features establishes unrestricted production suitability."
+          },
+          {
+            "zh": "升级可能涉及节点、缓存、证书或安全配置变化，应确认是否中断连接、是否重新验证域名，以及配置和日志能否保留。业务尚未证明线路与协议匹配时，先付一小段周期通常更便于纠错；已验收且流量可预测的业务，再讨论较长采购周期。折扣必须建立在合适的产品上，不能用低折算月价掩盖不适合的协议和地区。",
+            "en": "Upgrades may change endpoints, caches, certificates or policies. Check reconnections, domain validation and configuration/log retention. Short commitments help correct an unverified fit; longer terms make sense after acceptance and predictable demand. Discounts cannot compensate for mismatched protocols or regions."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "正常月和事件月，要做两张成本表",
+          "en": "Model an ordinary month and an incident month"
+        },
+        "paragraphs": [
+          {
+            "zh": "普通月按地区拆分用户出网和请求数，记录回源比例、源站出网、缓存填充、日志存储及操作费用。事件月则询问被拦截请求、挑战、清洗切换、攻击带宽与突发资源如何收费。不能假设全部攻击流量免费，也不能假设一切攻击都按正常流量收费，必须读对应服务的条款。对包月方案，还要确认超过额度后升级、限速或停服的流程。",
+            "en": "For an ordinary month, model regional delivery, requests, origin ratio, source transfer, cache fill, logs and operations. For an incident month, ask how blocked requests, challenges, scrubbing, attack bandwidth and bursts are charged. Neither universally free nor universally metered attack handling can be assumed. Bundled plans also need explicit over-limit procedures."
+          },
+          {
+            "zh": "举一个纯计算示例：某按量规则服务采用每百万请求0.60美元的价格，处理一亿请求的该项费用为60美元，另加ACL和规则等项目。这不是任何网站的实测账单，也不是攻击总成本。对低QPS但计算昂贵的API，费用可能主要来自源站；对大文件站，边缘出网更重要。使用[CDN计费比较](article/cdn-billing-comparison-2026/)可进一步拆解单位和地区差异。",
+            "en": "As an arithmetic example only, a component charging US$0.60 per million requests costs US$60 for 100 million requests, before ACLs, rules and other charges. This is not a measured website bill. Expensive low-QPS APIs may be origin-cost dominated; large downloads may be delivery dominated. The [billing comparison](article/cdn-billing-comparison-2026/) explains units and regional differences."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "不能省略的回源与支持费用",
+          "en": "Origin and support costs should remain visible"
+        },
+        "paragraphs": [
+          {
+            "zh": "安全CDN降低了进入源站的恶意流量，但无法取消正常动态计算。源站带宽、数据库、对象存储、跨区域访问和负载均衡仍可能收费。多家CDN并行时，缓存各自独立，冷启动和填充流量会增加；突然全网清缓存，也可能产生一个容易漏算的源站峰值。比较报价时需统一业务对象与缓存策略，才能知道差异来自产品还是配置。",
+            "en": "Protection does not eliminate legitimate dynamic computation. Include origin bandwidth, databases, object storage, cross-region access and load balancing. Parallel CDNs maintain separate caches, so cold starts and fills can increase traffic; broad purges can create an overlooked origin peak. Normalize objects and cache policies before attributing price differences to providers."
+          },
+          {
+            "zh": "应急支持也是资源。确认故障时可联系的人、响应等级、工单升级和是否协助调规则，而非只写全天在线。黑洞超过多久、合同免责与SLA申请窗口同样影响停机损失。企业如果有日志审计要求，应先确认可导出字段和保留期限，再谈价格；一个无法解释拦截和回源失败的低价套餐，可能把成本转移到自己的运维团队。",
+            "en": "Incident support is a resource: confirm escalation, response level and assistance with rules, not merely an always-online claim. Blackhole duration, SLA exclusions and claim windows affect outage cost. If audit logs are required, confirm fields and retention before selecting a low-priced tier that shifts troubleshooting work onto your team."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-pricing-2026-review.svg",
+            "alt": {
+              "zh": "高防账单的组成示意图：公开月价、额度与限制、超限处理",
+              "en": "Protected delivery cost components: Published monthly fee, Allowances / limits, Over-limit behavior"
+            },
+            "caption": {
+              "zh": "检查重点：公开月价 → 额度与限制 → 超限处理。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Published monthly fee → Allowances / limits → Over-limit behavior. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "询价要提供哪些数据，才能拿到可比较报价",
+          "en": "Provide enough detail for comparable quotations"
+        },
+        "paragraphs": [
+          {
+            "zh": "向候选厂商提交域名数量、用户地区占比、月出网、峰值请求、动态比例、源站位置、协议与端口，同时说明历史事件的时间、形态和业务影响。历史攻击数值若来自单侧监控，应注明采样来源，不能把估算值包装成精确的攻击峰值。没有历史数据的新项目，可先小范围接入并积累普通流量画像，再确定长期套餐。",
+            "en": "Supply domains, user regions, monthly delivery, peak requests, dynamic share, origin locations and protocols. Describe historical incidents with measurement sources and business effects; label estimates rather than inventing precise peaks. New projects can collect an ordinary traffic baseline during a limited pilot before committing."
+          },
+          {
+            "zh": "索取两份配置相同的报价：一份明确包月资源和超限动作，一份按实际量拆分项目，附上日志、支持与迁出条件。验证[采购流程](article/buying-ddos-cdn/)中的规则导出、证书续期和源站隔离。价格便宜并不是坏事，价格解释不清才是风险。对高防业务，先满足协议与恢复需求，再在可比较的费用边界内选择，而不是用最大的防护标示除以月费计算一个虚假的性价比分数。",
+            "en": "Request equivalent configurations with explicit bundled limits or itemized metering, including logs, support and exit terms. Verify configuration export, renewal and origin isolation using the [buying guide](article/buying-ddos-cdn/). Low prices are not inherently problematic; unexplained billing boundaries are. Meet protocol and recovery requirements before comparing costs, rather than calculating a misleading capacity-per-dollar score."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/waf/pricing/",
+        "label": {
+          "zh": "AWS WAF 官方定价及费用示例",
+          "en": "AWS WAF pricing and examples"
+        }
+      },
+      {
+        "url": "https://azure.microsoft.com/en-us/pricing/details/frontdoor/",
+        "label": {
+          "zh": "Azure Front Door 官方计费",
+          "en": "Azure Front Door pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-cdn-provider-workloads",
+    "seriesOrder": 5,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN服务商怎么选？2026年主流厂商优势与适用场景分析",
+      "en": "Choosing a Protected CDN Provider in 2026: Strengths and Workload Fit"
+    },
+    "excerpt": {
+      "zh": "从静态站、交易网站、API、企业系统和游戏入口五类业务出发，识别高防CDN的真正差异：不是品牌大小，而是保护范围、运维责任与迁移成本。",
+      "en": "Use workload requirements to compare protected CDNs: cache-heavy publishing, transactions, APIs, enterprise systems and games need different protection and operating models."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "把业务需求翻译成厂商能交付的条件",
+          "en": "Translate business needs into deliverable requirements"
+        },
+        "paragraphs": [
+          {
+            "zh": "选高防CDN时，最容易漏掉的问题不是防御带宽，而是到底保护哪条业务路径。一个内容站关心缓存和爬虫，一个交易平台关心身份、回调与正确性，一个游戏站可能同时有网页下载和UDP会话。它们不能使用同一套采购清单。建议从用户完成任务的全过程开始，列出入口、协议、状态、错误后果和负责团队。",
+            "en": "The common omission is not mitigation bandwidth but the actual business path being protected. A publisher needs caching and crawler access; a transaction platform needs identity and callback correctness; a game may combine downloads with UDP sessions. Map entrances, protocols, state, failure consequences and responsible teams before procurement."
+          },
+          {
+            "zh": "中文团队可以优先评估[CDN5高防CDN](https://www.cdn5.com/)的套餐及支持方式；是否适合，应由下面这些场景验证。全球通用Web、企业托管与云集成各有其他候选。本文不借助虚构测试给品牌打分，而是说明公开定位能回答哪些问题、实际部署还需要确认什么。",
+            "en": "Chinese-language teams can evaluate [CDN5](https://www.cdn5.com/) first where its support and bundles fit. Other candidates may better match global web, managed enterprise security or cloud integration. This guide uses published positioning and deployment questions rather than invented benchmark scores."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "内容站：缓存策略与可抓取性优先",
+          "en": "Publishing: caching and crawlability"
+        },
+        "paragraphs": [
+          {
+            "zh": "新闻、文档和下载页通常适合扩大边缘缓存，但实时更新、订阅内容与后台不能盲目缓存。对版本化资源设置较长缓存，对匿名HTML按更新频率决定过期与失效方式。爬虫访问若被挑战拦住，可能影响内容发现；不要凭User-Agent就无限放行，应利用厂商可验证的爬虫识别与访问日志。防护效果要看合法读者和爬虫能否取到正确版本，而非拦截计数增长。",
+            "en": "Publishers can benefit from extensive caching, but live updates, subscriptions and administration need explicit exceptions. Cache versioned assets longer and align anonymous HTML freshness with publication workflows. Challenges can obstruct crawlers; verify them rather than blindly trusting User-Agent. Measure whether readers and crawlers obtain the correct version."
+          },
+          {
+            "zh": "[Cloudflare缓存文档](https://developers.cloudflare.com/cache/)提供了相关配置概念，具体默认行为仍要按产品阅读。CDN5等安全服务则需确认缓存能力和套餐中的网络加速是否满足要求。运营人员应能独立清理某个URL，而不是每次更新都全站失效；后者会让源站重复承担填充请求，也可能在事件期间形成新的资源峰值。",
+            "en": "[Cloudflare’s cache documentation](https://developers.cloudflare.com/cache/) explains relevant concepts, subject to product defaults. Confirm equivalent delivery needs on security-oriented platforms. Editors should be able to purge selected URLs rather than repeatedly clearing the entire site and creating origin refill peaks."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-provider-workloads-flow.svg",
+            "alt": {
+              "zh": "按工作负载匹配保护示意图：内容与接口、协议分类、产品边界、业务验收",
+              "en": "Match protection to workloads: Content / APIs, Protocol classes, Product scope, Workflow acceptance"
+            },
+            "caption": {
+              "zh": "路径示意：内容与接口 → 协议分类 → 产品边界 → 业务验收。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Content / APIs → Protocol classes → Product scope → Workflow acceptance. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "交易网站：身份隔离比缓存命中率重要",
+          "en": "Transactions: identity isolation before hit ratios"
+        },
+        "paragraphs": [
+          {
+            "zh": "交易业务要把登录、购物车、订单和支付回调画成独立路径。登录态响应误入共享缓存，损失可能大于短暂访问变慢。明确Cookie、Authorization、查询参数与缓存键的关系，用不同测试账号检查是否串号；所有写操作、价格变更与支付验证也要有正确的源站处理和幂等策略。CDN能够过滤入口流量，但不能代替支付系统的业务校验。",
+            "en": "Treat login, carts, orders and payment callbacks as separate routes. Shared-cache identity leaks can be worse than temporary slowness. Verify Cookie, Authorization, query keys and user isolation with separate accounts, alongside origin validation and idempotency for writes. Edge filtering cannot replace payment logic."
+          },
+          {
+            "zh": "安全规则上线时，观测下单成功率、挑战通过率、回调失败和客服异常反馈，并保存规则版本。可以评估Cloudflare或[Akamai应用与API防护](https://www.akamai.com/products/app-and-api-protector)等候选，但必须确认所购套餐的功能。对于中文应急支持需求，CDN5也值得试点。采购重点应是事件下的合法交易完成率与可回退性，而非静态图片最快的那一次响应。",
+            "en": "Track checkout completion, challenge outcomes and callback failures while keeping rule versions. Cloudflare and [Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector) are candidates subject to purchased features; CDN5 can be evaluated where Chinese-language incident support matters. Prioritize legitimate transaction completion and rollback over one fast static response."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "API：不依赖浏览器的客户端需要另一种防护",
+          "en": "APIs need client-compatible controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "移动SDK、服务间调用和第三方Webhook通常不能执行浏览器挑战。按IP限速又可能伤及企业出口和移动网络共享地址下的正常用户。应结合API密钥、用户、路径、方法与计算成本建立限额，明确429重试、超时和熔断行为。记录规则命中与应用错误的关联，防止边缘拒绝被误诊为数据库故障。",
+            "en": "Mobile SDKs, service calls and webhooks often cannot complete browser challenges. IP-only limits can penalize shared mobile or corporate addresses. Use keys, users, paths, methods and processing cost to define quotas, 429 handling, retries and circuit breaking. Correlate edge rule actions with application failures."
+          },
+          {
+            "zh": "[CloudFront缓存键策略](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)说明，转发与缓存维度需要明确配置。API若需要携带身份回源，不代表应把所有身份字段都纳入可共享对象缓存。另检查上传大小、请求体检测上限、WSS与长连接超时。选型时要求厂商演示自己的实际客户端能够完成鉴权和调用，不要以浏览器首页可打开替代API验收。",
+            "en": "[CloudFront cache-key policies](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) illustrate why forwarding and caching dimensions need explicit configuration. Identity forwarding does not imply shared caching is safe. Check upload limits, request-body inspection, WSS and timeouts, and validate actual API clients rather than a browser homepage."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "企业系统：权限、日志与变更流程决定成本",
+          "en": "Enterprise systems: governance and observability"
+        },
+        "paragraphs": [
+          {
+            "zh": "有安全审计和多人协作的企业，需要角色权限、操作留痕、配置导出、日志字段和支持升级。管理员账号集中给所有人共享，会让误操作无法追责。将开发、发布、规则审查与应急授权分开，准备生产前审核和紧急回退流程。厂商提供API或基础设施配置能力时，应限制令牌权限，避免一次泄露就能修改全部域名。",
+            "en": "Enterprises need roles, audit trails, exportable configuration, useful logs and escalation. Shared administrator accounts make mistakes hard to trace. Separate development, release, review and emergency authorization, with rollback procedures. Restrict API tokens so one leaked credential cannot modify every hostname."
+          },
+          {
+            "zh": "[Azure Front Door](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview)等云入口适合结合现有资源架构评估；Akamai和YewSafe也可以按企业流程询价。重点确认数据存储地区、日志保留、事件通知和供应商退出。一个前期单价较低但缺少所需审计能力的产品，可能让后续合规与运维成本更高，不能只比较月租。",
+            "en": "[Azure Front Door](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview) can fit an existing Azure architecture; Akamai and YewSafe may suit enterprise procurement. Confirm data location, log retention, incident notice and exit arrangements. A cheaper subscription without required governance may create higher downstream operating costs."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "游戏业务：网站入口与游戏会话分开选",
+          "en": "Games: separate the website from the game session"
+        },
+        "paragraphs": [
+          {
+            "zh": "安装包、更新资源和官网通常能用HTTP CDN，实时会话却可能走TCP或UDP。普通高防CDN的Web套餐不自动覆盖这些会话。需要四层代理、高防IP或清洗服务时，确认源地址、端口、会话保持、UDP映射及回程路径。WebSocket也是长连接，但它不是任意UDP游戏协议的替代品。",
+            "en": "Installers, patches and websites generally fit HTTP delivery; game sessions may use TCP or UDP. Web CDN plans do not automatically protect those protocols. For layer-4 proxies, protected IPs or scrubbing, confirm source identity, ports, session continuity, UDP mapping and return paths. WebSocket does not substitute for arbitrary UDP protocols."
+          },
+          {
+            "zh": "参考[AWS TCP与UDP防护指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)理解保护对象，再阅读[游戏高防方案](article/gaming-ddos-cdn/)设计分流。试用应测重连、补丁下载、登录与房间建立，不能只测包大小或带宽。防护触发后路由改变可能影响连接稳定，需在授权范围内确认服务商支持的演练与恢复方式。",
+            "en": "Use [AWS’s TCP/UDP protection guide](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) and the [gaming architecture guide](article/gaming-ddos-cdn/) to separate workloads. Test reconnects, patches, login and room creation, including provider-approved mitigation exercises."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "迁移与退出：选型不能止于成功接入",
+          "en": "Migration and exit are part of selection"
+        },
+        "paragraphs": [
+          {
+            "zh": "准备双份配置记录，包括DNS、证书、缓存键、WAF例外、回源鉴权、日志接收与告警。对比平台时先迁入可独立恢复的资源，逐步增加流量；保留原平台和源站的恢复方式，避免首次接入就全量替换。攻击正在发生时，回退到裸源站会失去安全边界，退出计划要包含另一条受保护入口。",
+            "en": "Keep records for DNS, certificates, keys, exceptions, origin authentication, logs and alerts. Move independently recoverable resources first, retaining recovery paths. During an attack, rolling back to a bare origin removes protection, so an exit plan needs another protected entrance."
+          },
+          {
+            "zh": "合同到期后，确认令牌吊销、旧回源权限撤销、证书与日志处理，别留下长期可用的第三方访问。更多采购细节见[高防CDN购买指南](article/buying-ddos-cdn/)。能够接入并不等于值得长期购买；有明确验收、运维责任和退出安排的服务，才是适合团队能力的选型。",
+            "en": "At contract end, revoke tokens and obsolete origin permissions and settle certificate/log handling. The [buying guide](article/buying-ddos-cdn/) covers these steps. Successful onboarding alone does not establish long-term fit: acceptance criteria, operating responsibility and an executable exit plan do."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-provider-workloads-review.svg",
+            "alt": {
+              "zh": "按工作负载匹配保护示意图：内容发布、身份与交易、实时会话",
+              "en": "Match protection to workloads: Publishing, Identity / transactions, Real-time sessions"
+            },
+            "caption": {
+              "zh": "检查重点：内容发布 → 身份与交易 → 实时会话。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Publishing → Identity / transactions → Real-time sessions. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "哪些结论不能从一份厂商介绍推出来",
+          "en": "What a product description cannot establish"
+        },
+        "paragraphs": [
+          {
+            "zh": "公开页面能证明某个能力被列示，不能证明你所在地区的晚高峰性能，也不能证明未知攻击下永不失效。套餐中的防护数值、节点数量和线路词汇，应保留原始来源与查阅日期，实际业务效果则通过独立试用验证。不同平台的QPS统计范围、采样、挑战计数和带宽口径可能不同，不宜直接换算成总分。",
+            "en": "A product page can establish that a capability is advertised, not peak-hour performance in your region or immunity to unknown attacks. Preserve sources and consultation dates, then verify application behavior independently. QPS definitions, sampling, challenges and bandwidth measures may differ across providers and should not be collapsed into one score."
+          },
+          {
+            "zh": "建议把采购结论写成场景条件：内容站需要可控缓存与爬虫访问，交易站需要身份隔离与正确回调，API需要客户端兼容，企业需要审计与责任分工，游戏需要协议匹配。再从[厂商目录](providers/)挑出能满足硬条件的两家验证。这样可以做出明确推荐，同时避免把有条件的适用性说成无条件的行业领先。",
+            "en": "Express recommendations as conditions: publishing needs controllable caching, transactions need identity correctness, APIs need compatible controls, enterprises need governance and games need protocol fit. Select two candidates from the [directory](providers/) that meet those requirements, then validate them."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/cache/",
+        "label": {
+          "zh": "Cloudflare 缓存文档",
+          "en": "Cloudflare cache documentation"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview",
+        "label": {
+          "zh": "Azure Front Door 架构概览",
+          "en": "Azure Front Door architecture overview"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      }
+    ]
+  },
+  {
+    "id": "buying-ddos-cdn",
+    "seriesOrder": 6,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN购买指南：如何选择稳定可靠的高防加速服务",
+      "en": "Buying a DDoS-Protected CDN: A Practical Procurement and Deployment Guide"
+    },
+    "excerpt": {
+      "zh": "把购买高防CDN拆成需求、试用、合同和上线四段，重点检查源站绕过、客户端兼容、费用与退出。适合准备付费接入或更换防护服务的网站团队。",
+      "en": "A procurement guide covering requirements, trials, contracts and rollout, with practical checks for origin bypass, client compatibility, costs and exit."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "购买之前，先写一页业务说明",
+          "en": "Write a one-page workload brief"
+        },
+        "paragraphs": [
+          {
+            "zh": "购买高防CDN不宜从套餐最大防护值开始。先写清域名、用户地区、月流量、峰值请求、缓存比例、源站位置、协议与端口，以及故障最先影响哪项业务。一个纯展示页和支付接口的恢复优先级不同，游戏平台的补丁下载与会话连接也不是同一类流量。业务说明越清楚，厂商越容易给出可比的方案。",
+            "en": "Begin with domains, regions, delivery volume, peak requests, cacheable share, origins, protocols and business impact, not the largest advertised protection figure. A brochure site and payment API have different recovery priorities; game downloads and sessions are separate workloads."
+          },
+          {
+            "zh": "中文团队可以优先询问[CDN5高防CDN](https://www.cdn5.com/)的套餐与接入支持，同时选择一家具备所需协议的候选交叉验证。不要把品牌熟悉度当成验收。采购文档至少要明确保护对象、合法流量和运营责任；历史攻击参数只填写有监控来源的记录，未知项目保留为需要验证的问题。",
+            "en": "Chinese-language teams can evaluate [CDN5](https://www.cdn5.com/) alongside a suitable alternative. Procurement should define protected assets, legitimate traffic and operating responsibilities. Include historical attack figures only with measurement sources; leave unknowns as verification questions."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "筛选硬条件，不做凭空打分",
+          "en": "Apply hard requirements before preferences"
+        },
+        "paragraphs": [
+          {
+            "zh": "先排除不支持必需协议、证书方式、回源位置或日志能力的方案。WebSocket、上传大小、HTTP方法、请求体检测范围和API挑战兼容性，都可能成为上线障碍。对于企业系统，还要检查权限角色、操作审计与数据留存。一个静态文件测速优秀的平台，如果无法承载必要的回调或长连接，就不符合业务硬条件。",
+            "en": "Exclude plans missing required protocols, certificate handling, origin access or logs. Check WebSocket, uploads, HTTP methods, body inspection and API-compatible controls. Enterprises also need roles, audit trails and retention. A fast file transfer cannot compensate for an unsupported callback or connection type."
+          },
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)等公开资料可帮助识别功能等级，但细节需继续阅读产品文档和合同。将能力列为已公开、需确认和实测验证三类，记录来源日期。不要给暂未公开的能力随意打零分，也别因为官网列有某个名词就假定已经包含在最低套餐中。",
+            "en": "Published sources such as [Cloudflare plans](https://www.cloudflare.com/plans/) help identify tiers, but contracts and documentation govern details. Mark capabilities as published, awaiting confirmation or independently tested. Missing public information is not proof of absence; a listed feature is not proof of inclusion in the cheapest plan."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/buying-ddos-cdn-flow.svg",
+            "alt": {
+              "zh": "高防采购与迁移顺序示意图：需求清单、有限试点、受控切换、持续复查",
+              "en": "Protected CDN procurement: Requirements, Bounded pilot, Controlled rollout, Review"
+            },
+            "caption": {
+              "zh": "路径示意：需求清单 → 有限试点 → 受控切换 → 持续复查。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Requirements → Bounded pilot → Controlled rollout → Review. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "试用要准备真实对象和可核对的基线",
+          "en": "Prepare a representative trial and baseline"
+        },
+        "paragraphs": [
+          {
+            "zh": "选择版本化静态对象、匿名页面、登录接口和业务回调分别试用，用同一源站和响应内容比较候选。测试账号应覆盖不同身份与客户端，避免只用管理员浏览器证明普通用户可用。记录变更前的错误率、业务完成时间和源站资源，再对照变更后的结果。付费试用也要提前确认计费起止和取消方式。",
+            "en": "Trial versioned assets, anonymous pages, login and callbacks separately, using the same origin and content. Include ordinary user accounts and client types. Capture pre-change errors, transaction time and origin resources, then compare after rollout. Confirm trial billing and cancellation dates."
+          },
+          {
+            "zh": "大陆业务覆盖三家运营商及晚高峰，跨境业务按订单来源选测点。保留失败样本与P95，不只平均成功请求。[实测工具](lab/)能辅助理解当前网络，但单个浏览器不能代表全部用户。攻击演练必须经服务商和资产所有者授权，明确目标、范围和终止条件，普通访问测试则不应被描述成抗攻击测评。",
+            "en": "Cover mainland carriers and busy hours, or overseas locations matching customers. Retain failures and P95. The [lab](lab/) represents the current browser, not every user. Attack exercises require authorization, scope and stopping conditions; ordinary access tests should not be labeled mitigation benchmarks."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站隔离必须在DNS切换前设计",
+          "en": "Design origin isolation before changing DNS"
+        },
+        "paragraphs": [
+          {
+            "zh": "盘点历史IP、旧子域名、邮件与监控入口，判断攻击者是否可以绕过CDN。源站业务端口限制到可信回源，管理端口单独隔离；更新名单时保留合法检查和应急访问。回源TLS校验证书，必要时使用产品支持的鉴权方式。客户端IP只从可信代理读取，不能让外部随意构造的请求头参与业务限额判断。",
+            "en": "Audit historical addresses, alternate hostnames, mail and monitoring for bypasses. Restrict origin business ports to trusted proxies and isolate administration, preserving valid checks and emergency access. Verify origin TLS and supported authentication. Accept client-IP identity only from trusted proxies."
+          },
+          {
+            "zh": "DNS切换之前，先确认新边缘能正确回源，再逐步收紧旧入口，避免先封访问后才发现证书或Host配置错误。IPv6地址也属于源站暴露面，不应只限制IPv4。相关架构边界可对照[分层防护分析](article/ddos-cdn-security-network/)，把源站隔离作为验收项目，而非上线后的可选优化。",
+            "en": "Validate the new edge-to-origin path before tightening old access. Otherwise certificate or Host errors can become an outage. Include IPv6 exposure. Use the [layered protection guide](article/ddos-cdn-security-network/) to make origin isolation an acceptance requirement rather than an optional later optimization."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存与安全规则需要分批上线",
+          "en": "Roll out cache and security rules incrementally"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)区分共享缓存、私有响应和新鲜度控制。对登录态、购物车、订单与写操作使用明确例外，不要全站套一条长缓存。验证版本更新、失效操作与回源峰值，避免缓存命中看似提高，却把旧价格或其他用户的响应发出去。",
+            "en": "Use [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) to distinguish shared caches, private responses and freshness. Explicitly exclude authenticated state, checkout and writes. Test updates, purging and refill peaks rather than improving hit ratio at the expense of correctness."
+          },
+          {
+            "zh": "WAF和速率限制先观察，再限定路径启用，记录规则命中、正常用户成功率与误报。浏览器挑战应与API、搜索爬虫、移动客户端和支付回调区分处理。设置紧急回退权限与规则版本，让值班人员能恢复一个错误规则；不要为解决误报直接关闭全部防护。",
+            "en": "Observe WAF and limits before path-specific enforcement. Track legitimate success and false positives; distinguish browsers from APIs, crawlers, SDKs and callbacks. Keep rule versions and emergency rollback authority. Fixing one false positive should not require disabling every protection layer."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "合同里真正需要讨论的条款",
+          "en": "Discuss the clauses that affect operations"
+        },
+        "paragraphs": [
+          {
+            "zh": "询价时将正常流量、攻击处理、请求、日志、回源与支持分别列项。确认共享或独享资源、超限动作、黑洞时长、恢复途径、SLA口径与申诉期限。还需明确域名与端口上限、附加产品费用、税费、续费和降级条件。对[CloudFront固定月费与按量方案](https://aws.amazon.com/cloudfront/pricing/)这类不同模型，要统一保护对象后比较，不能只写一个最低入口价。",
+            "en": "Itemize delivery, attacks, requests, logs, origin access and support. Define sharing, over-limit behavior, blackholing, recovery, SLA measurement and claim windows, plus domains, ports, add-ons, taxes and renewal. For choices such as [CloudFront flat-rate and metered plans](https://aws.amazon.com/cloudfront/pricing/), normalize protected assets before comparing prices."
+          },
+          {
+            "zh": "将销售承诺落实为订单或合同附件，包括拟交付节点、必需协议、联系路径和日志权限。如果供应商不能明确故障升级流程，报价再便宜也难估算总成本。更细的账单拆分见[高防CDN价格分析](article/ddos-cdn-pricing-2026/)，里面的公开价格也需在下单时重新核对。",
+            "en": "Put endpoint, protocol, support and log commitments into the order or contract. An unclear escalation path makes total cost uncertain. The [pricing guide](article/ddos-cdn-pricing-2026/) provides further breakdowns; recheck public prices when ordering."
+          },
+          {
+            "zh": "涉及大陆节点时，备案和接入资质需单独核查；境外部署不等于所有经营义务消失。采购时请把服务地域与内容范围写入方案，不要只凭“免备案”三个字确认上线条件。",
+            "en": "For mainland nodes, verify ICP and onboarding eligibility separately. Offshore deployment does not remove every business obligation; record service regions and content scope explicitly."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "把上线设成一次可恢复的变更",
+          "en": "Treat production rollout as a reversible change"
+        },
+        "paragraphs": [
+          {
+            "zh": "先迁移非关键资源，再逐步加入主要域名或业务流量。每一步有负责人、观察窗口和回退条件，保存旧DNS、证书、缓存和WAF配置。DNS TTL只影响缓存解析的一部分行为，不能保证全网瞬间切换，因此旧平台需留出过渡期。对于已经被攻击的站点，回退目标应仍有保护，不能把流量直接引向裸源站。",
+            "en": "Move noncritical resources first, with an owner, observation window and rollback criteria for each step. Preserve DNS, certificates and policy versions. TTL does not guarantee instantaneous global switching; retain the previous platform during transition. During an attack, rollback should remain protected."
+          },
+          {
+            "zh": "观察边缘状态与源站应用日志是否对应，记录运营商、地区、地址族、协议和请求ID。试点达标后再扩大流量，若关键路径出现错误则先回退相应变更，再定位原因。一次能够被解释和恢复的上线，比一次没有记录但似乎顺利的接入更利于长期运维。",
+            "en": "Correlate edge and origin logs by region, carrier, address family, protocol and request ID. Expand only after critical paths pass acceptance. Roll back the affected change before diagnosing a serious failure. Reproducible rollout records support long-term operations better than undocumented success."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/buying-ddos-cdn-review.svg",
+            "alt": {
+              "zh": "高防采购与迁移顺序示意图：回源隔离、配置回退、退出与导出",
+              "en": "Protected CDN procurement: Origin isolation, Policy rollback, Exit / export"
+            },
+            "caption": {
+              "zh": "检查重点：回源隔离 → 配置回退 → 退出与导出。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Origin isolation → Policy rollback → Exit / export. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "验收之后，还要安排复查与退出",
+          "en": "Acceptance should include review and exit"
+        },
+        "paragraphs": [
+          {
+            "zh": "上线验收包括业务正确性、合法访问率、缓存更新、回源限制、日志导出、证书续期和支持联络。给每项记录证据和负责人，不必追求一个没有定义的总分。将高峰容量、跨区扩张、新客户端或新协议加入定期复查触发条件，避免一年前适合的配置长期不变。",
+            "en": "Accept correctness, legitimate access, updates, origin restrictions, log export, renewal and escalation with evidence and ownership. Define review triggers such as peaks, new regions, clients or protocols; last year’s suitable configuration may not remain suitable."
+          },
+          {
+            "zh": "退出时导出规则和数据，安排DNS过渡，撤销令牌与旧回源权限，按约定处理日志。多CDN并不天然等于可用性翻倍，缓存、证书与安全策略差异仍要同步。购买到这里才完成：团队不仅知道如何接入，也知道异常时如何联系、何时需要升级，以及如何有序离开。",
+            "en": "At exit, export policies, transition DNS, revoke tokens and obsolete ingress, and handle logs under agreed terms. Multiple CDNs need synchronized certificates and policies. Procurement is complete when the team knows onboarding, incident escalation, upgrade triggers and an orderly departure."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-cdn-performance",
+    "seriesOrder": 7,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN加速效果怎么样？防护能力、节点线路与性能解析",
+      "en": "How Fast Is a Protected CDN? Nodes, Routes, Security and Origin Performance"
+    },
+    "excerpt": {
+      "zh": "高防CDN是否加速，需要把DNS、连接、缓存、回源和应用计算分开测。本文解释TTFB、P95与命中率的边界，并给出排查慢请求的方法。",
+      "en": "Separate DNS, connections, cache delivery, origin access and application processing to judge acceleration. Learn what TTFB, P95 and hit ratio can actually establish."
+    },
+    "category": {
+      "zh": "性能与线路",
+      "en": "Performance and networks"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "加速有效，但不是所有路径都受益",
+          "en": "Acceleration benefits depend on the path"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防CDN能让可缓存内容更靠近用户，也能在源站之外处理部分恶意流量；它不保证所有动态请求更快。边缘距离、跨境线路、缓存状态、清洗调度和源站计算会共同决定耗时。中文安全加速可优先测试[CDN5](https://www.cdn5.com/)等候选，但必须用你的真实业务验证，不能把套餐中的BGP/CN2字样直接换成延迟结论。",
+            "en": "A protected CDN can move cacheable content closer to users and filter traffic before it reaches the origin. It does not guarantee faster dynamic responses. Edge placement, routes, cache state, mitigation routing and application processing interact. Evaluate [CDN5](https://www.cdn5.com/) where appropriate using actual workloads, not BGP/CN2 labels as latency evidence."
+          },
+          {
+            "zh": "判断效果时，先指定业务目标：读者更快看到文章、下载更快完成，还是订单接口更少超时。文件下载速率和动态TTFB描述不同体验；平均响应降低，却有更多用户失败，也不是合理优化。安全规则同样可能增加挑战或连接重建，应同时统计合法用户完成任务的结果，而不是把性能和防护各写成一个互不关联的分数。",
+            "en": "Define the outcome: faster reading, completed downloads or fewer transaction timeouts. Throughput and dynamic TTFB describe different experiences. A lower average with more failures is not improvement. Security challenges and reconnects also affect legitimate task completion."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "性能指标必须写清起点、终点与样本",
+          "en": "Define metric boundaries and samples"
+        },
+        "paragraphs": [
+          {
+            "zh": "浏览器开发者工具、CDN日志与源站监控对响应时间的计时范围可能不同。TTFB从哪一时点开始、是否包含重定向和连接复用，必须记录。P95是所定义样本中95%的观测不高于该分位值，不是可用性95%，也不是最大延迟。样本少、只保留成功请求或混合不同地区，都会让数字失去解释力。",
+            "en": "Browser, edge and origin measurements may use different boundaries. State whether TTFB includes redirects or connection setup. P95 is a percentile within defined samples, not 95% availability or maximum latency. Small samples, success-only selection and mixed regions can distort interpretation."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "常用指标的含义与误用边界，不包含实测成绩",
+            "en": "Metric definitions and limitations; no benchmark results"
+          },
+          "columns": [
+            {
+              "zh": "指标",
+              "en": "Metric"
+            },
+            {
+              "zh": "应测什么",
+              "en": "Measure"
+            },
+            {
+              "zh": "不能据此推断",
+              "en": "Do not infer"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "DNS时间",
+                "en": "DNS time"
+              },
+              {
+                "zh": "同一解析器下获得域名地址的过程，记录缓存和解析结果。",
+                "en": "Resolution using the same resolver, with cache state and returned addresses."
+              },
+              {
+                "zh": "解析很快不表示连接路径可靠，公共DNS也不必然命中适合本地运营商的节点。",
+                "en": "Fast resolution does not prove a reliable connection or locally suitable endpoint."
+              }
+            ],
+            [
+              {
+                "zh": "TCP / TLS",
+                "en": "TCP / TLS"
+              },
+              {
+                "zh": "新连接建立与握手，注明是否复用、证书与协议差异。",
+                "en": "New connection and handshake, documenting reuse, certificates and protocols."
+              },
+              {
+                "zh": "握手快不代表数据库处理快，连接复用样本不能和全部新连接直接混比。",
+                "en": "Fast handshakes do not establish backend speed; reused and new connections differ."
+              }
+            ],
+            [
+              {
+                "zh": "TTFB",
+                "en": "TTFB"
+              },
+              {
+                "zh": "按统一计时边界测收到首字节，分热缓存、冷缓存和动态接口。",
+                "en": "Time to first byte with identical boundaries, separated by workload."
+              },
+              {
+                "zh": "首字节不能代表文件已经下载完，源站与客户端统计也可能有不同起点。",
+                "en": "First byte is not completion; origin and client timers may start differently."
+              }
+            ],
+            [
+              {
+                "zh": "完成时间",
+                "en": "Completion time"
+              },
+              {
+                "zh": "收完整对象或业务操作结束，统一对象大小和压缩条件。",
+                "en": "Full object or task completion with identical payload and compression."
+              },
+              {
+                "zh": "不同大小文件不能只用耗时判断快慢，业务成功也不能仅凭返回200判断。",
+                "en": "Different payload sizes are not directly comparable; HTTP 200 does not prove business success."
+              }
+            ],
+            [
+              {
+                "zh": "P95",
+                "en": "P95"
+              },
+              {
+                "zh": "分地区和运营商计算尾部延迟，保留样本量与时间窗口。",
+                "en": "Tail latency per region/carrier with sample counts and windows."
+              },
+              {
+                "zh": "它不是最大值，也不能隐藏失败；单独一条总P95会遮住少数地区的异常。",
+                "en": "Not a maximum or a failure substitute; one aggregate can hide regional problems."
+              }
+            ],
+            [
+              {
+                "zh": "错误率",
+                "en": "Error rate"
+              },
+              {
+                "zh": "统计超时、连接失败、HTTP错误和业务失败，区分规则拒绝。",
+                "en": "Timeouts, connection/HTTP/application failures and policy rejection."
+              },
+              {
+                "zh": "只报告成功请求会高估稳定性；缓存的错误页面也不能算正常业务结果。",
+                "en": "Success-only reporting exaggerates reliability; cached errors are not successful service."
+              }
+            ],
+            [
+              {
+                "zh": "缓存命中率",
+                "en": "Cache hit ratio"
+              },
+              {
+                "zh": "说明按请求还是字节统计，以及是否仅针对可缓存对象。",
+                "en": "Specify request/byte denominator and cacheable-object scope."
+              },
+              {
+                "zh": "高命中不说明登录态安全，不同分母或动态占比的业务不能直接横比。",
+                "en": "High hits do not prove identity safety; different denominators invalidate comparisons."
+              }
+            ],
+            [
+              {
+                "zh": "回源压力",
+                "en": "Origin pressure"
+              },
+              {
+                "zh": "观察回源请求、并发、数据库耗时和资源队列，关联失效操作。",
+                "en": "Origin requests, concurrency, database time and queues around purges."
+              },
+              {
+                "zh": "边缘拦截计数高不代表源站健康，少量昂贵请求也可能耗尽应用资源。",
+                "en": "Many blocks do not prove origin health; a few expensive requests can exhaust it."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-performance-flow.svg",
+            "alt": {
+              "zh": "首字节之前发生了什么示意图：解析与连接、边缘检查、缓存或回源、响应交付",
+              "en": "Before the first byte: DNS / connection, Edge inspection, Cache / origin, Response delivery"
+            },
+            "caption": {
+              "zh": "路径示意：解析与连接 → 边缘检查 → 缓存或回源 → 响应交付。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: DNS / connection → Edge inspection → Cache / origin → Response delivery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "缓存收益要把冷启动与更新成本一起看",
+          "en": "Include cold-cache and update costs"
+        },
+        "paragraphs": [
+          {
+            "zh": "命中缓存时，边缘可以直接返回对象；未命中时，访问还要经过回源和应用或存储处理。假设仅用于解释的业务中，90%的请求命中，其余10%回源，不能简单认为性能会提高90%，因为两类请求的耗时、大小与地区不同。字节命中率也可能与请求命中率差距很大：大量小图命中，而少量大视频仍在回源。",
+            "en": "Hits return from the edge; misses also require origin processing. An illustrative 90% request hit rate does not imply a 90% speed improvement, because payloads, regions and response times differ. Byte and request hit ratios can diverge substantially."
+          },
+          {
+            "zh": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)解释缓存新鲜度与复用规则，[CloudFront缓存键策略](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)说明哪些请求维度影响对象分组。多余查询参数、每人不同的Cookie都可能降低命中；删除必要身份维度又会破坏隔离。检查更新、失效、过期和同时回源，不要为了漂亮命中率缓存应当动态处理的订单。",
+            "en": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) defines freshness and reuse; [CloudFront cache-key policies](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) explain grouping dimensions. Unnecessary parameters can fragment caches, while removing identity dimensions can break isolation. Test expiry, purging and simultaneous misses without caching transactions merely to improve a metric."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "HTTP/2、HTTP/3和节点数量不是性能公式",
+          "en": "Protocols and PoP counts are not a performance formula"
+        },
+        "paragraphs": [
+          {
+            "zh": "HTTP/2通过多路复用改善连接利用，但在TCP丢包时仍可能受传输层队头阻塞影响。[HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html)基于[QUIC](https://www.rfc-editor.org/rfc/rfc9000.html)，有不同连接与流行为，收益取决于终端支持和UDP路径。启用协议之后，仍需比较新连接、复用连接、移动切换和回退是否正常，不能承诺协议升级必然减少固定百分比耗时。",
+            "en": "HTTP/2 improves connection utilization through multiplexing, but TCP loss can affect streams. [HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html) uses [QUIC](https://www.rfc-editor.org/rfc/rfc9000.html), with benefits dependent on clients and UDP paths. Compare new/reused connections, mobility and fallback rather than promising a fixed percentage gain."
+          },
+          {
+            "zh": "PoP多并不证明你的用户能命中最合适节点。DNS调度、Anycast路由与运营商互联决定实际落点，回源又受源站地区影响。香港边缘配一个远距离源站，缓存未命中可能仍然慢；单一地区源站承载全球动态业务时，CDN也无法取消传播距离。先测路径，再决定是否使用分区源站、边缘逻辑或更合适的回源线路。",
+            "en": "PoP count does not establish the endpoint your users receive. DNS, Anycast and peering govern placement; origin distance affects misses. A nearby Hong Kong edge with a distant origin can still serve slow dynamic requests. Measure paths before selecting regional origins, edge logic or optimized origin transport."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防护触发后，继续测正常用户的体验",
+          "en": "Measure legitimate users during mitigation"
+        },
+        "paragraphs": [
+          {
+            "zh": "挑战、速率限制、连接复用和清洗切换都可能改变合法请求耗时。测防护效果时需要区分被拒绝的恶意请求、误伤的正常请求和成功业务，而非一张平均响应图。对API、支付回调和WebSocket，还要观察重试、断线与状态恢复，确保没有把浏览器验证直接施加给无法执行脚本的客户端。",
+            "en": "Challenges, limits, connection handling and mitigation changes can alter legitimate latency. Distinguish malicious blocks, false positives and completed tasks. For APIs, callbacks and WebSocket, observe retries, disconnects and state recovery rather than applying browser verification universally."
+          },
+          {
+            "zh": "查看CDN5等厂商参数时，要求说明启用安全策略后的线路、回源与超限动作，公开防护值不能证明攻击期间的P95。只有经过授权、记录场景并保留控制条件的演练，才可以描述对应测试结果。没有这样的证据，应明确写出能力来源和试用计划；本文提供的是分析方法，不是对任一厂商抗攻击性能的实测结论。",
+            "en": "Ask CDN5 and other candidates about protected routing, origin access and over-limit handling. Advertised capacity does not establish attack-period P95. Only authorized, documented exercises support corresponding results. Without them, present capability sources and an evaluation plan, as this article does."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-cdn-performance-review.svg",
+            "alt": {
+              "zh": "首字节之前发生了什么示意图：热缓存、冷缓存、动态处理",
+              "en": "Before the first byte: Warm cache, Cold cache, Dynamic processing"
+            },
+            "caption": {
+              "zh": "检查重点：热缓存 → 冷缓存 → 动态处理。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Warm cache → Cold cache → Dynamic processing. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "慢请求从哪一层开始查",
+          "en": "Locate the layer responsible for slow requests"
+        },
+        "paragraphs": [
+          {
+            "zh": "DNS阶段异常先看解析器、TTL和实际地址；连接阶段异常看运营商与地址族；首字节慢则对照缓存状态、边缘回源和源站计算；下载阶段慢再核查对象大小、丢包与吞吐。若边缘返回502、504，应关联源站日志和请求ID；若是挑战或429，则检查策略。相同表象可能有不同原因，不能一见慢就更换节点。",
+            "en": "Start with resolution for DNS failures, carrier/address-family paths for connection failures, and cache/origin/application timing for slow first bytes. For slow completion, check size, loss and throughput. Correlate 502/504 with origin logs; inspect policies for challenges or 429. Similar symptoms do not imply one cause."
+          },
+          {
+            "zh": "使用[实测工具](lab/)和[香港回源优化指南](article/hong-kong-cdn-origin-optimization/)建立基线，再按变化前后同一窗口比较。优化后保留结果、配置和业务指标，观察是否降低尾部延迟而未增加错误。一个有效的加速结论应该说明哪类用户、哪种请求、哪个时间段获得改善，也应列出仍然慢的路径，让下一步调整有依据。",
+            "en": "Build a baseline using the [lab](lab/) and [Hong Kong origin guide](article/hong-kong-cdn-origin-optimization/). Compare consistent windows and preserve configurations alongside business outcomes. A useful improvement claim identifies users, request types and periods, including paths that remain slow."
+          },
+          {
+            "zh": "还应记录监测是否来自企业出口代理或VPN，它们会改变实际路径。对比期间保持同一接入网络，不要让一次测速走代理、另一次直连，再把路径差异归到厂商性能上。",
+            "en": "Record corporate proxies and VPNs, which alter paths. Keep access networks consistent rather than attributing proxy-versus-direct routing differences to providers."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9114.html",
+        "label": {
+          "zh": "IETF RFC 9114：HTTP/3",
+          "en": "IETF RFC 9114: HTTP/3"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9000.html",
+        "label": {
+          "zh": "IETF RFC 9000：QUIC",
+          "en": "IETF RFC 9000: QUIC"
+        }
+      }
+    ]
+  },
+  {
+    "id": "china-mobile-cdn-troubleshooting",
+    "seriesOrder": 8,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN过移动墙怎么解决？移动网络访问异常原因与优化方案",
+      "en": "Troubleshooting Protected-CDN Access on China Mobile Networks"
+    },
+    "excerpt": {
+      "zh": "“移动墙”不是统一的故障类型。本文把移动网络访问异常拆成解析、地址族、TCP/TLS、HTTP策略和回源问题，给出证据收集及恢复方案。",
+      "en": "The informal term “Mobile wall” covers different symptoms. Diagnose resolver, address-family, connection, policy and origin issues before selecting a recovery path."
+    },
+    "category": {
+      "zh": "故障排查",
+      "en": "Troubleshooting"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先明确：没有一种配置能解决所有移动网络异常",
+          "en": "There is no universal setting for Mobile access failures"
+        },
+        "paragraphs": [
+          {
+            "zh": "所谓高防CDN过移动墙，常被用来描述移动网络访问某个境外站点超时、重置或不稳定，但这个词没有统一技术定义。DNS结果不一致、IPv6路径异常、跨网拥塞、TLS证书问题、边缘策略误报与运营商处置，都可能产生相似症状。仅凭手机打不开，不能确定原因，更不能承诺换一个节点就永久解决。",
+            "en": "The informal phrase can mean offshore website timeouts, resets or instability on China Mobile, but it has no single technical definition. DNS, IPv6 routing, peering congestion, certificates, edge policies and operator actions can resemble one another. A failed phone visit does not identify the cause or prove a permanent fix exists."
+          },
+          {
+            "zh": "正确顺序是先确认影响范围：只影响一个域名还是多个域名，只在移动还是全部运营商，只在某个省份或某段时间，浏览器与应用是否一致。记录时间、地区、接入方式、解析地址和请求阶段，保留可复查的失败。购买[CDN5高防CDN](https://www.cdn5.com/)等服务时，也应要求提供拟交付地址做实际验证，不接受无法限定条件的可达性承诺。",
+            "en": "Define the affected domains, carriers, provinces, periods and client types. Preserve times, access method, DNS answers and failure stages. When evaluating [CDN5](https://www.cdn5.com/) or alternatives, request assigned endpoints and test them rather than accepting an unconditional reachability promise."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "按失败阶段收集证据",
+          "en": "Collect evidence by failure stage"
+        },
+        "paragraphs": [
+          {
+            "zh": "尽量在同一时间用移动、电信、联通网络访问同一个HTTPS对象，并记录成功与失败，不只截图报错。浏览器网络面板、客户端日志和服务商请求日志各自提供不同视角；如果边缘根本没有收到请求，就不能只修改WAF。若仅某个业务路径异常，优先检查方法、大小、身份和缓存差异。",
+            "en": "Compare the same HTTPS object across carriers at similar times, retaining both outcomes. Browser, client and edge logs show different stages. If the edge never receives a request, WAF changes alone are not a diagnosis. Path-specific failures require method, size, identity and cache checks."
+          },
+          {
+            "zh": "手机排查时还要区分蜂窝与Wi-Fi，双卡设备记录正在使用的SIM和数据网络，确认没有代理或私有DNS改变路径。同一设备切换网络后的结果才有对照意义；不同手机、不同浏览器和不同对象同时变化，会让结论难以复查。",
+            "en": "On phones, distinguish cellular from Wi-Fi and record the active SIM, proxies and private DNS. Keep the device, client and object consistent while changing the access network so the comparison remains interpretable."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "移动网络异常的分层排查表",
+            "en": "Layer-by-layer Mobile-network troubleshooting"
+          },
+          "columns": [
+            {
+              "zh": "表现",
+              "en": "Symptom"
+            },
+            {
+              "zh": "核查证据",
+              "en": "Evidence"
+            },
+            {
+              "zh": "下一步",
+              "en": "Next step"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "没有地址或解析不同",
+                "en": "Missing/different DNS answer"
+              },
+              {
+                "zh": "比较递归解析器、A/AAAA、TTL及权威DNS记录，确认是否有旧地址。",
+                "en": "Compare resolvers, A/AAAA, TTL and authoritative records."
+              },
+              {
+                "zh": "修正错误记录与调度，等待缓存按TTL更新，不把更换公共DNS当所有问题的保证。",
+                "en": "Correct records and routing; do not treat public DNS as a universal fix."
+              }
+            ],
+            [
+              {
+                "zh": "IPv4正常而IPv6失败",
+                "en": "IPv4 works, IPv6 fails"
+              },
+              {
+                "zh": "分别记录地址族、连接时间及返回地址，核查AAAA指向与源站IPv6暴露。",
+                "en": "Separate address families, timings and returned endpoints."
+              },
+              {
+                "zh": "修复IPv6服务与路由，若临时调整AAAA，应保留回退及兼容验证。",
+                "en": "Repair IPv6; temporary AAAA changes need rollback and compatibility checks."
+              }
+            ],
+            [
+              {
+                "zh": "TCP连接超时",
+                "en": "TCP timeout"
+              },
+              {
+                "zh": "比较目标地址、端口、运营商与时段，检查是否在边缘建立连接前失败。",
+                "en": "Compare endpoints, ports, carriers and periods."
+              },
+              {
+                "zh": "交给供应商定位互联与路由；必要时协调运营商，不先增加应用缓存。",
+                "en": "Escalate routing/peering evidence to provider and, where appropriate, operator."
+              }
+            ],
+            [
+              {
+                "zh": "TLS阶段失败或重置",
+                "en": "TLS failure/reset"
+              },
+              {
+                "zh": "记录SNI、证书链、主机名和握手错误，重置本身不能证明某一种拦截。",
+                "en": "Record SNI, certificate chain, hostname and handshake error."
+              },
+              {
+                "zh": "修复证书和端点配置，核查网络处置；不要关闭证书验证当长期方案。",
+                "en": "Repair certificates/endpoints and investigate network actions; retain validation."
+              }
+            ],
+            [
+              {
+                "zh": "返回403、429或挑战",
+                "en": "403, 429 or challenge"
+              },
+              {
+                "zh": "查询请求ID、规则动作、客户端身份和应用兼容性，确认正常用户是否误伤。",
+                "en": "Inspect request IDs, policies, identities and client compatibility."
+              },
+              {
+                "zh": "缩小规则范围，按业务身份调整限额，保留保护与可审计例外。",
+                "en": "Narrow policies and use identity-aware limits with auditable exceptions."
+              }
+            ],
+            [
+              {
+                "zh": "502、504或首字节很慢",
+                "en": "502/504 or slow first byte"
+              },
+              {
+                "zh": "关联边缘回源日志、源站连接和应用计算，区分缓存命中与动态请求。",
+                "en": "Correlate origin connections, processing and cache state."
+              },
+              {
+                "zh": "检查回源TLS、Host、名单、超时和应用负载，不把错误全部归到移动网络。",
+                "en": "Check origin TLS, Host, ingress, timeouts and load."
+              }
+            ],
+            [
+              {
+                "zh": "UDP或HTTP/3异常",
+                "en": "UDP/HTTP/3 failure"
+              },
+              {
+                "zh": "检查终端支持、UDP路径与HTTP版本回退，记录是否有重复握手和延迟。",
+                "en": "Inspect support, UDP paths and protocol fallback."
+              },
+              {
+                "zh": "确保HTTP/2等兼容路径正常，再评估是否启用新的协议策略。",
+                "en": "Keep a working compatible fallback before changing protocol policy."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/china-mobile-cdn-troubleshooting-flow.svg",
+            "alt": {
+              "zh": "移动网络访问的诊断顺序示意图：DNS结果、连接与TLS、HTTP响应、源站处理",
+              "en": "Mobile-network diagnosis: DNS result, Connection / TLS, HTTP response, Origin work"
+            },
+            "caption": {
+              "zh": "路径示意：DNS结果 → 连接与TLS → HTTP响应 → 源站处理。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: DNS result → Connection / TLS → HTTP response → Origin work. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "DNS调度与IPv6要分别验证",
+          "en": "Validate DNS scheduling and IPv6 independently"
+        },
+        "paragraphs": [
+          {
+            "zh": "不同递归解析器可能让调度看到不同的网络位置，返回地址也可能不同。先核对权威记录是否正确，再比较运营商解析结果；CDN的智能调度仍可能受缓存和解析链路影响。一次从公共解析器获得的可用地址，不能证明全部移动用户都会获得同样结果。临时改DNS时，保留旧记录和TTL，给供应商提供新旧地址的时间线。",
+            "en": "Resolvers can expose different network locations to scheduling, producing different endpoints. Verify authoritative records, then compare carrier resolvers and cached answers. One working public-resolver address does not establish what every Mobile subscriber receives. Preserve old records, TTLs and endpoint timelines during changes."
+          },
+          {
+            "zh": "IPv4与IPv6不是同一条路径的两种写法。终端可能优先尝试IPv6，AAAA错误或链路不可用就可能影响体验，即使IPv4单独测试正常。应确认边缘IPv6服务、证书和策略完整，源站限制也要覆盖两个地址族。关闭IPv6可能短期改变症状，却不能替代查明故障；是否临时撤回AAAA应根据服务证据和影响范围决定。",
+            "en": "IPv4 and IPv6 are distinct paths. Clients may attempt IPv6 first; bad AAAA records or connectivity can degrade experience while IPv4 tests pass. Verify edge service, certificates and policies for both families, including origin restrictions. Temporary AAAA withdrawal may alter symptoms but should be evidence-based, not a replacement for diagnosis."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "连接、TLS与QUIC：不要把所有重置都叫拦截",
+          "en": "Connections, TLS and QUIC need separate checks"
+        },
+        "paragraphs": [
+          {
+            "zh": "TCP连不上，和TCP已建立但TLS失败，定位方向不同。后者需要核查主机名、SNI、证书链和边缘配置；连接重置也可能来自服务端、代理、中间网络或资源限制，单次现象无法证明具体责任方。遵循[HTTP语义](https://www.rfc-editor.org/rfc/rfc9110.html)理解客户端结果，记录实际错误，而不是用一个笼统的网络异常覆盖所有阶段。",
+            "en": "A failed TCP connection differs from an established connection with a TLS error. For TLS, verify hostname, SNI, chain and edge configuration. Resets may come from servers, proxies, networks or resource limits; one event cannot assign responsibility. Use [HTTP semantics](https://www.rfc-editor.org/rfc/rfc9110.html) to distinguish actual results."
+          },
+          {
+            "zh": "[QUIC](https://www.rfc-editor.org/rfc/rfc9000.html)使用UDP，[HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html)基于它运行，网络兼容性和回退行为会影响连接。如果启用新协议后仅部分客户端异常，比较协议、握手与回退，不要仅反复切节点。路径MTU、丢包和重传也可能影响大响应；小页面正常、大下载卡住时，要保留对象大小和完成阶段的证据。",
+            "en": "[QUIC](https://www.rfc-editor.org/rfc/rfc9000.html) uses UDP and carries [HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html). Inspect handshake and fallback if only some clients fail after enabling a protocol. MTU, loss and retransmission can also affect large responses; preserve payload sizes and transfer-stage evidence."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "边缘策略和回源故障，可能伪装成线路问题",
+          "en": "Policy and origin errors can resemble network failures"
+        },
+        "paragraphs": [
+          {
+            "zh": "移动用户经常共享出口地址，过严的单IP频率限制可能误伤正常用户。403、429和挑战页面应关联边缘规则ID，检查路径、方法、会话与客户端能力。API或SDK不能完成浏览器验证时，应改用适合业务的鉴权、配额和行为规则，而不是关闭所有安全策略。搜索爬虫与第三方回调也要分别验证。",
+            "en": "Shared Mobile egress addresses make strict per-IP limits prone to false positives. Correlate 403/429 and challenges with rule IDs, paths, methods, sessions and client capabilities. Browserless APIs need compatible authentication and quotas rather than removal of all security. Validate crawlers and callbacks separately."
+          },
+          {
+            "zh": "502与504往往需要查看回源连接、Host、TLS和源站处理，而不是简单换移动优化节点。新节点的回源地址若没加入源站名单，也会出现部分地区失败。查看错误是否被缓存、失败是否集中在动态接口。对照[香港回源优化](article/hong-kong-cdn-origin-optimization/)修复真正的瓶颈，保留变更版本便于恢复。",
+            "en": "For 502/504, inspect origin connections, Host, TLS and processing. Newly assigned edge addresses missing from origin allowlists can cause regional failures. Check cached errors and dynamic-path concentration. The [origin optimization guide](article/hong-kong-cdn-origin-optimization/) helps locate the actual bottleneck."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/china-mobile-cdn-troubleshooting-review.svg",
+            "alt": {
+              "zh": "移动网络访问的诊断顺序示意图：地区与运营商、IPv4与IPv6、错误与内容",
+              "en": "Mobile-network diagnosis: Region / carrier, IPv4 / IPv6, Errors / content"
+            },
+            "caption": {
+              "zh": "检查重点：地区与运营商 → IPv4与IPv6 → 错误与内容。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Region / carrier → IPv4 / IPv6 → Errors / content. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "恢复访问：采用可验证的修复与服务路径",
+          "en": "Recover through verifiable repairs and escalation"
+        },
+        "paragraphs": [
+          {
+            "zh": "确认是线路问题后，向CDN和运营商提交时间、地区、目标地址、协议与阶段信息，要求定位及替代可用线路。如果原因涉及服务或网络管理处置，应通过对应支持和合规流程解决，技术更换不等于获得永久可达承诺。香港和其他境外节点通常不适用大陆节点的相同接入条件，但这不消除当地法规、内容与经营义务；[Cloudflare中国网络条件](https://developers.cloudflare.com/china-network/)也显示大陆服务有独立要求。",
+            "en": "For confirmed routing issues, provide timestamp, region, endpoint, protocol and failure-stage evidence to the CDN and relevant operator. Request diagnosis and verified alternatives. Service or network-management actions should use the corresponding support and compliance process; switching endpoints does not guarantee permanent reachability. Offshore and mainland onboarding differ, as [Cloudflare China Network requirements](https://developers.cloudflare.com/china-network/) illustrate."
+          },
+          {
+            "zh": "替代节点、备用平台和DNS回退都需预先验证证书、规则和源站隔离，不能临时切到裸源站暴露防护入口。恢复后持续观察移动与其他运营商的成功率、P95及业务完成情况，再决定长期方案。需要换服务商时，阅读[高防采购指南](article/buying-ddos-cdn/)把可达性验证写进验收；不要把一次恢复访问包装成解决所有所谓移动墙的能力。",
+            "en": "Prevalidate certificates, rules and origin isolation for alternatives; do not expose a bare origin during an emergency. After recovery, monitor carrier-specific success, P95 and task completion. Include reachability evidence in procurement using the [buying guide](article/buying-ddos-cdn/), rather than promoting one recovery as a universal solution."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+        "label": {
+          "zh": "IETF RFC 9110：HTTP 语义",
+          "en": "IETF RFC 9110: HTTP semantics"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9000.html",
+        "label": {
+          "zh": "IETF RFC 9000：QUIC",
+          "en": "IETF RFC 9000: QUIC"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9114.html",
+        "label": {
+          "zh": "IETF RFC 9114：HTTP/3",
+          "en": "IETF RFC 9114: HTTP/3"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "gaming-ddos-cdn",
+    "seriesOrder": 9,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "游戏高防CDN推荐：游戏服务器DDoS防护与低延迟加速方案",
+      "en": "Protected CDN for Games: DDoS Defense and Low-Latency Delivery"
+    },
+    "excerpt": {
+      "zh": "游戏官网、更新文件、登录API与TCP/UDP游戏会话需要不同入口。本文说明高防CDN、高防IP与网络清洗如何分工，并给出低延迟业务的验收重点。",
+      "en": "Separate websites, patches, login APIs and TCP/UDP sessions before choosing protection. Compare CDN delivery, protected IPs and scrubbing through gameplay-specific acceptance criteria."
+    },
+    "category": {
+      "zh": "游戏与实时业务",
+      "en": "Gaming and realtime workloads"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "游戏高防CDN推荐，必须先拆开两种流量",
+          "en": "Separate delivery traffic from game sessions"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果游戏业务主要是官网、下载和Web登录，可以优先评估[CDN5高防CDN](https://www.cdn5.com/)的安全加速；如果实时战斗或房间连接采用TCP、UDP，则需要确认四层转发或游戏专用防护，不能把Web套餐直接当作全部游戏服务器的保护。CDN5官网列有高防IP与SDK游戏盾方向，具体接入方式、协议及套餐需另询价核实。",
+            "en": "For websites, downloads and web login, evaluate [CDN5](https://www.cdn5.com/) as a protected-delivery candidate. Real-time TCP/UDP sessions require confirmed layer-4 or game-specific protection. CDN5’s page also lists protected IP and SDK game-shield products, whose integration and plans need separate verification."
+          },
+          {
+            "zh": "玩家遇到的慢也有不同来源：安装包下载耗时、登录等待、房间建立、会话往返和卡顿，不应该被一个延迟数值概括。建议把域名、端口、协议、用户地区和状态依赖列出来，再分配交付与防护职责。这样既避免给UDP业务买错HTTP产品，也避免为了会话防护把大型静态更新流量全部送进昂贵的清洗链路。",
+            "en": "Patch completion, login, room creation, round-trip response and gameplay stalls are different outcomes. Inventory domains, ports, protocols, regions and state before assigning delivery and protection. This prevents buying HTTP protection for UDP sessions or sending all large downloads through a costly session-scrubbing path."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "更新包交给CDN，版本一致性不能交给运气",
+          "en": "Patch delivery requires version correctness"
+        },
+        "paragraphs": [
+          {
+            "zh": "更新包、纹理、音频和安装文件适合版本化对象名与边缘缓存。确认校验值、分片和断点续传行为，避免玩家拿到旧清单与新文件混合的版本。对Manifest更新采用明确的发布顺序和缓存失效机制，不要先发布引用新文件的清单，再等待资源慢慢传播。失败下载也要记录，不能只比较已完成样本的速率。",
+            "en": "Version patch objects and verify checksums, chunking and resumable downloads. Prevent mixed old manifests and new resources. Publish resources before manifests referencing them, with explicit freshness and purge behavior. Include failed transfers, not just completed-download throughput."
+          },
+          {
+            "zh": "[CloudFront缓存键策略](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)可帮助理解查询参数与版本对象的关系。使用多CDN时，各家缓存独立，发布与失效也需要协调。测试要覆盖大文件、Range请求、并发更新及弱网络中断恢复。压缩比例、对象大小和源站位置保持一致，才有理由比较交付成本与下载体验。",
+            "en": "[CloudFront cache-key policies](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) clarify version/query grouping. Multiple CDNs maintain separate caches and publication workflows. Test large objects, Range, concurrent updates and interrupted-download recovery using equivalent compression, sizes and origins."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/gaming-ddos-cdn-flow.svg",
+            "alt": {
+              "zh": "游戏业务的三种入口示意图：官网与下载、登录与API、游戏会话、状态恢复",
+              "en": "Game workload entrances: Site / downloads, Login / APIs, Game sessions, State recovery"
+            },
+            "caption": {
+              "zh": "路径示意：官网与下载 → 登录与API → 游戏会话 → 状态恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Site / downloads → Login / APIs → Game sessions → State recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "登录和支付接口，需要保护也需要客户端兼容",
+          "en": "Login and payments need compatible controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "游戏客户端通常不是完整浏览器，浏览器验证码可能让登录、充值或SDK初始化失败。按账号、设备会话与接口成本建立限额，比单IP一刀切更贴近业务，但身份凭据本身也需保护。来自移动网络或网吧的玩家可能共享出口地址，误报会集中影响同一群人。将WAF动作、登录失败、429和业务错误关联，才能判断问题发生在边缘还是应用。",
+            "en": "Game clients may not execute browser challenges, which can break login, payment or SDK startup. Use account/session- and cost-aware limits, protecting the credentials themselves. Mobile and gaming-café users can share egress addresses. Correlate WAF actions, login failures, 429 and application errors."
+          },
+          {
+            "zh": "官方回调应使用签名、时效与重放保护，不应仅依赖一个可伪造的来源头。对正常重试保留合理的退避和幂等处理，避免故障时客户端同时猛烈重连。安全策略上线前先观察真实流量画像，逐步启用，保留规则版本。更详细的应用层防护可阅读[CC配置指南](article/cdn-cc-defense-configuration/)。",
+            "en": "Authenticate callbacks with signatures, validity windows and replay controls rather than a spoofable source header. Use backoff and idempotency for retries to avoid reconnect storms. Observe real traffic before gradual enforcement and preserve rule versions. See the [CC configuration guide](article/cdn-cc-defense-configuration/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "TCP与UDP会话：防护边界在网络入口",
+          "en": "TCP/UDP protection belongs at the network entrance"
+        },
+        "paragraphs": [
+          {
+            "zh": "[AWS TCP与UDP防护指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)说明这类应用需要相应网络架构。采购高防IP或清洗时，要核对端口、协议、会话保持、源地址传递与回程安排。普通HTTP反向代理无法自动理解自定义游戏协议；一个WebSocket开关也不能把UDP数据包变成受支持的Web流量。",
+            "en": "[AWS’s TCP/UDP protection guide](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) describes the need for appropriate network architecture. Verify ports, protocols, session persistence, source identity and return paths for protected IPs or scrubbing. HTTP proxying and a WebSocket option do not automatically cover custom UDP traffic."
+          },
+          {
+            "zh": "对于有状态的游戏服务，清洗切换或边缘重启可能触发连接重建，玩家能否重新进入原房间取决于应用设计。应同时确认会话恢复、重连限额与备用地域容量。全网防护容量不是每个端口的吞吐承诺，实际能转发的正常流量和延迟预算，应写入方案验收。四层与七层防护不是互相替代，而是对不同入口分工。",
+            "en": "Mitigation changes or edge restarts may reconnect stateful games. Application design determines whether players return to their rooms. Confirm recovery, reconnect limits and backup capacity. Aggregate protection is not a per-port legitimate-throughput guarantee; layer-4 and layer-7 controls address different entrances."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "低延迟的验收指标，要贴近游戏行为",
+          "en": "Use gameplay-specific latency criteria"
+        },
+        "paragraphs": [
+          {
+            "zh": "下载速度以完成时间和失败率为主；实时会话则关注往返、抖动、丢包、重连和业务操作耗时。P95或P99必须说明样本和时间窗口，不宜把游戏服务内部tick耗时与客户端网络延迟混在一项指标里。节点靠近玩家是有利条件，但运营商互联、跨区回程和状态服务位置会影响实际体验。",
+            "en": "For downloads, use completion and failure rates. For sessions, measure round trips, jitter, loss, reconnection and operation time. Define windows and samples for P95/P99; do not mix server tick time with client-network latency. Peering, return routes and state-service placement can outweigh geographic proximity."
+          },
+          {
+            "zh": "按真实玩家地区权重测试电信、联通、移动以及海外主要接入网络，并覆盖活动高峰。云服务器位于某个城市，不代表其网络路径能替代当地家用或蜂窝用户。若无客户端测试条件，可以先做受限验证并说明样本边界。测速页面的一次小文件响应，不能证明大规模在线会话在清洗期间同样稳定。",
+            "en": "Weight trials by player regions and access networks, including peak events. A cloud VM is not an equivalent sample of local household or mobile access. State limitations when client testing is unavailable. One small-file timing cannot establish mass-session stability during mitigation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "WebSocket游戏也需要单独验收",
+          "en": "WebSocket games still require specific acceptance"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 6455](https://www.rfc-editor.org/rfc/rfc6455.html)定义WebSocket握手与连接行为，适合某些浏览器实时应用，但并不负责游戏状态恢复。需要确认WSS、空闲超时、最大消息、连接上限、节点重启后的断线行为与计费单位。代理支持握手成功，不意味着会对之后每条消息提供与普通HTTP请求相同的WAF检测。",
+            "en": "[RFC 6455](https://www.rfc-editor.org/rfc/rfc6455.html) defines WebSocket connection behavior, not game-state recovery. Check WSS, idle timeouts, message and connection limits, restart behavior and billing units. A successful upgrade does not prove HTTP-style WAF inspection of every subsequent message."
+          },
+          {
+            "zh": "设计心跳、断线检测、带随机退避的重连和消息去重，恢复时不要重复扣费或执行操作。CDN5不同套餐的WebSocket支持应按官网当前说明核查，免费版与付费版不能直接等同。参考[WebSocket CDN选型](article/websocket-cdn-selection/)列出验收项，再用真实客户端确认事件期间的恢复行为。",
+            "en": "Implement heartbeats, disconnect detection, randomized backoff and deduplication to prevent repeated charges or actions. Check CDN5’s current plan-specific WebSocket support. Use the [WebSocket guide](article/websocket-cdn-selection/) to validate real clients and recovery behavior."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防护方案也要考虑发版与活动运维",
+          "en": "Plan releases and events alongside protection"
+        },
+        "paragraphs": [
+          {
+            "zh": "发版时大量玩家同时更新，会抬高边缘出网与源站填充；活动开始又可能形成登录峰值。提前预热有帮助，但必须确认资源已经完整发布、预热对象与缓存键一致，以及厂商是否对操作收费。活动前保存配置基线，设置业务成功率与源站队列告警，不要在缺乏观察窗口时一次更改协议、线路和WAF。",
+            "en": "Releases create delivery and cache-fill peaks; events create login peaks. Prewarming helps only when complete resources and cache keys are consistent, with operation charges understood. Preserve a baseline and monitor task success and origin queues. Avoid simultaneous protocol, routing and WAF changes without observation."
+          },
+          {
+            "zh": "游戏SDK防护可能要求客户端发版，旧版本玩家是否仍受保护、紧急策略如何下发、密钥如何轮换都应问清。服务商提供的SDK能力不能替代服务器自身鉴权与安全更新。源站业务端口、管理入口和日志权限仍需隔离，尤其要避免官网已接防护而真实游戏地址长期公开。",
+            "en": "SDK-based protection may require client releases. Confirm old-version coverage, emergency policy distribution and key rotation. SDK protection does not replace server authentication or updates. Isolate business, administration and log access, including actual game addresses rather than only the website."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/gaming-ddos-cdn-review.svg",
+            "alt": {
+              "zh": "游戏业务的三种入口示意图：HTTP缓存、身份与限额、TCP或UDP入口",
+              "en": "Game workload entrances: HTTP caching, Identity / quotas, TCP / UDP ingress"
+            },
+            "caption": {
+              "zh": "检查重点：HTTP缓存 → 身份与限额 → TCP或UDP入口。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: HTTP caching → Identity / quotas → TCP / UDP ingress. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "采购结论：为不同入口购买合适能力",
+          "en": "Buy the right capabilities for each entrance"
+        },
+        "paragraphs": [
+          {
+            "zh": "可以把最终方案写成三部分：静态更新由CDN缓存交付，登录与Web业务由应用层安全保护，实时会话由合适的四层入口或清洗承载。CDN5适合优先讨论中文安全接入需求，其他候选可从[厂商目录](providers/)按协议筛选，再结合[高防IP与CDN区别](article/ddos-protected-ip-explained/)明确预算。推荐的是业务匹配，而不是未经测试的最低延迟或最大防护排名。",
+            "en": "A practical architecture separates cached updates, protected web/API traffic and suitable layer-4 session protection. Evaluate CDN5 for Chinese-language security onboarding and use the [directory](providers/) plus [protected-IP comparison](article/ddos-protected-ip-explained/) to match protocols and budgets. This is workload fit, not a lowest-latency ranking."
+          },
+          {
+            "zh": "合同需要写明合法流量上限、事件支持、黑洞与切换、日志及测试许可。上线时保留受保护的回退路径，活动前验证容量和状态恢复，活动后复盘失败样本。游戏高防的价值最终体现在玩家能否下载正确版本、完成登录并恢复会话；宣传参数只能提供线索，不能替代这些验收结果。",
+            "en": "Define legitimate capacity, incident support, blackholing, switching, logs and test authorization in the contract. Maintain protected rollback, verify capacity and state recovery before events, and review failures afterward. The outcome is correct downloads, successful login and recoverable sessions."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc6455.html",
+        "label": {
+          "zh": "IETF RFC 6455：WebSocket",
+          "en": "IETF RFC 6455: WebSocket"
+        }
+      }
+    ]
+  },
+  {
+    "id": "overseas-ddos-cdn",
+    "seriesOrder": 10,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "海外高防CDN推荐：适合跨境网站的高防加速服务商对比",
+      "en": "Overseas DDoS-Protected CDNs for Cross-Border Websites: A Provider Comparison"
+    },
+    "excerpt": {
+      "zh": "跨境网站选海外高防CDN，需要按真实买家地区、动态比例、回源位置和安全预算决策。本文比较不同服务模式，并说明境外接入、大陆可达性与收费的边界。",
+      "en": "Choose overseas protection around actual buyer locations, dynamic traffic, origin placement and security budgets. Compare service models without assuming offshore reachability or identical billing."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "海外高防CDN的推荐，应从订单地图开始",
+          "en": "Start with the customer and transaction map"
+        },
+        "paragraphs": [
+          {
+            "zh": "跨境网站的海外高防CDN，首要目标不是地图上节点最多，而是主要买家能够稳定完成页面访问、登录和支付。卖家位于大陆、源站在香港、买家在北美，三者对应不同网络路径；用卖家办公室测速代表海外消费者，容易选错方案。按真实用户地区、运营商或接入方式分组，再统计动态业务与静态资源的占比。",
+            "en": "The goal is reliable browsing, login and payment in buyer markets, not the largest map. A mainland seller, Hong Kong origin and North American buyers follow different paths. Seller-office tests are not representative of consumers. Group actual regions and access networks, then classify static and dynamic traffic."
+          },
+          {
+            "zh": "需要中文协助、安全套餐与境外接入时，可优先评估[CDN5高防CDN](https://www.cdn5.com/)。全球标准Web可比较Cloudflare和CloudFront，可编程交付可评估Fastly，企业托管安全可查看[Akamai档案](providers/akamai/)。这些推荐基于公开定位，不能当成跨国性能排名。采购前取得实际节点和服务范围，验证你最重要的市场，而非让候选的宣传地图决定需求。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/) for suitable Chinese-language onboarding, security bundles and offshore deployment. Compare Cloudflare/CloudFront for standard web, Fastly for programmability and [Akamai](providers/akamai/) for enterprise protection. These are positioning recommendations, not international performance rankings. Obtain assigned endpoints and verify priority markets."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "服务商比较：先区分操作与计费方式",
+          "en": "Compare operating and billing models"
+        },
+        "paragraphs": [
+          {
+            "zh": "相似的安全功能名称，可能对应不同运维责任。包月方案需要明确资源与超限动作，按量方案需要预测事件月费用，企业托管则需确认响应权限与工单升级。下表只讨论可核查的产品及商业模式，不虚构全球延迟和攻击成绩。",
+            "en": "Similar security labels can assign different responsibilities. Bundles require resource and over-limit definitions, metering requires incident-month modeling, and managed contracts require escalation and authority. The table compares documented models without fabricated measurements."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "海外候选的模式与采购问题",
+            "en": "Overseas candidates: operating models and procurement questions"
+          },
+          "columns": [
+            {
+              "zh": "候选",
+              "en": "Candidate"
+            },
+            {
+              "zh": "适用线索",
+              "en": "Reasons to evaluate"
+            },
+            {
+              "zh": "必须确认",
+              "en": "Confirm"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "官方列示安全加速、BGP/CN2方向和固定套餐，适合先讨论中文支持、Web防护及业务接入。",
+                "en": "Security acceleration, BGP/CN2 positioning and published bundles; discuss Chinese-language onboarding."
+              },
+              {
+                "zh": "明确买家市场实际节点、协议、回源、普通流量与攻击处理。香港运营中心不直接证明每个域名均分配香港节点。",
+                "en": "Confirm buyer-market endpoints, protocols, origins and billing; offices do not prove hostname placement."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "站点交付与安全统一管理，公开自助套餐；全球Web部署可从功能等级、规则和客户端兼容评估。",
+                "en": "Unified website delivery/security and self-service tiers; evaluate policies and client compatibility."
+              },
+              {
+                "zh": "高级Bot、日志、企业支持和中国网络各有条件，确认账单与大陆访问边界，勿把自助价格当所有产品总价。",
+                "en": "Check bots, logs, enterprise support and separate China Network conditions."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront",
+                "en": "CloudFront"
+              },
+              {
+                "zh": "适合AWS源站与资源集成，公开按量及固定月费方案，便于根据现有云架构建立成本模型。",
+                "en": "AWS origin integration, with metered and flat-rate options."
+              },
+              {
+                "zh": "选择具体方案后阅读功能与额度，源站资源、跨区流量及账户中其他应用不自动被同一个分发配置覆盖。",
+                "en": "Read plan allowances and account-resource boundaries; other infrastructure remains distinct."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "面向可编程交付、配置与日志需求，分发和安全能力分项列价，适合有能力管理边缘逻辑的团队。",
+                "en": "Programmable delivery and operational visibility with separately priced components."
+              },
+              {
+                "zh": "确认所需安全组件、地区费率、缓存失效与操作流程，企业套餐还有内容类型和区域占比等限制需阅读。",
+                "en": "Check security components, regions, purging and package workload restrictions."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN",
+                "en": "Google Cloud CDN"
+              },
+              {
+                "zh": "适合Google云资源和负载均衡集成，缓存出网、填充与请求拆分计费，可按用户目的地建模。",
+                "en": "Google Cloud integration with separate delivery, fill and lookup costs."
+              },
+              {
+                "zh": "安全政策和Cloud Armor另核查，计费目的地不等于服务器地理落点，大陆方向明确由境外位置提供服务。",
+                "en": "Verify Cloud Armor separately; billing destinations are not guaranteed PoPs, and mainland traffic is served offshore."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/overseas-ddos-cdn-flow.svg",
+            "alt": {
+              "zh": "跨境请求与源站路径示意图：用户市场、全球或区域边缘、动态回源、业务依赖",
+              "en": "Cross-border delivery path: Audience market, Regional / global edge, Origin fetch, Dependencies"
+            },
+            "caption": {
+              "zh": "路径示意：用户市场 → 全球或区域边缘 → 动态回源 → 业务依赖。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Audience market → Regional / global edge → Origin fetch → Dependencies. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "境外部署，不等于不受任何接入条件约束",
+          "en": "Offshore deployment has its own conditions"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港、新加坡等境外节点通常不适用大陆节点的相同ICP备案接入要求，但域名、内容、经营活动和数据处理仍有各自义务。使用境外CDN，不应被描述成可以绕过所有监管或网络处置。若业务需要大陆节点，则核查备案、许可证与服务商接入条件；[Cloudflare中国网络文档](https://developers.cloudflare.com/china-network/)明确列出其大陆服务的单独订阅和ICP备案要求。",
+            "en": "Hong Kong and Singapore nodes generally do not use the same ICP onboarding requirements as mainland nodes, but domains, content, business operations and data processing retain applicable obligations. Offshore delivery is not a way to avoid every rule or network action. [Cloudflare China Network documentation](https://developers.cloudflare.com/china-network/) identifies its separate subscription and ICP conditions."
+          },
+          {
+            "zh": "同时确认订单地区是否真的包含所需服务。全球套餐地图不保证所有域名默认使用某一城市，针对大陆的境外路径也会受跨境互联影响。无法核实特定区域落点时，写成需确认项目，不要把海外、高防、免备案和大陆快速访问四个词绑定成无条件承诺。更多边界可阅读[免备案CDN跨境选择](article/cross-border-offshore-cdn-2026/)。",
+            "en": "Verify that the ordered service includes the required region. A global map does not guarantee a hostname’s city placement. Mainland-bound offshore routes remain affected by border connectivity. Treat unverified endpoints as questions, not unconditional offshore/security/speed promises. See the [cross-border offshore guide](article/cross-border-offshore-cdn-2026/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "回源位置与动态比例决定跨境性能",
+          "en": "Origin placement and dynamic share shape performance"
+        },
+        "paragraphs": [
+          {
+            "zh": "图片、脚本和商品静态素材命中后可以在买家附近返回；登录、库存与支付往往仍需回源。若源站远离主要买家，边缘不能取消所有传播距离。分区源站或边缘逻辑可能降低部分请求成本，但需要解决状态一致性、身份与数据位置。不要为了加速把个人账户、购物车和订单响应放进共享缓存。",
+            "en": "Assets can be served near buyers after hits, but login, inventory and payment commonly reach the origin. Edge delivery cannot remove every distance cost. Regional origins or edge logic may help, subject to state consistency, identity and data-location requirements. Keep personalized commerce responses out of shared caches."
+          },
+          {
+            "zh": "用同样内容分别测试热缓存、冷缓存和动态接口，记录P95、失败与业务成功，而非只报平均下载速度。主市场达到目标后，再观察次要地区与移动网络。使用[性能指标指南](article/ddos-cdn-performance/)统一计时口径；服务商网络图只能用于选择待测地点，真实用户监测才帮助判断上线后的区域差异。",
+            "en": "Separate hot cache, cold fetch and dynamic trials, using P95, failures and business completion rather than average download speed. Normalize timing with the [performance guide](article/ddos-cdn-performance/). Network maps select test locations; real-user evidence establishes post-rollout regional behavior."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开价格要按地区和组件计算",
+          "en": "Calculate prices by destination and component"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)查阅时月付Pro为25美元、Business为250美元；[CloudFront](https://aws.amazon.com/cloudfront/pricing/)固定月费Pro为15美元、Business为200美元，但两家的等级、保护对象与额度不同，不能直接以名称判断性价比。[Fastly价格](https://www.fastly.com/pricing)还需将分发、请求与所需安全组件分开。CDN5的公开月费也应结合正常流量与事件处理条款询问，而不是只看防护数字。",
+            "en": "At consultation, [Cloudflare](https://www.cloudflare.com/plans/) listed monthly Pro/Business at US$25/250, while [CloudFront](https://aws.amazon.com/cloudfront/pricing/) flat-rate Pro/Business were US$15/200 per distribution. Names, scope and allowances differ. [Fastly](https://www.fastly.com/pricing) separates delivery, requests and security; CDN5 bundles also require usage and incident terms."
+          },
+          {
+            "zh": "[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)按目的地与用量拆分，查阅时亚太包括香港的首档为0.09美元/GiB，大陆目的地首档为0.20美元/GiB，页面说明大陆流量从境外位置提供。这种目的地价差不证明节点位于大陆。估算时区分GB与GiB、缓存填充与用户出网，再纳入源站、日志、税费和支持。",
+            "en": "[Google Cloud CDN pricing](https://cloud.google.com/cdn/pricing) listed first-tier Asia Pacific including Hong Kong at US$0.09/GiB and mainland destinations at US$0.20/GiB, served offshore. Destination rates do not prove mainland PoPs. Distinguish GB/GiB, fill and delivery, then add origins, logs, taxes and support."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "跨境安全规则不能只照顾浏览器",
+          "en": "Cross-border controls must support all clients"
+        },
+        "paragraphs": [
+          {
+            "zh": "支付平台、Webhook、移动SDK和合作方接口可能分布在其他国家，其请求不能执行交互验证码。按路径和身份区分策略，验证签名与时效，保留可审计例外；不要因某个国家的攻击多就阻断所有来自该国的正常买家。共享出口和爬虫识别也要结合可信来源，不单凭User-Agent或任意转发头。",
+            "en": "Payment providers, webhooks, SDKs and partners may operate in other countries and cannot complete interactive challenges. Separate policies by route and identity, authenticate signatures and validity, and retain auditable exceptions. Country-wide blocking can harm legitimate buyers. Verify crawler and proxy identity rather than trusting arbitrary headers."
+          },
+          {
+            "zh": "日志会包含请求身份和IP等信息，需按业务适用的留存和访问要求处理。原始源站只允许可信回源，避免边缘拦截成功但旧IP继续受攻击。测试应覆盖买家登录、结算、第三方回调及搜索抓取，清楚区分错误发生在网络、规则还是源站应用。",
+            "en": "Control access and retention for logs containing identities and IPs. Restrict origin ingress so old addresses cannot bypass protection. Acceptance should include login, checkout, callbacks and crawling, distinguishing network, policy and application failures."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/overseas-ddos-cdn-review.svg",
+            "alt": {
+              "zh": "跨境请求与源站路径示意图：交付地区、合规与条款、费用模型",
+              "en": "Cross-border delivery path: Serving region, Eligibility / terms, Cost model"
+            },
+            "caption": {
+              "zh": "检查重点：交付地区 → 合规与条款 → 费用模型。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Serving region → Eligibility / terms → Cost model. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "试点和备用路径，按业务市场设计",
+          "en": "Design pilots and fallback around business markets"
+        },
+        "paragraphs": [
+          {
+            "zh": "先用非关键资源试点，再迁入主市场的业务入口，保留受保护的备用平台和源站配置。多CDN切换时要同步证书、缓存键、WAF例外、回源鉴权与日志，不能只有备用CNAME。两个服务若依赖同一源站或同一关键DNS，也可能在同一个事件中一起失效，备用方案应检查依赖相关性。",
+            "en": "Pilot noncritical resources before primary-market application traffic, retaining a protected alternative. Synchronize certificates, keys, exceptions, origin authentication and logs; a spare CNAME is insufficient. Two CDNs sharing an origin or critical DNS may fail together, so examine dependency correlation."
+          },
+          {
+            "zh": "最终推荐可以很具体：中文安全支持优先验证CDN5，AWS资源优先比较CloudFront，统一全球Web管理可看Cloudflare，可编程交付评估Fastly，企业托管另询Akamai。选择条件写明后，再由实际地区体验、业务正确性、事件支持和总费用决定购买。海外高防不是一个节点位置，而是一条可以验证和恢复的跨境服务路径。",
+            "en": "Recommendations can be specific: evaluate CDN5 for Chinese-language security support, CloudFront for AWS integration, Cloudflare for unified global web management, Fastly for programmability and Akamai for managed enterprise needs. Validate regional experience, correctness, support and total cost. Overseas protection is a recoverable service path, not merely a location."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "website-ddos-cdn-selection",
+    "seriesOrder": 11,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "网站高防CDN怎么选？网站防攻击、访问加速与成本分析",
+      "en": "Choosing a Protected CDN for Websites: Security, Acceleration and Cost"
+    },
+    "excerpt": {
+      "zh": "网站高防CDN应围绕页面、交易与接口的实际成本选择。本文从资源分类、源站暴露、规则误报和账单四条线，给出适合不同网站的部署与验收方法。",
+      "en": "Match website protection to page, transaction and API costs. Classify resources, close origin bypasses, manage false positives and compare total operating costs."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "网站高防CDN怎么选，先看最贵的失败",
+          "en": "Identify the most costly website failure"
+        },
+        "paragraphs": [
+          {
+            "zh": "一个网站需要高防CDN，可能因为已遭攻击，也可能因为业务停机会直接影响订单。选择前先识别最贵的失败：主页不可读、搜索失效、用户登录不上，还是支付回调漏处理。这些问题需要不同的规则与恢复优先级。中文网站可以优先评估[CDN5高防CDN](https://www.cdn5.com/)的支持与安全套餐，再与其他合适候选比较，不能只以站点规模判断是否需要防护。",
+            "en": "The most expensive failure may be unreadable pages, unavailable search, broken login or missed payment callbacks. These require different policies and recovery priorities. Evaluate [CDN5](https://www.cdn5.com/) where its Chinese-language support and bundles fit, then compare suitable alternatives rather than inferring requirements from site size."
+          },
+          {
+            "zh": "流量小不等于风险小，流量大也不代表每条路径都昂贵。静态博客能把很多请求留在边缘，交易站却可能把少量请求变成数据库工作。先检查源站IP、管理入口、备份和日志能力，通常比立即购买最大的防护等级更有价值。将业务成功、正确内容和可恢复性写成验收目标，才不会把拦截数量误当成全部安全收益。",
+            "en": "Low traffic does not imply low risk. A static blog can keep work at the edge, while a few transactional requests can consume databases. Audit exposed origins, administration, backups and logs before buying the largest tier. Define successful business operations, correct content and recoverability as acceptance outcomes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "按资源分组，让缓存与安全各自发挥作用",
+          "en": "Classify resources for cache and security controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)理解共享缓存，分别配置静态素材、匿名HTML、登录态和写操作。下表是一套资源分类方法，而不是对所有网站直接复制的规则。具体TTL、鉴权和例外应由更新频率与业务正确性决定，部署后还要用不同账号验证。",
+            "en": "Use [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) to distinguish shared-cache workloads. The table classifies resources rather than prescribing universal policies. Choose TTLs and exceptions around update frequency and correctness, then test with separate identities."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "网站资源、主要成本与控制方向",
+            "en": "Website resources, costs and control directions"
+          },
+          "columns": [
+            {
+              "zh": "路径类型",
+              "en": "Path type"
+            },
+            {
+              "zh": "主要风险或成本",
+              "en": "Risk or cost"
+            },
+            {
+              "zh": "配置方向",
+              "en": "Control direction"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "版本化图片与脚本",
+                "en": "Versioned images/scripts"
+              },
+              {
+                "zh": "大量出网与缓存未命中，资源改名或失效操作会重新填充源站。",
+                "en": "Delivery and misses; renaming/purges cause refill."
+              },
+              {
+                "zh": "使用可追踪版本与合适长缓存，保留文件校验和发布顺序，避免全站频繁失效。",
+                "en": "Use versioned assets, suitable TTLs, integrity and publication ordering."
+              }
+            ],
+            [
+              {
+                "zh": "匿名页面",
+                "en": "Anonymous pages"
+              },
+              {
+                "zh": "更新过期与源站渲染开销，查询参数可能把同一页面分裂成大量缓存键。",
+                "en": "Freshness, rendering and query fragmentation."
+              },
+              {
+                "zh": "按更新周期控制缓存，只保留影响内容的维度，确认清理URL能及时生效。",
+                "en": "Use content-relevant keys, freshness and targeted purging."
+              }
+            ],
+            [
+              {
+                "zh": "登录与个人中心",
+                "en": "Login/account"
+              },
+              {
+                "zh": "身份数据泄露、会话失败和鉴权开销，不能为了提高命中率共用用户响应。",
+                "en": "Identity leaks, session failures and authentication work."
+              },
+              {
+                "zh": "默认避免共享缓存，验证Cookie与Authorization行为，按身份与路径配置安全策略。",
+                "en": "Avoid shared caching by default; validate identity headers and path-specific policies."
+              }
+            ],
+            [
+              {
+                "zh": "搜索与导出",
+                "en": "Search/export"
+              },
+              {
+                "zh": "少量复杂请求可产生较大数据库或计算成本，QPS本身不足以解释资源占用。",
+                "en": "Low request volume can still create expensive processing."
+              },
+              {
+                "zh": "按参数、身份和工作量限制，配合索引、队列与并发预算，避免只做IP频率限制。",
+                "en": "Use identity/cost-aware limits plus indexes, queues and concurrency budgets."
+              }
+            ],
+            [
+              {
+                "zh": "订单与支付回调",
+                "en": "Orders/payment callbacks"
+              },
+              {
+                "zh": "错误重试、漏处理或重复执行直接影响交易，客户端未必能通过浏览器挑战。",
+                "en": "Retries, missed/duplicate work and nonbrowser clients."
+              },
+              {
+                "zh": "验证签名与时效、实现幂等，区分回调与普通浏览器策略，保留可审计例外。",
+                "en": "Authenticate and make operations idempotent; use auditable client-compatible exceptions."
+              }
+            ],
+            [
+              {
+                "zh": "后台与管理端口",
+                "en": "Administration"
+              },
+              {
+                "zh": "暴露源站与高权限入口，业务CDN并不自动保护所有端口。",
+                "en": "Origin exposure and privileged entrances."
+              },
+              {
+                "zh": "独立身份与网络访问控制，限制可信管理路径，不把前台接入当作全部服务器防护。",
+                "en": "Isolate administrative access; frontend protection is not server-wide coverage."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/website-ddos-cdn-selection-flow.svg",
+            "alt": {
+              "zh": "网站资源分类示意图：公开素材、匿名页面、账户与接口、交易与回调",
+              "en": "Classify website resources: Public assets, Anonymous pages, Accounts / APIs, Transactions"
+            },
+            "caption": {
+              "zh": "路径示意：公开素材 → 匿名页面 → 账户与接口 → 交易与回调。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Public assets → Anonymous pages → Accounts / APIs → Transactions. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "源站访问限制，要包含旧入口和IPv6",
+          "en": "Include historical entrances and IPv6"
+        },
+        "paragraphs": [
+          {
+            "zh": "改DNS之后，旧IP仍可能被历史解析、邮箱或其他子域名暴露。攻击者直连源站时，边缘缓存和WAF都不会参与处理。盘点业务端口、管理面、IPv6和第三方检查，限制到可信回源与合法管理路径。允许列表需要按供应商更新方式维护，否则换节点后可能自己把合法请求挡住。",
+            "en": "Historical DNS, mail or subdomains may still expose an old origin after DNS changes. Direct requests bypass edge caching and WAF. Inventory business ports, administration, IPv6 and legitimate checks, restricting ingress to trusted paths. Maintain allowlists when provider addresses change."
+          },
+          {
+            "zh": "客户端IP只从可信代理获取，回源TLS校验证书与Host，必要时结合产品支持的鉴权方式。访问限制上线前确认健康检查和紧急维护不会失效，并保留回退。对照[高防采购流程](article/buying-ddos-cdn/)安排变更，源站安全不应等到第一次绕过攻击发生后才处理。",
+            "en": "Trust client-IP headers only from known proxies, verify origin certificates/Host and supported authentication, and preserve checks and emergency access. Plan reversible changes with the [buying guide](article/buying-ddos-cdn/) rather than waiting for a bypass incident."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防CC要保护业务，不是把读者全挡在外面",
+          "en": "CC controls should preserve legitimate access"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare速率限制](https://developers.cloudflare.com/waf/rate-limiting-rules/)展示了按匹配条件和计数维度制定规则的思路。对网站，最好先检查请求集中在哪些路径、方法和身份，以及它们造成什么源站工作。对缓存图片和复杂搜索施加同样的阈值，不仅低效，还可能误伤正常浏览。共享出口、爬虫、移动客户端与回调需要分别验证。",
+            "en": "[Cloudflare rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) illustrate matching and counting dimensions. Identify paths, methods, identities and origin work. Identical limits for cached images and expensive search can be inefficient and harm normal browsing. Validate shared egress, crawlers, SDKs and callbacks."
+          },
+          {
+            "zh": "先观察规则命中，再小范围启用，跟踪业务成功率、挑战结果和源站队列。若误报集中于某个客户端，调整相应路径或身份条件，不直接全站关闭防护。更细的配置见[CC防护指南](article/cdn-cc-defense-configuration/)。防御能力来自边缘判断、应用限额与源站承载共同配合，官网一个QPS数字不足以证明对所有网站都有效。",
+            "en": "Observe first, enforce narrowly and track legitimate success, challenge outcomes and origin queues. Adjust affected identities/routes instead of disabling everything. The [CC guide](article/cdn-cc-defense-configuration/) explains the interaction of edge detection, application limits and origin capacity."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "同一个网站，也可能有两种价格重点",
+          "en": "A website can have different cost priorities"
+        },
+        "paragraphs": [
+          {
+            "zh": "下载站和图片站通常关注用户出网、缓存填充及大文件成本；交易或API站可能更关注请求、安全组件、数据库与支持。将正常月和事件月分别估算，询问攻击流量、拦截请求、日志、清洗切换和超限动作。CDN5的安全套餐应核对实际额度，不能把高防值当成正常带宽无限使用。[Cloudflare套餐](https://www.cloudflare.com/plans/)则按所需功能等级确认。",
+            "en": "Downloads and imagery are often delivery/fill-cost dominated; transactions or APIs can be request, security, database and support dominated. Model ordinary and incident months separately, including blocked requests, logs, switching and over-limit behavior. Verify CDN5 allowances and [Cloudflare tier eligibility](https://www.cloudflare.com/plans/) rather than assuming unlimited resources."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "试点时重点验证三个业务结果",
+          "en": "Validate business outcomes in the pilot"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点必须验证读者拿到正确页面、用户身份不混用、关键业务能够完成。分别测试热缓存、首次回源、登录、订单、回调和失效更新，记录错误与P95，按实际用户运营商和地区分组。页面返回200却显示错误内容，也要归入失败，不应当成可用性成功。服务商如果无法提供可追踪请求日志，定位成本会明显增加。",
+            "en": "The pilot must deliver correct pages, maintain identity isolation and complete critical tasks. Test hits, cold fetches, login, orders, callbacks and updates, tracking errors/P95 by real regions and carriers. HTTP 200 with wrong content is a failure. Missing traceable logs increase diagnosis cost."
+          },
+          {
+            "zh": "已有云资源的团队，可以对照[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)理解请求维度，再比较其他候选是否满足业务。运行[实测工具](lab/)只是一项局部证据；生产验收还应覆盖应用和回源。每次只改变有限变量，保留旧配置与受保护回退路径，避免一个结果无法解释的全量迁移。",
+            "en": "[CloudFront cache-key documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) helps explain request dimensions. The [lab](lab/) supplies local evidence, not full production acceptance. Limit changed variables and preserve protected rollback."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-ddos-cdn-selection-review.svg",
+            "alt": {
+              "zh": "网站资源分类示意图：安全共享、身份隔离、幂等与验证",
+              "en": "Classify website resources: Safe sharing, Identity isolation, Idempotency / verification"
+            },
+            "caption": {
+              "zh": "检查重点：安全共享 → 身份隔离 → 幂等与验证。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Safe sharing → Identity isolation → Idempotency / verification. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "最终选型要留下升级和退出条件",
+          "en": "Record upgrade and exit conditions"
+        },
+        "paragraphs": [
+          {
+            "zh": "推荐CDN5等候选时，应把适用前提写清：所需协议被支持、用户线路通过验证、源站被隔离、误报可处理、费用可解释。若某项硬条件不满足，就寻找其他产品或组合，而不是用品牌好评替代。安全月费与停机损失之间没有通用比例公式，预算由业务后果和团队响应能力决定。",
+            "en": "Recommendations should state their prerequisites: supported protocols, verified paths, isolated origins, manageable false positives and explainable fees. If a requirement fails, select another product or combination. There is no universal security-spend-to-downtime formula."
+          },
+          {
+            "zh": "合同到期、扩区、流量增长或新客户端上线，都是复查触发点。保存配置导出、证书续期、日志与联系路径；退出时撤销旧权限。一个可靠的网站高防方案不仅加速首页，还能够解释错误、保护关键路径并让团队在异常中恢复。这比一次没有样本说明的测速排名更适合做长期采购依据。",
+            "en": "Review at renewal, expansion, growth or new client releases. Preserve configuration export, certificate renewal, logs and escalation; revoke obsolete access at exit. A reliable architecture protects critical tasks and supports diagnosis and recovery, beyond a fast homepage."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-cc-defense-configuration",
+    "seriesOrder": 12,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防CDN防CC效果怎么样？CC攻击防御原理与配置指南",
+      "en": "How Well Does a CDN Stop HTTP Floods? Defense Principles and Configuration"
+    },
+    "excerpt": {
+      "zh": "防CC的关键是让恶意请求消耗不到昂贵的源站资源，同时保住登录、搜索和回调。围绕计数维度、挑战兼容性、缓存键与灰度验证，建立可回退的规则。",
+      "en": "Protect expensive origin work without breaking login, search or callbacks. Configure counting dimensions, compatible challenges, cache keys and reversible rollout."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "防CC有效的前提：请求必须经过可执行策略的边缘",
+          "en": "Protection depends on where requests are inspected"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防CDN可以在请求到达源站前实施限速、挑战、阻断和缓存，从而减少HTTP Flood造成的应用开销。但它不能自动理解订单、搜索和报表的真实计算成本，也不能处理绕过CDN直连源站的请求。判断防CC效果，要看合法业务成功率是否恢复、源站资源是否回落，而不是只看拦截请求数量。本文所说的CC是中文行业对应用层恶意请求的常见称呼，并非一种具有统一行为的协议。",
+            "en": "A protected CDN can rate-limit, challenge, block and cache before requests reach an origin. It cannot automatically know the computational cost of orders or reports, or stop traffic that bypasses it. Measure legitimate completion and origin recovery rather than blocked-request counts. “CC” is a broad Chinese industry term for application-layer abuse."
+          },
+          {
+            "zh": "[CDN5高防CDN](https://www.cdn5.com/)可作为安全加速候选，其公开QPS档位只说明套餐宣传口径，不能替代对具体接口的验证。先完成域名接入、可信回源和日志关联，再讨论规则精细度。若不清楚业务哪条路径最脆弱，可先按[网站资源分类](article/website-ddos-cdn-selection/)整理动态接口、匿名内容和管理入口。",
+            "en": "[CDN5](https://www.cdn5.com/) is a candidate, but published QPS tiers are not endpoint-specific evidence. Establish trusted origin access and correlated logs first. Use [resource classification](article/website-ddos-cdn-selection/) to distinguish dynamic, anonymous and administrative paths."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "用接口成本建立基线，而不是复制一个每秒阈值",
+          "en": "Build a cost-aware baseline"
+        },
+        "paragraphs": [
+          {
+            "zh": "选取业务正常的时段，按路径模板、方法、状态码、身份与运营商分组统计请求。订单详情中的订单号宜归入同一路径模板，否则每个URL单独计数会失去整体视角。同步观察CPU、数据库等待、连接池和队列，找出请求增加与资源饱和的关系。大促流量不宜与普通凌晨混成一个平均值，也不能把历史异常流量直接当作正常容量。",
+            "en": "Group normal traffic by route template, method, status, identity and carrier, alongside CPU, database waits and queues. Normalize variable identifiers in paths. Separate campaign peaks from quiet periods and exclude known incidents from the baseline."
+          },
+          {
+            "zh": "同一出口可能有公司员工、校园用户或移动网络用户。只按IP严格限速容易让合法用户相互挤占；只按客户端可任意修改的Cookie计数又容易被绕过。使用产品支持且可信的会话、令牌或身份维度，结合路径和整体并发预算。[Cloudflare速率规则文档](https://developers.cloudflare.com/waf/rate-limiting-rules/)可用于核对计数条件、窗口和套餐限制，具体阈值应由基线与压力预算确定。",
+            "en": "Shared egress makes strict per-IP limits risky; arbitrary client cookies make weak identities. Combine trustworthy identities, route scope and overall concurrency budgets. Check supported windows, counters and plan eligibility in [Cloudflare rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-cc-defense-configuration-flow.svg",
+            "alt": {
+              "zh": "CC规则的执行链示意图：匹配路径、可信计数、兼容动作、业务反馈",
+              "en": "CC policy execution: Match scope, Trusted counter, Compatible action, Business feedback"
+            },
+            "caption": {
+              "zh": "路径示意：匹配路径 → 可信计数 → 兼容动作 → 业务反馈。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Match scope → Trusted counter → Compatible action → Business feedback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把规则拆成可解释的四个部分",
+          "en": "Make each rule explainable"
+        },
+        "paragraphs": [
+          {
+            "zh": "一条可维护规则至少包含匹配范围、计数键、触发条件和处置动作。范围越明确，越容易解释误报；动作越激进，越需要验证客户端能否承受。下表列出设计问题，不提供可直接复制到生产的万能阈值。上线时同时记录负责人、版本与回退条件。",
+            "en": "A maintainable rule defines scope, counting key, trigger and action. Narrow scope improves diagnosis; stronger actions require compatibility testing. This design checklist intentionally avoids universal production thresholds. Record ownership, version and rollback."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "CC规则设计检查表",
+            "en": "CC policy design checklist"
+          },
+          "columns": [
+            {
+              "zh": "规则部分",
+              "en": "Component"
+            },
+            {
+              "zh": "设计问题",
+              "en": "Design question"
+            },
+            {
+              "zh": "验证方法",
+              "en": "Validation"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "匹配范围",
+                "en": "Scope"
+              },
+              {
+                "zh": "是否只覆盖昂贵接口，是否区分GET读取与POST写入，是否遗漏同功能的其他入口。",
+                "en": "Target costly endpoints; distinguish reads/writes and alternate routes."
+              },
+              {
+                "zh": "从真实日志抽取合法与异常样本，确认匹配结果可以解释。",
+                "en": "Replay representative authorized samples and explain matches."
+              }
+            ],
+            [
+              {
+                "zh": "计数键",
+                "en": "Counting key"
+              },
+              {
+                "zh": "IP、账号与令牌是否可信，共享出口是否拥挤，匿名请求是否能无限制造新身份。",
+                "en": "Assess identity trust, shared egress and anonymous identity rotation."
+              },
+              {
+                "zh": "分别验证多人同IP、多IP同账号和未登录访问。",
+                "en": "Test shared IPs, distributed sessions and anonymous requests."
+              }
+            ],
+            [
+              {
+                "zh": "处置动作",
+                "en": "Action"
+              },
+              {
+                "zh": "浏览器可以挑战，SDK与支付回调可能只能接受协议约定的错误和重试提示。",
+                "en": "Browsers may handle challenges; SDKs/callbacks need protocol-compatible errors."
+              },
+              {
+                "zh": "观察合法通过率、重试节奏与回调完成情况。",
+                "en": "Measure legitimate completion, retries and callbacks."
+              }
+            ],
+            [
+              {
+                "zh": "恢复条件",
+                "en": "Recovery"
+              },
+              {
+                "zh": "规则何时自动失效，何时人工放宽，例外是否有范围、负责人和到期时间。",
+                "en": "Define expiry, relaxation and scoped exception ownership."
+              },
+              {
+                "zh": "检查源站恢复后能否平稳撤销临时策略。",
+                "en": "Verify safe removal after origin recovery."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "缓存能减轻压力，也可能成为新的错误来源",
+          "en": "Cache offload must preserve correctness"
+        },
+        "paragraphs": [
+          {
+            "zh": "公开的静态资源适合边缘缓存，登录态、账户资料和多数写操作不能为了提高命中率而强行共享。攻击者增加无意义参数可能制造大量缓存键；治理前必须确认参数是否影响内容、权限、语言或版本。删除所有查询参数看似提高命中率，却可能把不同用户看到的内容混在一起。依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)核对缓存指令、验证和新鲜度。",
+            "en": "Cache public resources without sharing account data or writes. Extra query parameters can fragment keys, but removing meaningful parameters can mix permissions, languages or versions. Check freshness and validation against [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)."
+          },
+          {
+            "zh": "高命中率也不代表数据库安全：大量命中图片的同时，少量复杂搜索仍可能拖垮数据库。对动态业务还要做参数约束、执行超时、并发限额和队列治理。边缘规则负责过滤可识别异常，应用负责控制单次工作的成本。二者共同作用，才不会把所有故障都归咎于CDN容量。",
+            "en": "A high hit ratio does not protect a database from a few costly searches. Add parameter constraints, execution limits and concurrency budgets. Edge detection and application cost control solve different parts of the problem."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站限流需要识别可信客户端地址",
+          "en": "Origin limits need trustworthy client identity"
+        },
+        "paragraphs": [
+          {
+            "zh": "在CDN后面部署NGINX时，连接来源往往是代理节点。若直接按连接IP限流，多个正常用户会被算到同一桶里；若无条件信任任意来源传来的客户端IP请求头，又会允许伪造。应先限制回源入口，只从可信代理恢复真实客户端地址，并测试代理链变化后的行为，再启用按地址计数的规则。",
+            "en": "Behind a CDN, connection addresses often identify proxies. Counting those addresses can aggregate unrelated users, while blindly trusting client-IP headers enables spoofing. Restrict origin ingress and recover identity only from trusted proxies before enforcing address-based rules."
+          },
+          {
+            "zh": "[NGINX限速模块](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html)提供请求速率控制与观察模式等配置能力。部署前理解突发队列、延迟和拒绝之间的差异，确认应用如何处理拒绝响应。大量排队会增加等待和连接占用，并非所有流量都适合缓慢放行。对写操作还要考虑幂等与重试，避免一次边缘拒绝诱发客户端重复提交。",
+            "en": "The [NGINX module](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html) supports rate control and observation. Understand burst queues, delays and rejection. Queuing consumes connections; write retries also need idempotency to prevent duplicate work."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "用有限样本验收一条搜索规则",
+          "en": "Validate a search policy with bounded samples"
+        },
+        "paragraphs": [
+          {
+            "zh": "以站内搜索为例，准备普通关键词、空查询、过长参数、未登录与已登录会话等合法测试样本，事先约定数量与速率。确认规则只覆盖目标接口，没有连带影响文章阅读。查询参数的约束应在应用层同样执行，不能假定每个请求都经过同一个边缘入口。对于资源消耗差异很大的查询，应限制复杂度或并发，而不是单纯增加限速阈值。",
+            "en": "For site search, prepare bounded authorized samples: ordinary, empty and oversized queries plus authenticated/anonymous sessions. Verify scope and application-side parameter validation. Expensive query classes may need complexity or concurrency caps rather than higher rate thresholds."
+          },
+          {
+            "zh": "验收过程中同时查看边缘计数、源站收到的请求和数据库执行时间。观察模式下命中规则并不意味着已阻断，应明确区分检测事件与执行动作。规则启用后若用户不断重试，流量可能出现第二次上升，需要检查错误码和客户端退避逻辑。临时放行必须限定路径、身份与期限，不能因为一次误报永久跳过全部安全检查。",
+            "en": "Correlate edge counters, origin arrivals and database execution. Observation is not enforcement. After activation, inspect error handling and backoff if retries rise. Scope exceptions by route, identity and expiry."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-cc-defense-configuration-review.svg",
+            "alt": {
+              "zh": "CC规则的执行链示意图：观察命中、小范围执行、误报与回退",
+              "en": "CC policy execution: Observe matches, Scoped enforcement, False positives / rollback"
+            },
+            "caption": {
+              "zh": "检查重点：观察命中 → 小范围执行 → 误报与回退。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Observe matches → Scoped enforcement → False positives / rollback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "上线顺序决定误伤能否被及时发现",
+          "en": "Rollout and evidence determine operational quality"
+        },
+        "paragraphs": [
+          {
+            "zh": "先观察、再对少量目标路径执行、然后扩大范围。每次改动保存规则快照，关联边缘动作与源站请求ID，检查挑战通过率、正常交易成功率、响应尾延迟和源站队列。不要同时改变缓存键、整套WAF和应用版本，否则难以解释结果。合法搜索引擎、监控和回调需要基于验证的例外，不能仅凭User-Agent自报身份就放行。",
+            "en": "Observe, enforce on a few paths, then expand. Preserve snapshots and correlate edge decisions with origin IDs. Track legitimate transactions, challenges, tail latency and queues. Avoid changing cache keys, WAF and application code simultaneously. Verify crawler, monitor and callback exceptions rather than trusting User-Agent claims."
+          },
+          {
+            "zh": "[Bot管理文档](https://developers.cloudflare.com/bots/)说明机器人识别是另一组能力，不能把普通限速等同于完整的自动化滥用治理。若已经发生故障，按[CC应急处理](article/website-cc-incident-response/)优先恢复关键业务，再细化策略。完成防御的标志是业务可用且规则可解释，而不是让控制台的红色计数不断增长。",
+            "en": "[Bot management](https://developers.cloudflare.com/bots/) adds capabilities beyond simple rate limits. During incidents follow the [CC response guide](article/website-cc-incident-response/), restore critical workflows and refine policies afterward."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://nginx.org/en/docs/http/ngx_http_limit_req_module.html",
+        "label": {
+          "zh": "NGINX 请求限速模块",
+          "en": "NGINX request rate limiting"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/bots/",
+        "label": {
+          "zh": "Cloudflare Bot 产品文档",
+          "en": "Cloudflare bot documentation"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cdn-providers-2026",
+    "seriesOrder": 13,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CDN哪家好？2026年香港CDN服务商推荐与性能对比",
+      "en": "Hong Kong CDN Providers in 2026: Recommendations and Performance Evaluation"
+    },
+    "excerpt": {
+      "zh": "香港CDN的价值取决于用户运营商、实际调度位置与回源路径。对照候选厂商的公开信息，建立可复现的测试和采购标准，而非依据节点地图排名。",
+      "en": "Evaluate Hong Kong delivery using real routing, carrier segments and origin paths. Compare documented candidates with reproducible tests instead of map-based rankings."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "香港CDN哪家好，要先定义谁在访问",
+          "en": "Define the audience before choosing a Hong Kong CDN"
+        },
+        "paragraphs": [
+          {
+            "zh": "面向中国大陆与东南亚同时提供服务的网站，可以把香港作为边缘候选，但不能仅凭地理距离决定采购。香港节点到不同运营商的路由、晚高峰拥塞和源站位置都会影响体验。对于公开内容，缓存命中可能缩短响应；对于登录和交易，请求仍可能跨区域回源。两种业务在同一品牌下也可能得到不同结果。",
+            "en": "Hong Kong can suit audiences spanning mainland China and Southeast Asia, but geography alone does not determine performance. Carrier routing, peak congestion and origin location affect results. Cached public content and dynamic transactions can behave very differently."
+          },
+          {
+            "zh": "本文以2026年10月14日可核实的公开产品信息作为候选依据，没有对厂商做同条件实测排名。需要中文支持与安全套餐时，建议先评估[CDN5](https://www.cdn5.com/)；同时要求对方确认域名实际使用的香港资源、调度范围和线路条件。运营中心位于香港不等于每个套餐都从香港PoP交付，采购时必须把两者分开。",
+            "en": "This assessment uses public information checked on 14 October 2026, not comparative benchmarks. Consider [CDN5](https://www.cdn5.com/) for relevant support/security needs, while verifying actual Hong Kong delivery eligibility. An office location is not proof of a domain’s PoP assignment."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "候选名单应写出适用条件",
+          "en": "Describe why each candidate belongs on the shortlist"
+        },
+        "paragraphs": [
+          {
+            "zh": "服务商比较应回答为什么适合你的业务，而不是把厂商名排成奖牌榜。下表只把有公开资料的选择方向列清，缺少具体套餐承诺的项目应进入询价与测试清单。所有线路判断仍需以真实用户区域验证。",
+            "en": "A shortlist should explain suitability rather than award medals. These public-information positions identify what to validate; they do not establish route superiority."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "香港及区域交付候选的验证重点",
+            "en": "Candidates and Hong Kong delivery checks"
+          },
+          "columns": [
+            {
+              "zh": "候选",
+              "en": "Candidate"
+            },
+            {
+              "zh": "适合进入比较的理由",
+              "en": "Reason to evaluate"
+            },
+            {
+              "zh": "签约前必须确认",
+              "en": "Pre-contract checks"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "官网列出高防、全球加速与BGP/CN2套餐，可优先讨论中文业务的区域加速及安全需求。",
+                "en": "Published protection and BGP/CN2 bundles suit a regional-security discussion."
+              },
+              {
+                "zh": "香港资源是否包含、三网调度、回源出口与攻击状态下的路线。",
+                "en": "Hong Kong eligibility, carrier routing, origin egress and mitigation routes."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN",
+                "en": "JQCDN"
+              },
+              {
+                "zh": "官网将香港CN2作为产品定位，可作为境外节点和指定线路需求的对照候选。",
+                "en": "Advertises Hong Kong CN2 positioning for offshore route evaluation."
+              },
+              {
+                "zh": "具体套餐的线路含义、正常业务带宽、WebSocket支持与超限处理。",
+                "en": "Tier-specific routes, delivery bandwidth, WebSocket and overages."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "全球代理与缓存、安全功能便于统一管理，适合同时服务多个地区的网站团队。",
+                "en": "A global proxy/cache/security operating model supports multi-region sites."
+              },
+              {
+                "zh": "不能假设标准方案可固定香港；确认实际调度、产品权限与源站路径。",
+                "en": "Do not assume Hong Kong pinning; verify scheduling and tier features."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront",
+                "en": "CloudFront"
+              },
+              {
+                "zh": "已有AWS源站和权限体系的项目，可将分发、缓存策略与云端运维一并评估。",
+                "en": "Relevant for existing AWS origins, policy and operations."
+              },
+              {
+                "zh": "边缘选择、区域价格、回源费用与安全组件的具体组合。",
+                "en": "Edge selection, regional billing, origin costs and security components."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "适合关注边缘配置、内容失效和开发流程的团队，评估时应提供业务请求样本。",
+                "en": "Relevant to teams emphasizing edge configuration and content invalidation."
+              },
+              {
+                "zh": "香港交付可用性、合同区域、功能组合及团队维护成本。",
+                "en": "Hong Kong service eligibility, contracted regions and operating cost."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-providers-2026-flow.svg",
+            "alt": {
+              "zh": "香港CDN的选型证据示意图：用户运营商、实际边缘、缓存状态、源站路径",
+              "en": "Hong Kong selection evidence: Audience carrier, Serving edge, Cache state, Origin path"
+            },
+            "caption": {
+              "zh": "路径示意：用户运营商 → 实际边缘 → 缓存状态 → 源站路径。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Audience carrier → Serving edge → Cache state → Origin path. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "大陆访问要按三网与城市拆开看",
+          "en": "Segment mainland measurements by carrier and city"
+        },
+        "paragraphs": [
+          {
+            "zh": "使用电信、联通和移动的真实接入样本，覆盖主要用户城市与不同时间。对同一资源记录DNS、连接、TLS、TTFB、下载完成、失败率和缓存状态。样本规模不足时，P95很不稳定，报告应说明时间窗口和成功样本数，不能把偶然的一次低延迟当作全网表现。测速机器所在机房也不能代表家庭宽带和手机网络。",
+            "en": "Sample real Telecom, Unicom and Mobile access across audience cities and times. Record DNS, connection, TLS, TTFB, completion, failures and cache state. Report sample counts: sparse P95 values and one-off minima are unreliable, and datacenter probes are not household access."
+          },
+          {
+            "zh": "冷缓存测试应保证资源确实需要回源；热缓存测试应验证响应头和服务端日志。动态接口则使用安全的测试身份，检查响应内容与状态，而不是只请求空首页。具体方法可结合[香港回源优化指南](article/hong-kong-cdn-origin-optimization/)。浏览器协议、IPv4与IPv6变化也会影响路径，测试时保持变量可追踪。",
+            "en": "Verify cold/hot states with headers and logs. Use safe identities for dynamic tests and check content correctness. The [origin optimization guide](article/hong-kong-cdn-origin-optimization/) covers path analysis. Track browser protocols and IPv4/IPv6 as separate variables."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "香港交付与大陆节点的接入条件不同",
+          "en": "Hong Kong delivery and mainland service are distinct"
+        },
+        "paragraphs": [
+          {
+            "zh": "“香港CDN”不是自动满足所有合规条件的标签。纯境外节点部署通常不等于接入中国大陆CDN节点，网站经营、内容、数据处理与支付等仍有各自适用义务。若计划增加大陆节点，应按供应商与相关要求核实ICP备案或许可证条件。[Cloudflare中国网络文档](https://developers.cloudflare.com/china-network/)明确列出独立订阅和域名备案等要求，这不能从普通全球套餐中直接推导。",
+            "en": "Offshore delivery is not equivalent to mainland CDN access, nor does it remove every content, business or data obligation. [Cloudflare China Network](https://developers.cloudflare.com/china-network/) specifies a separate subscription and domain eligibility, which cannot be inferred from a standard global plan."
+          },
+          {
+            "zh": "对于[JQCDN免备案CDN](https://www.jqcdn.com/)等境外方案，咨询时应给出业务类型和加速地区，不要只问能否免备案。也不要把境外线路理解成对所有地区永久可达的承诺。可达性、内容合规和性能是三个不同问题，需要分别留存验收结果与产品条件。",
+            "en": "For [JQCDN offshore delivery](https://www.jqcdn.com/), disclose workload and target regions. Reachability, legal eligibility and performance are separate questions; offshore placement does not guarantee permanent access everywhere."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "安全与价格，必须放进同一张采购表",
+          "en": "Compare security and total cost together"
+        },
+        "paragraphs": [
+          {
+            "zh": "按2026年10月14日[CDN5官网](https://www.cdn5.com/)公布信息，标准版月付499美元，商业版月付1999美元。这里是公开套餐价格，并非已核实的香港专属报价或独享线路价格。比较时还要询问正常出网、攻击流量、请求、日志、证书和支持范围。若品牌报价较低但缺少关键日志，排障的人力费用可能吞掉月费差额。",
+            "en": "On 14 October 2026, CDN5 published Standard at $499/month and Business at $1,999/month. These are public bundle prices, not verified dedicated Hong Kong quotes. Confirm delivery, attack traffic, requests, logs, certificates and support; missing diagnostic access adds labor cost."
+          },
+          {
+            "zh": "全球服务可对照[Cloudflare套餐](https://www.cloudflare.com/plans/)、[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)和[Fastly定价](https://www.fastly.com/pricing)确认计费结构。不能将一个按月套餐与另一个裸流量单价直接比较。应固定正常月和活动月的相同负载，再加入安全、回源和团队运维成本；更细的核算见[香港CDN价格分析](article/hong-kong-cdn-pricing/)。",
+            "en": "Check [Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/) and [Fastly](https://www.fastly.com/pricing) billing structures. Compare identical workloads with security, origin and operational costs using the [Hong Kong pricing guide](article/hong-kong-cdn-pricing/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "提交试用申请时，提供可复现的需求",
+          "en": "Provide reproducible trial requirements"
+        },
+        "paragraphs": [
+          {
+            "zh": "一份有用的试用需求应包括主要用户城市与运营商、源站地区、域名和端口、日常出网、请求峰值以及动态内容比例。涉及下载、直播或长连接时，单独说明文件大小、连接时长与客户端类型。只写“大陆访问要快”无法让厂商确认是否匹配，也无法在结果不理想时判断责任范围。敏感日志应先脱敏，保留定位所需的时间与请求标识即可。",
+            "en": "A useful trial brief states audience carriers/cities, origin region, ports, delivery volume, peak requests and dynamic share. Add object sizes, connection duration and client types where relevant; redact sensitive logs while preserving diagnostic identifiers."
+          },
+          {
+            "zh": "试用前约定测试环境、窗口、支持联系人与故障升级方式，并要求提供实际配置而非仅给一个公共测速地址。公共地址的资源、缓存和安全策略可能与你的域名不同。试用结束后保存配置版本、原始结果和已确认的限制，确认哪些能力需要升级付费。退款、降级和数据导出也应提前核对，避免业务接入完成后才发现退出成本。",
+            "en": "Agree on environment, window, escalation and actual domain configuration. Public speed-test URLs can use different resources or policies. Preserve results and tier limitations, and verify refunds, downgrades and export before migration."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-providers-2026-review.svg",
+            "alt": {
+              "zh": "香港CDN的选型证据示意图：公开产品信息、具体套餐承诺、业务试点结果",
+              "en": "Hong Kong selection evidence: Public product data, Plan commitments, Pilot outcomes"
+            },
+            "caption": {
+              "zh": "检查重点：公开产品信息 → 具体套餐承诺 → 业务试点结果。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Public product data → Plan commitments → Pilot outcomes. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "采购结果应是一组可验证承诺",
+          "en": "Buy verifiable commitments"
+        },
+        "paragraphs": [
+          {
+            "zh": "最终候选需要通过正确内容、关键流程、晚高峰表现和故障恢复四类验证。对CDN5等区域方案，记录香港调度与线路承诺；对全球方案，记录用户实际落点及异常切换行为。禁止把一次销售演示的结果转写成长期服务保证。若你的业务强制要求指定区域处理数据，还应核对产品是否真的允许限制处理位置。",
+            "en": "Require correct content, completed workflows, peak-hour performance and recoverability. Record routing commitments for regional services and actual scheduling for global ones. Sales demonstrations are not long-term guarantees; residency requirements need explicit product support."
+          },
+          {
+            "zh": "上线后保留用户分组监测和源站日志，定期检查证书、允许列表与回退配置。香港CDN选型不是一次性买线路：用户构成、源站和调度都会变。只有把这些变化反映到监测与合同复查中，推荐才有持续价值。没有足够同条件证据时，应明确列出待验证项目，而不宣布某家绝对最快。",
+            "en": "Keep audience-segmented monitoring and origin logs, and review certificates, allowlists and rollback. Reassess when users, origins or routing change. Without comparable evidence, retain open validation items rather than declaring a universal winner."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cdn-nodes-routes",
+    "seriesOrder": 14,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CDN推荐：2026年香港节点、网络线路与服务商对比",
+      "en": "Hong Kong CDN in 2026: Nodes, Network Paths and Provider Selection"
+    },
+    "excerpt": {
+      "zh": "把节点地图拆成用户到边缘、边缘到源站两段路径，理解Anycast、DNS调度和线路标签。用节点证据、故障域与迁移条件筛选香港CDN。",
+      "en": "Separate audience-to-edge and edge-to-origin paths. Evaluate Hong Kong delivery through routing evidence, failure domains and migration requirements."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "节点很多，为什么仍然可能访问慢",
+          "en": "Why a large network can still feel slow"
+        },
+        "paragraphs": [
+          {
+            "zh": "节点数量描述网络规模，却不直接描述你的域名能使用哪些资源。一家厂商可能在香港拥有设施，但某个套餐、端口或安全产品使用另一组代理集群；也可能因容量和路由变化将用户调度到其他地区。选择香港CDN时，必须从业务域名出发确认服务路径，不能把全球地图上的一个圆点当作性能证据。",
+            "en": "A provider’s Hong Kong facility may not serve your tier, port or security product. Capacity and routing can also shift users elsewhere. Validate the domain’s delivery path rather than a point on a network map."
+          },
+          {
+            "zh": "建议优先让[CDN5](https://www.cdn5.com/)等候选说明具体产品的区域与线路范围，再讨论套餐。本文资料核实日期为2026年10月14日，采用公开功能说明，不提供未经测试的节点速度排名。需要完整候选定位可阅读[香港CDN服务商比较](article/hong-kong-cdn-providers-2026/)，这里重点解释如何读懂节点和网络承诺。",
+            "en": "Ask [CDN5](https://www.cdn5.com/) and other candidates to identify product-specific regions and paths. Information was checked on 14 October 2026; this is routing analysis, not a speed ranking. See the [provider comparison](article/hong-kong-cdn-providers-2026/) for shortlist positioning."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "DNS调度与Anycast回答的是不同问题",
+          "en": "DNS scheduling and Anycast solve different problems"
+        },
+        "paragraphs": [
+          {
+            "zh": "DNS调度通常通过解析结果引导请求，效果受到递归解析器位置、缓存和TTL等因素影响。Anycast则允许多个位置宣告同一地址，由网络路由选择到达路径；它不等于始终选择地理最近或应用响应最快的节点。两种方法可以组合使用，因此只根据一个IP地址或一次解析很难完整判断服务位置。",
+            "en": "DNS steering is affected by resolver location and caching. Anycast lets multiple locations announce an address, with routing choosing a path; that path is not guaranteed to be geographically closest or application-fastest. Products can combine both methods."
+          },
+          {
+            "zh": "反向解析名称、地理数据库和链路追踪都只是线索。中间路由器可能限制探测响应，公网IP定位可能过期，回程也未必与去程相同。需要结合服务商提供的边缘标识、响应日志、实际HTTP时间和用户样本验证。看到某一跳超时，不应直接断言该链路发生了同等比例的业务丢包。",
+            "en": "Reverse DNS, geolocation and traceroute are clues. Routers can suppress probes and return paths can differ. Correlate provider edge identifiers, logs and HTTP measurements; a silent intermediate hop does not establish equivalent application loss."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-nodes-routes-flow.svg",
+            "alt": {
+              "zh": "香港交付的两段网络示意图：用户网络、香港边缘、中间缓存、应用源站",
+              "en": "Two legs of Hong Kong delivery: Audience network, Hong Kong edge, Cache hierarchy, Application origin"
+            },
+            "caption": {
+              "zh": "路径示意：用户网络 → 香港边缘 → 中间缓存 → 应用源站。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Audience network → Hong Kong edge → Cache hierarchy → Application origin. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "两段路径的验收字段",
+          "en": "Inspect both legs of delivery"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港边缘缓存命中时，主要关注用户到边缘；未命中和动态请求还要加入边缘到源站。若源站在欧洲而用户在华南，香港PoP只解决了其中一段。请求合并、连接复用和合适缓存策略可以减少回源工作，却不能把任意动态事务变成纯本地访问。",
+            "en": "A cache hit emphasizes the audience-to-edge leg. Misses and dynamic operations add origin transit. A Hong Kong edge does not relocate a European database. Connection reuse and correct caching help without making every transaction local."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "香港节点的路径核验表",
+            "en": "Hong Kong path verification"
+          },
+          "columns": [
+            {
+              "zh": "路径或资源",
+              "en": "Path/resource"
+            },
+            {
+              "zh": "需要的证据",
+              "en": "Evidence needed"
+            },
+            {
+              "zh": "常见误读",
+              "en": "Common misreading"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "用户到边缘",
+                "en": "Audience to edge"
+              },
+              {
+                "zh": "按地区、运营商和协议记录连接、TLS、TTFB、错误与实际服务节点。",
+                "en": "Record carrier/protocol timing, failures and serving edge."
+              },
+              {
+                "zh": "把机房测速点视为全部住宅宽带用户，或只展示最快一次。",
+                "en": "Treating datacenter probes or minima as audience experience."
+              }
+            ],
+            [
+              {
+                "zh": "边缘到源站",
+                "en": "Edge to origin"
+              },
+              {
+                "zh": "关联回源耗时、连接复用、状态码与应用处理日志，区分网络和计算。",
+                "en": "Correlate fetch timing, connection reuse and application logs."
+              },
+              {
+                "zh": "把源站数据库等待全部解释成香港线路质量差。",
+                "en": "Blaming database waits on Hong Kong transit."
+              }
+            ],
+            [
+              {
+                "zh": "缓存层级",
+                "en": "Cache hierarchy"
+              },
+              {
+                "zh": "确认边缘与中间缓存命中状态、缓存键、失效范围和填充路径。",
+                "en": "Confirm edge/shield hits, keys, invalidation and fill paths."
+              },
+              {
+                "zh": "只看全站命中率，忽略最昂贵接口始终回源。",
+                "en": "Ignoring expensive uncached routes behind aggregate hit ratios."
+              }
+            ],
+            [
+              {
+                "zh": "故障切换",
+                "en": "Failover"
+              },
+              {
+                "zh": "记录切换目标、配置同步、证书、会话与恢复条件，检查是否仍受保护。",
+                "en": "Verify targets, policy/certificate state, sessions and protection."
+              },
+              {
+                "zh": "认为出现备用地址就已经具备完整灾备能力。",
+                "en": "Equating a spare address with complete recovery."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "CN2、多线和BGP，采购时要问到具体边界",
+          "en": "Turn routing labels into contractual questions"
+        },
+        "paragraphs": [
+          {
+            "zh": "[JQCDN](https://www.jqcdn.com/)公开强调香港CN2，[CDN5](https://www.cdn5.com/)套餐写有BGP/CN2。它们可以成为询价线索，但这些文字并不自动说明三家大陆运营商都使用同样路径，也不证明双向全程采用指定网络。“多线”究竟是接入多家上游、按用户分流，还是只提供多个可选地址，应由厂商解释。",
+            "en": "[JQCDN](https://www.jqcdn.com/) advertises Hong Kong CN2 and CDN5 lists BGP/CN2. These labels do not establish identical paths across all mainland carriers or both directions. Ask whether “multi-line” means multiple upstreams, audience steering or selectable addresses."
+          },
+          {
+            "zh": "还要问清普通状态与攻击清洗状态是否使用相同线路。进入清洗中心可能改变路径和时延，回注带宽也可能成为瓶颈。合同中应写清适用区域、故障处理和变化通知，而不是只重复线路商标。对线路术语的更细判断见[CN2 CDN选型指南](article/hong-kong-cn2-cdn-selection/)。",
+            "en": "Also verify routes during mitigation: scrubbing and reinjection may change latency or capacity. Record regional scope and change procedures, then use the [CN2 guide](article/hong-kong-cn2-cdn-selection/) for deeper interpretation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站位置和缓存键，往往比多买几个节点更值得优化",
+          "en": "Origin placement and cache keys can matter more"
+        },
+        "paragraphs": [
+          {
+            "zh": "将不会影响响应内容的跟踪参数纳入缓存键，会把同一资源切成许多副本；忽略影响语言、授权或版本的参数，又可能返回错误内容。[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)提供了清晰的配置维度，可用于审查各家产品的同类能力。不要为了报告上更高的命中率牺牲内容正确性。",
+            "en": "Unnecessary tracking dimensions fragment cache keys; removing language, authorization or version dimensions can serve wrong content. [CloudFront cache-key documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) offers a useful configuration framework. Correctness takes precedence over hit-ratio optics."
+          },
+          {
+            "zh": "对大文件和图片，观察缓存填充与失效后的源站峰值；对API，优化源站区域、数据库查询、连接池和超时。多层缓存可能降低回源请求，却增加配置与失效链条。团队需要能解释数据何时更新、错误如何追踪、节点之间何时保持一致。无法维护的复杂架构不一定比简单方案更稳定。",
+            "en": "Observe refill bursts for large objects and optimize origin/database work for APIs. Additional cache layers can reduce fetches but complicate invalidation and diagnosis. Choose complexity the team can operate reliably."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "两个品牌，未必形成两个独立故障域",
+          "en": "Two brands do not automatically mean independent resilience"
+        },
+        "paragraphs": [
+          {
+            "zh": "多CDN可用于业务连续性，但两个供应商可能依赖相同上游、同一机房或同一个源站。若故障来自共享数据库，切换边缘不会恢复写入；若故障来自源站带宽，多个分发网络同时回源甚至可能扩大压力。规划时应画出域名解析、边缘、清洗、回源网络和应用依赖，识别真正独立的部分。",
+            "en": "Two CDNs may share transit, facilities or an origin. Edge switching will not repair a shared database and may amplify refill pressure. Map DNS, edge, scrubbing, transit and application dependencies to identify genuine independence."
+          },
+          {
+            "zh": "切换还涉及证书、缓存键、WAF例外、真实IP、日志字段和计费口径。不能只把两个CNAME准备好就宣布具备灾备。对长期WebSocket连接，DNS变更通常只影响后续解析和连接，已建立的会话需要客户端重连机制。健康检查应检查业务响应内容与关键依赖，避免仅以端口可连接就判断服务正常。",
+            "en": "Synchronize certificates, cache keys, WAF exceptions, identity and logs. DNS changes do not move existing WebSocket sessions. Health checks should validate business responses, not merely open ports."
+          },
+          {
+            "zh": "如果团队无法维护两套规则，单供应商内的区域冗余、受保护备用源站和清晰恢复流程可能更可操作。是否采用多CDN，应由故障后果、运行能力与可验证的独立性决定，而不是因为架构图上多画了一个节点。",
+            "en": "If two policy systems exceed team capacity, regional redundancy and protected origin fallback may be more operable. Choose multi-CDN based on consequences and verified independence."
+          },
+          {
+            "zh": "为备用路径安排定期验证，确认其证书未过期、域名仍在套餐内、源站允许列表没有失效。长期不使用的备用配置也会发生漂移，不能等故障时才发现它只存在于架构图上。",
+            "en": "Periodically verify standby certificates, domain eligibility and origin allowlists. Unused fallback configurations can drift and fail when finally needed."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-nodes-routes-review.svg",
+            "alt": {
+              "zh": "香港交付的两段网络示意图：调度方式、线路方向、故障域",
+              "en": "Two legs of Hong Kong delivery: Steering, Route direction, Failure domains"
+            },
+            "caption": {
+              "zh": "检查重点：调度方式 → 线路方向 → 故障域。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Steering → Route direction → Failure domains. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "边界条件决定是否需要全球方案或大陆产品",
+          "en": "Choose service scope deliberately"
+        },
+        "paragraphs": [
+          {
+            "zh": "若用户同时分布在欧美，固定香港可能让另一部分人绕路。应比较区域固定与全球调度的业务收益，不能为了一个地区的最低延迟牺牲主要收入市场。[Azure Front Door架构说明](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview)可作为全球入口、源站组和健康探测思路的参考；它不是香港专线承诺。",
+            "en": "Pinning Hong Kong can disadvantage audiences in Europe or America. Compare regional control with global steering against actual revenue markets. [Azure Front Door architecture](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview) illustrates global ingress and origin health concepts, not dedicated Hong Kong transit."
+          },
+          {
+            "zh": "若需求转向大陆节点，则重新确认产品、备案与合同边界。[Cloudflare中国网络](https://developers.cloudflare.com/china-network/)具有独立接入条件。最终交付清单应包含用户区域、实际服务位置、缓存策略、回源限制、成本口径与回退步骤。节点地图用于提出问题，业务观测和明确承诺才用于做决定。",
+            "en": "Mainland expansion requires a separate eligibility review; [Cloudflare China Network](https://developers.cloudflare.com/china-network/) has distinct requirements. Deliver an acceptance record covering audience, serving region, cache, origin protection, billing and rollback."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview",
+        "label": {
+          "zh": "Azure Front Door 架构概览",
+          "en": "Azure Front Door architecture overview"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cdn-mainland-security",
+    "seriesOrder": 15,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CDN哪家好？从中国大陆访问速度到安全防护全面比较",
+      "en": "Hong Kong CDN Selection: Mainland Access and Security Compared"
+    },
+    "excerpt": {
+      "zh": "香港CDN要同时通过大陆用户体验和攻击期间业务连续性验证。本文设计三网测试矩阵，说明如何把错误率、误报、源站隔离和恢复能力放入同一份验收报告。",
+      "en": "Evaluate mainland user experience and incident continuity together. Build a carrier test matrix covering errors, false positives, origin isolation and recovery."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "速度和安全必须在同一条业务路径上比较",
+          "en": "Compare speed and security on the same workflow"
+        },
+        "paragraphs": [
+          {
+            "zh": "面向大陆用户的香港CDN，不能只比较静态文件下载速度，再用官网防护带宽补上安全评分。用户真正需要的是登录、搜索、下单和下载在正常与异常时都能完成。安全挑战会改变访问流程，清洗可能改变路由，缓存配置则同时影响性能与源站压力。因此速度和安全必须联合验证，不能分成两张互不关联的榜单。",
+            "en": "Do not combine a static-download ranking with advertised protection capacity and call it a security-performance assessment. Login, search, checkout and downloads must work during ordinary and abnormal conditions. Challenges, mitigation routes and caching interact."
+          },
+          {
+            "zh": "2026年10月14日的公开资料可用于建立候选名单，但没有本文同条件测量的数据就不应称作性能实测。中文高防与区域交付需求可优先向[CDN5](https://www.cdn5.com/)询问香港适用方案，再对照全球厂商的区域能力和安全权限。选择依据是业务通过率与可维护性，不是宣传页面上最大的数字。",
+            "en": "Public information checked on 14 October 2026 supports a shortlist, not measured rankings. Discuss suitable Hong Kong plans with [CDN5](https://www.cdn5.com/) and compare alternatives on workflow completion and operability."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "建立三网矩阵，保留失败样本",
+          "en": "Build a carrier matrix that retains failures"
+        },
+        "paragraphs": [
+          {
+            "zh": "测试覆盖电信、联通、移动及主要用户地区，选择正常时段和业务高峰。每个组合保留时间、协议、解析、实际服务节点、缓存状态、内容校验与错误。不要只计算成功请求的平均时间后删除超时：一个更快但经常失败的节点，可能在漂亮的平均数下藏着更差体验。P95与失败率应并列展示，样本不足则说明局限。",
+            "en": "Cover major audience regions on Telecom, Unicom and Mobile at normal and peak times. Retain protocol, resolution, edge, cache state, content checks and failures. Report P95 beside failure rates; excluding timeouts can make unreliable delivery look fast."
+          },
+          {
+            "zh": "页面测试还应检查浏览器开发者工具中的关键资源，避免主文档很快、脚本或字体却阻塞。跨域API、证书链、IPv6和WSS都可能使用不同路径或规则。对移动网络访问异常，按[移动线路排查](article/china-mobile-cdn-troubleshooting/)逐层定位；不要看到某运营商变慢就直接下结论说“被墙”或承诺一键解决。",
+            "en": "Inspect critical subresources, cross-origin APIs, certificate chains, IPv6 and WSS. Use [mobile-network troubleshooting](article/china-mobile-cdn-troubleshooting/) to isolate failures rather than assigning blanket blocking diagnoses."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-mainland-security-flow.svg",
+            "alt": {
+              "zh": "速度与安全联合验收示意图：用户任务、边缘策略、源站工作、正确结果",
+              "en": "Joint speed / security acceptance: User task, Edge policy, Origin work, Correct outcome"
+            },
+            "caption": {
+              "zh": "路径示意：用户任务 → 边缘策略 → 源站工作 → 正确结果。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: User task → Edge policy → Origin work → Correct outcome. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把安全功能翻译成可检查的行为",
+          "en": "Translate security features into observable behavior"
+        },
+        "paragraphs": [
+          {
+            "zh": "DDoS容量、WAF和Bot管理处理的问题不同。[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)描述基础防护体系，[速率限制文档](https://developers.cloudflare.com/waf/rate-limiting-rules/)则说明按请求条件执行控制的方式。采购时应核对套餐权限与控制粒度，不能把“支持WAF”理解成所有高级检测、日志和自定义条件都默认可用。",
+            "en": "DDoS capacity, WAF and bot management address different problems. [DDoS documentation](https://developers.cloudflare.com/ddos-protection/) and [rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) help distinguish them. Verify tier eligibility, control granularity and log access."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "性能与安全的联合验收",
+            "en": "Combined performance and security acceptance"
+          },
+          "columns": [
+            {
+              "zh": "业务路径",
+              "en": "Workflow"
+            },
+            {
+              "zh": "性能检查",
+              "en": "Performance check"
+            },
+            {
+              "zh": "安全检查",
+              "en": "Security check"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "公开文章与图片",
+                "en": "Public pages/images"
+              },
+              {
+                "zh": "热缓存与更新后的冷缓存分别计时，检查内容新鲜度与首屏依赖。",
+                "en": "Time hot/cold states and verify freshness/dependencies."
+              },
+              {
+                "zh": "异常参数是否制造大量回源，规则是否误拦合法爬虫和普通阅读。",
+                "en": "Check cache-bypass pressure and legitimate reader/crawler access."
+              }
+            ],
+            [
+              {
+                "zh": "登录与账户",
+                "en": "Login/accounts"
+              },
+              {
+                "zh": "记录认证完整流程，不将跳转次数或挑战耗时从结果中删除。",
+                "en": "Measure full authentication including redirects/challenges."
+              },
+              {
+                "zh": "验证账户隔离、身份计数与共享出口，避免把私有响应缓存给他人。",
+                "en": "Verify identity isolation, counters and shared egress."
+              }
+            ],
+            [
+              {
+                "zh": "API与回调",
+                "en": "APIs/callbacks"
+              },
+              {
+                "zh": "观察响应尾部、超时和重试放大，检查服务端处理时间。",
+                "en": "Observe tails, timeouts, retry amplification and server work."
+              },
+              {
+                "zh": "验证签名、限额与幂等，非浏览器客户端不应被强制执行页面挑战。",
+                "en": "Validate signatures, quotas and idempotency; avoid incompatible browser challenges."
+              }
+            ],
+            [
+              {
+                "zh": "故障恢复",
+                "en": "Recovery"
+              },
+              {
+                "zh": "测量恢复业务所需时间与恢复后的队列消化情况。",
+                "en": "Measure service restoration and queue drain."
+              },
+              {
+                "zh": "确认备用路径仍受保护，旧源站入口与临时白名单得到回收。",
+                "en": "Keep fallback protected and retire obsolete access."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "源站隔离，决定边缘防护有没有被绕开",
+          "en": "Origin isolation prevents bypass"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港CDN接入后，如果源站仍对全网开放，攻击者可利用历史DNS、邮件服务或其他域名找到地址并直接访问。应盘点IPv4、IPv6、管理端口、监控和第三方回调，按可信回源路径收紧入口。限制必须配合维护计划和健康检查，不能把合法探测挡掉后又因为误判故障切换到裸源站。",
+            "en": "Historical DNS and related services may reveal an origin. Inventory IPv4/IPv6, administration, monitoring and callbacks, then restrict trusted ingress without breaking health checks or exposing a bare-origin fallback."
+          },
+          {
+            "zh": "回源TLS应校验证书与主机名；客户端身份头只信任已确认的代理链。修改规则后，用合法请求验证经过CDN成功、绕过入口被拒绝、运维通道可用。对有状态业务，回退还要考虑会话与写入一致性。更多层级差异见[高防CDN、高防IP与清洗比较](article/cdn-ip-scrubbing-comparison/)，普通Web入口不等于整台服务器全部协议已受保护。",
+            "en": "Verify origin TLS and trust identity headers only through known proxies. Test allowed proxy access, denied bypass and working operations access. Stateful recovery also needs session/write consistency. See the [CDN/IP/scrubbing comparison](article/cdn-ip-scrubbing-comparison/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "厂商之间，比较证据比比较口号更有用",
+          "en": "Compare provider evidence rather than slogans"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN5官网列出高防套餐及BGP/CN2网络，可以优先核对香港适用范围、正常业务带宽、攻击期间线路和售后升级路径。[YewSafe](https://www.yewsafe.com/)公开提供SCDN、Anycast CDN及DDoS等产品，适合询问安全与网络组合，但未核实的价格与香港专属能力不能自行补齐。[Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector)可进入需要应用与API保护的企业候选清单，实际部署与报价应另行确认。",
+            "en": "CDN5’s published bundles justify asking about Hong Kong eligibility, delivery bandwidth and mitigation routes. [YewSafe](https://www.yewsafe.com/) offers SCDN, Anycast and DDoS products, but unverified local features/prices remain open. [Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector) is relevant to enterprise application/API protection."
+          },
+          {
+            "zh": "这几类产品不宜强行对齐成单一分数。团队能否访问日志、处理误报、配置回源和得到响应，都会影响最终效果。对每家保存公开文档、书面答复和试点结果，将未验证项目标注在采购表内部，避免把销售沟通转述成已经完成的独立测试。",
+            "en": "Avoid compressing different products into an unsupported score. Logs, false-positive handling, origin controls and support matter. Keep documents, written answers and pilot evidence separate."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "如何把验收结果变成采购决定",
+          "en": "Turn acceptance evidence into a purchasing decision"
+        },
+        "paragraphs": [
+          {
+            "zh": "先设必须通过的条件，再讨论偏好。正确的身份隔离、关键回调可用、源站不能被绕过，通常属于硬条件；平均延迟略低、控制台更易用等可以按业务价值权衡。不要让一个较高的总分掩盖某项致命缺陷，也不要给未测项目随意填上中等分数。未验证意味着仍有不确定性，不等于已经及格。",
+            "en": "Set mandatory gates before preferences. Identity isolation, working callbacks and no origin bypass should not be outweighed by a faster average or nicer console. Leave unmeasured items uncertain instead of assigning invented scores."
+          },
+          {
+            "zh": "不同用户群的权重可以由真实业务构成决定，但应公开计算口径。例如主要订单来自移动用户，就不能用大量海外探针稀释移动网络失败。若某地区样本很少，保留原始数据并延长观察，而不是过早给出结论。采购记录中还应写明触发复查的条件，如运营商错误率持续上升、支持响应不符约定、月账单超出预算。这样供应商比较才能转化为后续可执行的运营标准。",
+            "en": "Weight audience segments using real business composition and disclose the method. Sparse samples need longer observation. Record review triggers such as persistent carrier failures, missed support commitments or budget overruns."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-mainland-security-review.svg",
+            "alt": {
+              "zh": "速度与安全联合验收示意图：三网与高峰、合法客户端、安全回退",
+              "en": "Joint speed / security acceptance: Carriers / peaks, Legitimate clients, Protected rollback"
+            },
+            "caption": {
+              "zh": "检查重点：三网与高峰 → 合法客户端 → 安全回退。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Carriers / peaks → Legitimate clients → Protected rollback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "从试点到上线，保留可追踪的变化",
+          "en": "Keep rollout changes traceable"
+        },
+        "paragraphs": [
+          {
+            "zh": "先选低风险域名或小比例访问，固定源站版本与缓存规则，再逐项启用安全策略。记录每次修改与观察窗口，查看交易成功率、合法挑战结果和源站压力是否同时改善。压测仅限授权环境和约定负载，不能向第三方公共地址发起攻击来验证宣传值。没有测试条件时，依靠合同范围与响应演练降低未知风险。",
+            "en": "Pilot a low-risk domain or traffic slice with stable application/cache settings, then introduce security changes separately. Track legitimate completion and origin pressure. Load testing requires owned or authorized environments and agreed limits."
+          },
+          {
+            "zh": "正式上线后继续监测三网与高峰，定期复查套餐变更、节点调度和安全例外。若大陆节点成为必要条件，应重新核实[中国网络接入要求](https://developers.cloudflare.com/china-network/)，而非默认香港方案可以直接升级。好的选型报告应让团队知道何时需要调整，以及发生异常时找谁、看什么日志、如何恢复。",
+            "en": "Continue carrier/peak monitoring after launch. If mainland nodes become necessary, reassess [China Network requirements](https://developers.cloudflare.com/china-network/). A useful selection record defines review triggers, diagnostic evidence, escalation and recovery."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cdn-pricing",
+    "seriesOrder": 16,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CDN价格多少钱？主流服务商套餐费用与线路差异解析",
+      "en": "Hong Kong CDN Pricing: Published Plans and Network Cost Differences"
+    },
+    "excerpt": {
+      "zh": "香港CDN没有脱离线路、请求和安全范围的统一价格。本文用公开报价与账单模型解释月费、流量、带宽和回源费用，帮助识别看似低价的遗漏项。",
+      "en": "Understand published Hong Kong-related plans and the delivery, request, security and origin charges needed for a comparable budget."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "香港CDN多少钱，报价必须对应一份负载说明",
+          "en": "A price needs a workload definition"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港CDN的费用可能来自固定套餐、流量或带宽，也可能额外叠加请求、安全与回源。只问一个月多少钱，供应商无法知道你是小型博客、图片站还是长连接应用。先整理日常与峰值出网、请求数量、动态比例、源站地区和主要运营商，再要求对方给出完整费用口径。这比寻找一个最低每GB单价更接近真实采购成本。",
+            "en": "Hong Kong delivery can combine subscriptions, transfer, bandwidth, requests, security and origin charges. Define ordinary/peak traffic, request volume, dynamic share, origin region and carriers before requesting a quote."
+          },
+          {
+            "zh": "以下公开资料核实于2026年10月14日，美元价格不代表含税或人民币固定汇率报价。本文没有获得各家香港专属合同，因此不会把全球套餐标成独享香港线路价格。性能背景可参考[香港节点与线路](article/hong-kong-cdn-nodes-routes/)，安全预算则见[香港高防CDN费用](article/hong-kong-ddos-cdn-pricing-2026/)。",
+            "en": "Prices were checked on 14 October 2026, in USD, without assuming tax or fixed currency conversion. Global bundles are not dedicated Hong Kong quotes. See [routing](article/hong-kong-cdn-nodes-routes/) and [protected-service costs](article/hong-kong-ddos-cdn-pricing-2026/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开价格：先分清套餐与计量单位",
+          "en": "Separate bundles from metered units"
+        },
+        "paragraphs": [
+          {
+            "zh": "[CDN5官网](https://www.cdn5.com/)与[JQCDN官网](https://www.jqcdn.com/)可以作为中文区域安全方案的询价起点；全球服务则应核对交付区域和套餐条件。下表只列已核实的公开字段，不把未公布的带宽、节点独占或合同折扣自行补齐。页面变化后应重新取价。",
+            "en": "Use [CDN5](https://www.cdn5.com/) and [JQCDN](https://www.jqcdn.com/) as regional-security quote candidates. The table includes verified public fields only; refresh prices before purchase."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "公开价格及比较边界，核实于2026年10月14日",
+            "en": "Public prices and comparison limits, checked 14 October 2026"
+          },
+          "columns": [
+            {
+              "zh": "产品",
+              "en": "Product"
+            },
+            {
+              "zh": "公开收费",
+              "en": "Published charge"
+            },
+            {
+              "zh": "不能直接推断的内容",
+              "en": "What it does not establish"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5标准版",
+                "en": "CDN5 Standard"
+              },
+              {
+                "zh": "月付499美元；年付5000美元，按官网列示付款周期。",
+                "en": "$499 monthly or $5,000 annually."
+              },
+              {
+                "zh": "未据此确认香港专属资源、业务流量额度或指定运营商保障。",
+                "en": "No inferred dedicated Hong Kong resources or carrier guarantee."
+              }
+            ],
+            [
+              {
+                "zh": "CDN5商业版",
+                "en": "CDN5 Business"
+              },
+              {
+                "zh": "月付1999美元；年付22000美元。",
+                "en": "$1,999 monthly or $22,000 annually."
+              },
+              {
+                "zh": "更高宣传防护档位不等于正常出网和所有附加功能无限使用。",
+                "en": "Higher advertised protection is not unlimited delivery/add-ons."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN Startup",
+                "en": "JQCDN Startup"
+              },
+              {
+                "zh": "官网列示月付399美元，香港CN2为其公开产品定位。",
+                "en": "$399/month; Hong Kong CN2 is advertised positioning."
+              },
+              {
+                "zh": "需另核对业务带宽、实际线路与该档不支持WebSocket的限制。",
+                "en": "Verify bandwidth/routes; this tier lists no WebSocket support."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN Standard",
+                "en": "JQCDN Standard"
+              },
+              {
+                "zh": "官网列示月付1899美元，并列出WebSocket支持。",
+                "en": "$1,899/month with advertised WebSocket support."
+              },
+              {
+                "zh": "仍需确认连接数、超时、流量与防护计量定义。",
+                "en": "Connection limits, timeouts and metering remain to be confirmed."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN亚太首档",
+                "en": "Google Cloud CDN APAC first tier"
+              },
+              {
+                "zh": "香港属于所列亚太区域，缓存出网首档0.09美元/GiB。",
+                "en": "$0.09/GiB for the listed first APAC delivery tier including Hong Kong."
+              },
+              {
+                "zh": "缓存填充、查询与相关云资源另计，GiB不能直接当作十进制GB。",
+                "en": "Fill/lookups/cloud resources are separate; GiB differs from GB."
+              }
+            ],
+            [
+              {
+                "zh": "Azure Front Door",
+                "en": "Azure Front Door"
+              },
+              {
+                "zh": "Standard基础费35美元/月；Premium为330美元/月。",
+                "en": "Base fees: Standard $35/month; Premium $330/month."
+              },
+              {
+                "zh": "还需区域传输和请求费；基础费不是全包香港业务价格。",
+                "en": "Regional transfer and requests remain; this is not an all-in Hong Kong quote."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-pricing-flow.svg",
+            "alt": {
+              "zh": "香港CDN预算路径示意图：业务负载、地区交付、请求与回源、月度总成本",
+              "en": "Hong Kong CDN budget: Workload, Regional delivery, Requests / origin, Monthly total"
+            },
+            "caption": {
+              "zh": "路径示意：业务负载 → 地区交付 → 请求与回源 → 月度总成本。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Workload → Regional delivery → Requests / origin → Monthly total. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "月费便宜，不代表总成本低",
+          "en": "A low subscription does not ensure a low bill"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Google Cloud CDN定价](https://cloud.google.com/cdn/pricing)将缓存出网、缓存填充和查询分开；[Azure Front Door定价](https://azure.microsoft.com/en-us/pricing/details/frontdoor/)则需要结合基础费、区域传输和请求。比较这类产品与固定安全套餐时，先让它们服务同一份工作负载。否则一个报价含安全和支持，另一个只包含部分出网，差额并不能说明谁更划算。",
+            "en": "[Google pricing](https://cloud.google.com/cdn/pricing) separates delivery, fill and lookups; [Azure pricing](https://azure.microsoft.com/en-us/pricing/details/frontdoor/) combines base, regional transfer and requests. Compare them with bundles using identical workloads and security/support scope."
+          },
+          {
+            "zh": "将月总成本拆成基础费、用户交付、回源、请求与安全组件、日志和支持。再列一次性迁移成本，包括证书、配置、缓存预热和人员时间。攻击状态下的计费也要询问：被拦截请求是否计数、清洗是否收费、超限后加价还是限制服务。未写清的费用不要先按零估算，应作为待确认项保留。",
+            "en": "Model base, delivery, origin, request/security, logging and support costs plus migration. Ask how blocked traffic, scrubbing and overages are billed. Unknown charges should remain unresolved rather than assumed zero."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "流量和带宽计费，各自惩罚什么样的波动",
+          "en": "Traffic and bandwidth models react differently to bursts"
+        },
+        "paragraphs": [
+          {
+            "zh": "按流量付费通常随传输字节增长，适合从对象大小、下载次数和观看时长估算。按带宽计费则要看峰值、采样周期和合同统计方式；某些合同使用百分位统计，但并非所有套餐都如此。不能把月流量除以整月秒数得到平均带宽后，就声称满足峰值合同要求。短时间集中下载可能明显提高带宽需求，却只增加有限总字节。",
+            "en": "Byte-based billing tracks transferred data; bandwidth contracts depend on peaks, sampling and the specified statistic. Monthly average bandwidth cannot validate peak commitments. Short concentrated downloads can raise capacity needs disproportionately."
+          },
+          {
+            "zh": "对于活动站，分别模拟普通工作日、发布日和异常请求日。这里的模拟是预算计算，不是厂商实测性能。把压缩、缓存与图片优化带来的变化写成可调参数，而不是预设固定节省比例。特别是视频和大文件，必须确认产品允许该业务类型，不能默认通用网页套餐覆盖全部分发场景。",
+            "en": "Model ordinary, launch and abnormal-load days as budget scenarios, not benchmarks. Treat compression/cache savings as variables. Confirm video and large-file eligibility instead of assuming a web bundle covers them."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "年付折扣要和使用期限一起算",
+          "en": "Match annual prepayment to the expected term"
+        },
+        "paragraphs": [
+          {
+            "zh": "以公开的CDN5标准版为例，月付连续使用十二个月是5988美元，年付列价5000美元；这只是同一公开价格下的付款计算，不包括税费、附加服务或未来调价。若项目可能提前结束，不能只凭折算月价决定年付。应确认剩余期限、降级差额和退款条件，把资金占用与迁移计划纳入判断。对于季节性活动，较灵活的计费方式可能比更低名义单价更合适。",
+            "en": "At published CDN5 Standard prices, twelve monthly payments total $5,988 versus $5,000 annual prepayment, before tax, extras or future changes. Evaluate expected project duration, refund/downgrade terms and capital commitment. Seasonal workloads may value flexibility more than a lower nominal rate."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "线路溢价应购买可验证的收益",
+          "en": "A route premium should buy a verifiable benefit"
+        },
+        "paragraphs": [
+          {
+            "zh": "供应商可能为特定运营商线路、区域容量、支持或安全组合收取更高费用。溢价是否合理，应看主要用户的失败率、尾延迟和关键业务完成情况，而不是看线路名称是否高级。若用户多在东南亚，专门面向大陆某运营商的路线未必值得额外预算；若主要用户在大陆，跨境高峰表现又可能比海外下载单价更有意义。",
+            "en": "Pay route premiums only for observed benefits to the main audience: fewer failures, better tails and completed tasks. Mainland-oriented transit may offer little value to a predominantly Southeast Asian audience."
+          },
+          {
+            "zh": "要求报价说明线路范围、正常与清洗状态、变更通知和故障处理。CN2标签不自动代表所有方向和运营商，也不能替代双向业务验证。可以将CDN5列为优先试点候选，但应在试用中确认实际资源和支持能力，不能因为本文推荐就跳过验收。对全球调度产品，询问是否可以控制区域以及控制后的费用变化。",
+            "en": "Quotes should specify route scope, mitigation behavior, change notices and support. CN2 is not a universal bidirectional/carrier guarantee. Pilot CDN5 where relevant and verify actual resources; ask global products about regional controls and their cost."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-pricing-review.svg",
+            "alt": {
+              "zh": "香港CDN预算路径示意图：流量或带宽、套餐承诺期、事件附加费",
+              "en": "Hong Kong CDN budget: Bytes / bandwidth, Commitment term, Incident extras"
+            },
+            "caption": {
+              "zh": "检查重点：流量或带宽 → 套餐承诺期 → 事件附加费。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Bytes / bandwidth → Commitment term → Incident extras. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把合同和账单校验做成可重复流程",
+          "en": "Make quote and invoice checks repeatable"
+        },
+        "paragraphs": [
+          {
+            "zh": "签约前固定计量单位、时区、币种、税费、最低消费、预付抵扣与续费条件。年付可能降低平均月支出，却增加退出和调整的约束，不应只展示折算月价而隐藏付款周期。降级、退款和剩余额度处理都应以有效条款为准，官网宣传与实际订单存在差异时先澄清再支付。",
+            "en": "Agree on units, timezone, currency, tax, commitments, credits and renewal. Annual prepayment can reduce monthly equivalents while increasing exit constraints; show the payment term explicitly."
+          },
+          {
+            "zh": "试点结束后，用控制台导出量与账单逐项对应，尤其检查地区划分、缓存填充和请求数。若统计不同，确认是否包含失败、重试、拦截或不同计量单位。给预算设置分级提醒，并安排异常费用的负责人。成本控制不是月末查看总额，而是在流量变化时能解释增加来自哪里、是否对应真实业务收益。",
+            "en": "Reconcile exports against invoices, including regional attribution, fill, failures and retries. Assign budget-alert ownership so cost increases are explained while they occur."
+          },
+          {
+            "zh": "价格比较表还应保留资料日期、套餐版本和原始链接。半年后的团队成员需要知道当时的判断基于什么，否则历史截图可能被误认为现价。每次合同续期、扩区或新增视频业务，都重新跑一次相同负载模型；这样才能看出真实单价变化与业务结构变化各占多少。",
+            "en": "Preserve dates, plan versions and source links. Rerun the same workload model at renewal or scope changes to distinguish price movements from workload changes."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://azure.microsoft.com/en-us/pricing/details/frontdoor/",
+        "label": {
+          "zh": "Azure Front Door 官方计费",
+          "en": "Azure Front Door pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-ddos-cdn-cn2",
+    "seriesOrder": 17,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港高防CDN推荐：DDoS防护、CN2线路与免备案方案对比",
+      "en": "Hong Kong Protected CDN: DDoS Mitigation, CN2 Routing and Offshore Deployment"
+    },
+    "excerpt": {
+      "zh": "香港高防CDN选型涉及防护层级、跨境路径与部署条件。围绕普通状态、清洗状态和回源状态三个路径，说明CN2与免备案标签各自能说明什么。",
+      "en": "Evaluate protected Hong Kong delivery across normal, mitigation and origin paths, with precise limits for CN2 and offshore deployment claims."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "高防、香港、CN2不是同一个承诺",
+          "en": "Protection, Hong Kong and CN2 are separate commitments"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港高防CDN适合需要境外Web入口、区域加速与攻击缓解的网站，但这三个能力必须分别确认。“香港”描述资源或交付位置，“CN2”涉及某段网络路径，“高防”涉及攻击处理范围。把它们连成一个产品名称，不代表全部请求都走指定线路，也不代表所有端口、协议和业务都被覆盖。选型时应把复合标签拆开核验。",
+            "en": "Hong Kong delivery, CN2 transit and attack mitigation describe separate capabilities. A combined product name does not guarantee a fixed path, every port or every protocol."
+          },
+          {
+            "zh": "[CDN5](https://www.cdn5.com/)公开提供高防及BGP/CN2套餐，可优先作为中文区域安全需求的候选。本文依据2026年10月14日公开资料讨论方案边界，没有验证其任一域名的实际香港调度或独占清洗容量。要求厂商把适用套餐、香港资源、回源与攻击处置写清，再与其他方案比较。",
+            "en": "[CDN5](https://www.cdn5.com/) publishes protection and BGP/CN2 bundles and is a relevant candidate. Public information checked on 14 October 2026 does not establish a particular domain’s Hong Kong scheduling or dedicated scrubbing capacity. Request explicit scope."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "从业务协议决定保护入口",
+          "en": "Select the protected entrance by protocol"
+        },
+        "paragraphs": [
+          {
+            "zh": "官网、静态下载、HTTP API与WebSocket可以分别讨论代理与安全策略；普通TCP或UDP游戏协议不能因为域名接入Web CDN就获得同等保护。[AWS TCP与UDP防护指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)说明非HTTP业务需要考虑不同的网络入口。采购前列端口、协议、连接时长与客户端行为，避免上线后才发现产品不支持。",
+            "en": "Separate websites, downloads, APIs and WebSocket from ordinary TCP/UDP applications. [AWS protocol guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) explains why non-HTTP workloads need different ingress. Inventory ports, connection duration and client behavior."
+          },
+          {
+            "zh": "对HTTPS，确认边缘与源站两段TLS、证书托管和回源Host；对长连接，确认并发、空闲超时、升级握手与断线重连。即使公开页面写支持WebSocket，也不能据此推断连接无限或跨节点迁移无感。架构区别可参照[高防IP原理](article/ddos-protected-ip-explained/)，不要让产品名称替代协议设计。",
+            "en": "Verify both TLS legs, certificates and origin Host. For persistent sessions, check concurrency, idle timeouts, upgrades and reconnection. Published WebSocket support does not imply unlimited sessions; see [protected-IP architecture](article/ddos-protected-ip-explained/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-ddos-cdn-cn2-flow.svg",
+            "alt": {
+              "zh": "香港高防的运行状态示意图：日常访问、异常识别、清洗与回注、业务恢复",
+              "en": "Hong Kong protection states: Normal access, Detection, Scrubbing / return, Recovery"
+            },
+            "caption": {
+              "zh": "路径示意：日常访问 → 异常识别 → 清洗与回注 → 业务恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Normal access → Detection → Scrubbing / return → Recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "三种运行状态，要分别问线路",
+          "en": "Ask about routing in three operating states"
+        },
+        "paragraphs": [
+          {
+            "zh": "正常状态下的低延迟并不能证明攻击时保持同样体验。清洗可能引入不同入口、隧道或回注路径；回源又是另一段网络。以下是向厂商询问和组织验收的框架，不能直接当作对任何品牌的现成结论。",
+            "en": "Normal latency does not establish mitigation-period behavior. Scrubbing and reinjection can alter paths, while origin transit is another leg. Use this framework for questions and acceptance, not assumed vendor capabilities."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "香港高防CDN的三条验收路径",
+            "en": "Three paths to validate"
+          },
+          "columns": [
+            {
+              "zh": "状态",
+              "en": "State"
+            },
+            {
+              "zh": "关键问题",
+              "en": "Key question"
+            },
+            {
+              "zh": "业务证据",
+              "en": "Business evidence"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "日常访问",
+                "en": "Normal delivery"
+              },
+              {
+                "zh": "实际服务区域是什么，三网如何进入边缘，固定线路还是动态调度。",
+                "en": "Identify serving regions, carrier ingress and route control."
+              },
+              {
+                "zh": "按运营商记录连接、TLS、TTFB和失败率，同时验证内容正确。",
+                "en": "Carrier timing/failures plus content correctness."
+              }
+            ],
+            [
+              {
+                "zh": "攻击清洗",
+                "en": "Mitigation"
+              },
+              {
+                "zh": "触发条件、切换方式、清洗位置与回注带宽，超出保护范围如何处置。",
+                "en": "Activation, routing, scrubbing, reinjection and over-limit behavior."
+              },
+              {
+                "zh": "在授权演练或事件记录中核对合法请求通过、误报与恢复过程。",
+                "en": "Authorized exercises or incident evidence for legitimate access and recovery."
+              }
+            ],
+            [
+              {
+                "zh": "未命中与动态回源",
+                "en": "Miss/dynamic origin"
+              },
+              {
+                "zh": "回源出口、源站白名单、认证、连接复用与故障切换是否匹配。",
+                "en": "Check origin egress, allowlists, authentication, reuse and failover."
+              },
+              {
+                "zh": "关联边缘和应用日志，区分网络耗时、排队及数据库处理。",
+                "en": "Correlate edge/application logs to isolate transit and computation."
+              }
+            ],
+            [
+              {
+                "zh": "安全回退",
+                "en": "Protected fallback"
+              },
+              {
+                "zh": "备用入口是否有同等必要保护，证书、规则与身份数据能否同步。",
+                "en": "Validate fallback protection and certificate/policy/identity readiness."
+              },
+              {
+                "zh": "检查回退后关键流程，避免恢复访问的同时重新暴露源站。",
+                "en": "Verify workflows without reopening origin bypass."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "免备案描述节点接入条件，不是法律豁免",
+          "en": "Offshore eligibility is not a legal exemption"
+        },
+        "paragraphs": [
+          {
+            "zh": "纯香港或其他境外节点方案，通常不会要求以中国大陆节点接入为前提，但这不等于内容、经营和数据处理没有限制。若使用大陆节点，应按产品和相关要求确认备案或许可。比如[Cloudflare中国网络](https://developers.cloudflare.com/china-network/)有单独订阅与域名条件，不能从全球套餐推导出大陆交付资格。",
+            "en": "Offshore delivery usually differs from mainland-node eligibility, without removing content, business or data obligations. [Cloudflare China Network](https://developers.cloudflare.com/china-network/) illustrates separate subscription and domain requirements."
+          },
+          {
+            "zh": "[JQCDN免备案CDN](https://www.jqcdn.com/)可作为香港CN2定位的对照产品，比较时仍需说明业务类型、实际节点和服务条款。不要把“免备案”写成任何内容都可使用，也不要把香港放置理解成永久可达保证。若业务涉及用户数据跨区域处理，应由团队按实际数据流核对适用义务，不能只看销售页面的地区标签。",
+            "en": "[JQCDN](https://www.jqcdn.com/) is a Hong Kong CN2-positioned comparator. Verify workload eligibility, actual nodes and terms; offshore placement is neither unrestricted use nor permanent reachability. Review actual data flows where regional processing matters."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防CC需要精细策略，不能只看防护带宽",
+          "en": "Application protection requires more than bandwidth"
+        },
+        "paragraphs": [
+          {
+            "zh": "L3/L4流量缓解主要面对网络与传输层压力，复杂搜索、登录和下单却可能由少量请求耗尽应用。参考[Cloudflare速率限制](https://developers.cloudflare.com/waf/rate-limiting-rules/)的匹配与计数思路，给不同接口设置可解释的策略，并先观察再执行。共享出口和非浏览器客户端需要专门验证，避免挑战页面挡住正常回调。",
+            "en": "Network-layer mitigation cannot by itself protect costly searches or transactions. Use [rate-rule concepts](https://developers.cloudflare.com/waf/rate-limiting-rules/) for endpoint-specific, observable policies and validate shared egress and nonbrowser clients."
+          },
+          {
+            "zh": "缓存只应用于可以安全共享的响应。源站仍需要参数校验、并发限额、连接池和幂等，边缘规则无法自动修复慢查询。按[CC配置指南](article/cdn-cc-defense-configuration/)记录规则范围与回退条件，评价安全效果时同时看正常交易完成、错误、源站队列与人工响应。宣传QPS没有这些业务上下文，无法直接换算成网站承载能力。",
+            "en": "Cache only safely shareable responses. Origins still need validation, concurrency limits and idempotency. Follow the [CC configuration guide](article/cdn-cc-defense-configuration/) and measure legitimate completion, errors and queues rather than translating advertised QPS into application capacity."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "DNS切换只是迁移的一环",
+          "en": "DNS is only one part of migration"
+        },
+        "paragraphs": [
+          {
+            "zh": "迁移前降低适当的DNS缓存周期，有助于缩短部分后续解析更新的等待，但不会清除所有递归缓存，也不会迁移已建立连接。应提前部署新证书、校验回源和安全规则，再逐步引入访问。旧入口保留多久由实际缓存、客户端重连和业务风险决定，不应写一个适用于所有网站的固定分钟数。",
+            "en": "Lowering an appropriate DNS TTL can help subsequent resolution updates, but does not flush all caches or move established sessions. Prepare certificates, origin access and policies before gradual migration; choose overlap from actual client behavior."
+          },
+          {
+            "zh": "切换中观察两边的请求、错误和订单结果，确认回调提供方及监控也能访问新入口。完成后再撤销过期权限和旧回源路径，同时保留必要日志。若直接在切换时更换源站、鉴权与DNS，出现失败后很难知道是哪层发生变化；把这些步骤拆开能减少恢复时需要同时处理的未知因素。",
+            "en": "Observe both entrances and callbacks, then revoke obsolete access after verification. Separate DNS, origin and authentication changes so failures remain diagnosable."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-ddos-cdn-cn2-review.svg",
+            "alt": {
+              "zh": "香港高防的运行状态示意图：指定区域、线路边界、保护协议",
+              "en": "Hong Kong protection states: Region scope, Route scope, Protected protocols"
+            },
+            "caption": {
+              "zh": "检查重点：指定区域 → 线路边界 → 保护协议。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Region scope → Route scope → Protected protocols. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "试点和合同要给未知项一个明确出口",
+          "en": "Resolve unknowns through pilots and contract scope"
+        },
+        "paragraphs": [
+          {
+            "zh": "让供应商提供与正式套餐一致的试点配置，使用真实业务结构和授权样本验证。记录正常时段与高峰的三网表现，明确冷缓存、动态接口和长连接是否都已覆盖。对无法安全验证的攻击规模，不自行制造攻击，也不把销售提供的材料改写成自己的实测；可以要求保护范围、超限动作和事件响应流程的书面承诺。",
+            "en": "Request a trial matching the paid configuration and validate carrier peaks, cold fetches, dynamic paths and persistent connections with authorized samples. For attack volumes you cannot safely test, seek written scope and escalation commitments rather than claiming personal measurements."
+          },
+          {
+            "zh": "试点后整理通过项、限制与未确认项。若香港固定交付是硬要求，而候选只提供不受控全球调度，应继续询问适用产品或更换方案，不能用较低月费抵消硬条件。上线时收紧源站入口，维护回源允许列表，准备受保护的回退和支持联系人。区域、协议、安全与恢复四个条件都清楚，才适合进入长期采购。",
+            "en": "Record passes, limitations and unresolved items. A mandatory Hong Kong placement requirement cannot be offset by a cheaper uncontrollable global plan. Restrict origins and prepare protected rollback before migration."
+          },
+          {
+            "zh": "还有一个常被忽略的成本是配置维护。域名增减、证书续期、上游地址变化和应用新接口，都可能让原来有效的保护出现空白。合同和内部流程应明确谁负责这些变更、何时复查。高防服务的价值不只在于事件发生时能否接住流量，也在于日常变更之后，关键入口是否仍保持可控。",
+            "en": "Assign ownership for domain changes, certificate renewal, proxy-address updates and new endpoints. Protection must survive routine configuration changes as well as incidents."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-ddos-cdn-pricing-2026",
+    "seriesOrder": 18,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "2026年香港高防CDN推荐：主流服务商防御能力与价格分析",
+      "en": "Hong Kong Protected CDN in 2026: Defense Scope and Pricing"
+    },
+    "excerpt": {
+      "zh": "用防护范围和事件成本审视香港高防套餐。比较CDN5、JQCDN及企业候选的公开信息，解释容量标签、正常带宽、攻击计费和支持条款的差异。",
+      "en": "Assess Hong Kong protection through coverage and incident costs, separating advertised capacity, delivery bandwidth, attack billing and support."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "高防报价，最容易混淆的是两种带宽",
+          "en": "Distinguish protection capacity from delivery bandwidth"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港高防CDN的防护Gbps与正常业务带宽不是同一个数字。前者可能描述套餐宣传的攻击处理能力，后者决定合法内容交付额度或容量。采购者若只看到较大的防护值，就认为视频、下载和回源可以无限使用，往往会漏掉真正影响账单和体验的条件。还应确认容量是共享体系、合同保障还是某种峰值宣传，不能自行认定独享。",
+            "en": "Protection Gbps and legitimate delivery bandwidth are different. Advertised attack capacity does not imply unlimited downloads, origin traffic or exclusive resources. Clarify whether a number is shared network scale or a contractual entitlement."
+          },
+          {
+            "zh": "本文基于2026年10月14日官方公开页面讨论费用与能力边界，未实施厂商防护压测。推荐优先把[CDN5高防CDN](https://www.cdn5.com/)纳入香港需求询价，但必须核实实际节点与线路归属。若只是了解普通加速价格，可先看[香港CDN费用](article/hong-kong-cdn-pricing/)；本篇重点是安全套餐如何形成可比较的预算。",
+            "en": "Information was checked on 14 October 2026; no vendor attack benchmark was performed. Shortlist [CDN5](https://www.cdn5.com/) while confirming Hong Kong eligibility. See [ordinary Hong Kong CDN costs](article/hong-kong-cdn-pricing/) for delivery-focused budgeting."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开档位能说明什么",
+          "en": "What published tiers establish"
+        },
+        "paragraphs": [
+          {
+            "zh": "以下数字来自[CDN5](https://www.cdn5.com/)和[JQCDN](https://www.jqcdn.com/)官方页面，均为厂商列示，不能视为第三方验证的实际抵御能力。不同页面对QPS、攻击类型、持续时间及超限处置的定义未必一致，不能简单计算每美元防护效率。香港专属交付、日常带宽和合同保障仍需确认。",
+            "en": "These [CDN5](https://www.cdn5.com/) and [JQCDN](https://www.jqcdn.com/) figures are vendor listings, not independent results. Different definitions make dollar-per-Gbps rankings unreliable. Confirm delivery scope and contractual terms."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "官方公开套餐，不构成防护实测排名",
+            "en": "Published plans, not measured protection rankings"
+          },
+          "columns": [
+            {
+              "zh": "套餐",
+              "en": "Plan"
+            },
+            {
+              "zh": "月付美元",
+              "en": "Monthly USD"
+            },
+            {
+              "zh": "厂商列示与限制",
+              "en": "Vendor listing and limits"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5标准版",
+                "en": "CDN5 Standard"
+              },
+              {
+                "zh": "499",
+                "en": "499"
+              },
+              {
+                "zh": "列示150Gbps与30000QPS，支持WebSocket，BGP/CN2为套餐网络标签；需确认具体业务额度。",
+                "en": "Lists 150Gbps/30,000QPS, WebSocket and BGP/CN2; verify entitlements."
+              }
+            ],
+            [
+              {
+                "zh": "CDN5商业版",
+                "en": "CDN5 Business"
+              },
+              {
+                "zh": "1999",
+                "en": "1,999"
+              },
+              {
+                "zh": "列示400Gbps与50000QPS；较高档位不自动说明香港独享容量或任意攻击均可抵御。",
+                "en": "Lists 400Gbps/50,000QPS; no inferred dedicated Hong Kong capacity."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN Startup",
+                "en": "JQCDN Startup"
+              },
+              {
+                "zh": "399",
+                "en": "399"
+              },
+              {
+                "zh": "列示150G与30000QPS，WebSocket标记不支持；香港CN2定位仍需结合实际订单核验。",
+                "en": "Lists 150G/30,000QPS and no WebSocket; verify route scope."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN Standard",
+                "en": "JQCDN Standard"
+              },
+              {
+                "zh": "1899",
+                "en": "1,899"
+              },
+              {
+                "zh": "列示400G与80000QPS，并支持WebSocket；连接数、超时与计费边界需单独确认。",
+                "en": "Lists 400G/80,000QPS and WebSocket; confirm sessions/timeouts/metering."
+              }
+            ],
+            [
+              {
+                "zh": "YewSafe企业方案",
+                "en": "YewSafe enterprise"
+              },
+              {
+                "zh": "询价",
+                "en": "Quote"
+              },
+              {
+                "zh": "公开介绍SCDN、Anycast与DDoS产品，不能据此填入未经核实的香港套餐价格。",
+                "en": "Publishes SCDN/Anycast/DDoS products; no invented Hong Kong price."
+              }
+            ],
+            [
+              {
+                "zh": "Akamai应用与API保护",
+                "en": "Akamai application/API protection"
+              },
+              {
+                "zh": "按具体方案询价",
+                "en": "Scope-specific quote"
+              },
+              {
+                "zh": "适合纳入企业安全能力评估，但产品介绍不等于已获得区域部署与全包费用承诺。",
+                "en": "Relevant enterprise candidate; product material is not a regional all-in quote."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-ddos-cdn-pricing-2026-flow.svg",
+            "alt": {
+              "zh": "高防套餐的费用边界示意图：订阅与额度、正常业务、事件资源、恢复账单",
+              "en": "Protection bundle boundaries: Plan / allowance, Normal workload, Incident resources, Recovery bill"
+            },
+            "caption": {
+              "zh": "路径示意：订阅与额度 → 正常业务 → 事件资源 → 恢复账单。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Plan / allowance → Normal workload → Incident resources → Recovery bill. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "容量之外，检查业务真正会耗尽的资源",
+          "en": "Check the resources your application can exhaust"
+        },
+        "paragraphs": [
+          {
+            "zh": "网站可能在出口远未达到防护带宽时，就因连接池、数据库、TLS处理或复杂接口失去响应。需要统计请求路径、方法、并发、响应大小和源站执行时间。防护QPS也不能直接换算为应用承载：缓存图片、登录校验和导出报表的成本差异很大。有效方案应同时约束网络压力、请求频率和单次工作的复杂度。",
+            "en": "An application may fail from connection pools, databases, TLS work or costly endpoints before advertised bandwidth is relevant. Compare route cost and concurrency, not only QPS. Cached images and exports consume different resources."
+          },
+          {
+            "zh": "[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)可帮助区分防护层级；[Akamai产品说明](https://www.akamai.com/products/app-and-api-protector)则用于了解应用与API安全的产品边界。对CDN5等套餐也应询问WAF、速率规则、日志和误报处理权限。公开写有安全功能，不代表每个档位的控制粒度、历史保留和支持响应都一致。",
+            "en": "Use [Cloudflare DDoS documentation](https://developers.cloudflare.com/ddos-protection/) and [Akamai product scope](https://www.akamai.com/products/app-and-api-protector) to distinguish capabilities. Ask every candidate about WAF/rate controls, logs and false-positive support by tier."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "将账单分成平时与事件两条线",
+          "en": "Model ordinary and incident bills separately"
+        },
+        "paragraphs": [
+          {
+            "zh": "平时预算包括套餐、正常出网、回源、请求、日志和支持。事件预算再加入可能的清洗、攻击请求、临时升级、应急人工与恢复流量。固定月费不等于事件期间完全没有额外费用；按量服务也不意味着一定失控，关键是计费规则、上限、告警和应急变更是否清楚。将未知项列为待确认，不能为了比较整齐就填零。",
+            "en": "Ordinary cost includes delivery, origin, requests, logs and support. Incident cost can add scrubbing, attack requests, temporary upgrades and recovery. Neither fixed nor metered billing is inherently complete; clarify limits and alerts."
+          },
+          {
+            "zh": "对照[AWS Shield定价](https://aws.amazon.com/shield/pricing/)可以看到高级防护与受保护资源费用需要分开理解，其公开高级方案示例有每月3000美元的订阅费用，但不能据此认为它与香港高防CDN套餐完全等价。区域、资源类型、承诺期和费用保护条件都会改变比较结果。跨产品核算必须先统一业务与服务范围。",
+            "en": "[AWS Shield pricing](https://aws.amazon.com/shield/pricing/) illustrates separate advanced subscription and resource costs, including a published $3,000 monthly example. This is not equivalent to a Hong Kong CDN bundle; align resources, region, commitments and protection conditions first."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "线路在清洗期间是否变化，值得单独询价",
+          "en": "Price mitigation-path behavior explicitly"
+        },
+        "paragraphs": [
+          {
+            "zh": "用户正常时从香港进入，并不保证攻击期间仍沿相同路径。厂商可能切到其他清洗位置或改变回注方式，合法连接因此出现更高延迟或重建。对于交易网站和长连接应用，应询问触发、切换、保持与恢复的行为；对静态站，缓存是否继续服务也很重要。线路溢价只有在这些条件可验证时才具有采购意义。",
+            "en": "Mitigation may move ingress or reinjection and reset sessions. Ask about activation, routing, continuity and recovery, including cached-content availability. A route premium needs evidence of useful behavior."
+          },
+          {
+            "zh": "[YewSafe官方资料](https://www.yewsafe.com/)可作为讨论Anycast与安全组合的入口，但不可把网络宣传规模直接算成单一租户的资源。要求每家候选提供故障升级渠道、源站允许列表维护方式和合法流量误伤处理。必要时先做授权演练验证协作过程，不必通过制造大流量攻击来证明团队能否联系到正确人员。",
+            "en": "[YewSafe](https://www.yewsafe.com/) supports discussions of Anycast/security combinations, but network scale is not tenant entitlement. Verify escalation, allowlist maintenance and false-positive handling through authorized operational exercises."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "事件后的费用核对也属于防护服务",
+          "en": "Post-incident billing is part of service quality"
+        },
+        "paragraphs": [
+          {
+            "zh": "事件结束后，不应只保存一个峰值截图。导出攻击时间范围、边缘处置、源站流量、临时升级和支持工单，把它们与账单对应。某些增加来自合法用户重试和缓存重新填充，并非全部是被清洗的攻击流量。时间区间、单位与统计边界不同，也会造成控制台和发票数字不一致，核对前先统一口径。",
+            "en": "After an incident, reconcile timelines, edge actions, origin traffic, temporary upgrades and tickets with invoices. Retries and cache refill are not identical to scrubbed attack traffic; normalize units and time boundaries."
+          },
+          {
+            "zh": "要求供应商解释异常费用的计算依据，保留事件前套餐、变更授权和生效时间。团队内部还要复盘临时规则是否已撤销、连接与数据库队列是否恢复、备用资源是否继续计费。只把恢复首页作为事件结束标准，容易留下长期费用和访问例外。一次事件的完整成本应包括响应与恢复，并用于调整下一轮预算，而不是拿最大攻击数字作为唯一依据。",
+            "en": "Retain plan versions and change approvals. Remove temporary policies and unnecessary standby resources, and verify queues have drained. Include response/recovery costs in future budgets."
+          },
+          {
+            "zh": "如果费用争议无法通过可追踪记录解释，应将日志透明度和支持流程列入续约评估。便宜但不可核对的账单，会让后续扩容和安全决策都依赖猜测。",
+            "en": "Unresolvable billing opacity should affect renewal decisions because it undermines capacity planning."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-ddos-cdn-pricing-2026-review.svg",
+            "alt": {
+              "zh": "高防套餐的费用边界示意图：宣传容量、合同保障、合法业务容量",
+              "en": "Protection bundle boundaries: Advertised capacity, Contract entitlement, Legitimate capacity"
+            },
+            "caption": {
+              "zh": "检查重点：宣传容量 → 合同保障 → 合法业务容量。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Advertised capacity → Contract entitlement → Legitimate capacity. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "推荐应附带升级触发点",
+          "en": "Recommendations need upgrade triggers"
+        },
+        "paragraphs": [
+          {
+            "zh": "若CDN5的协议、区域与支持条件符合业务，可从足够覆盖需求的方案试点，不必预先购买最大档位。记录哪些变化会触发升级：域名数量、连接规模、合法流量、日志要求或事件响应级别。升级依据应是可观测需求，而不是将偶发异常全部归结为买得不够贵。对明确不支持的协议，则寻找合适产品，不能靠加钱假定能力存在。",
+            "en": "Pilot an adequate CDN5 tier when protocol, region and support fit. Define upgrades by domains, sessions, legitimate traffic, logs or response requirements—not unexplained fear. Unsupported protocols require another product."
+          },
+          {
+            "zh": "签约时把超限动作写清，特别是限速、停用、黑洞、临时费用和人工审批。源站隔离、回源TLS与应用限额仍由部署流程验证。更完整的方案边界见[香港高防架构](article/hong-kong-ddos-cdn-cn2/)。采购结论最好能回答三个问题：保护什么、何时可能失败、失败时如何恢复。能够解释这些问题的报价，才值得进入长期合作。",
+            "en": "Contract over-limit behavior, including throttling, blackholing, suspension and emergency charges. Validate origin isolation and TLS. The [architecture guide](article/hong-kong-ddos-cdn-cn2/) helps document what is protected, how it can fail and how recovery works."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/shield/pricing/",
+        "label": {
+          "zh": "AWS Shield 官方定价",
+          "en": "AWS Shield pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cdn-origin-optimization",
+    "seriesOrder": 19,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CDN加速效果怎么样？大陆访问延迟、线路与回源优化指南",
+      "en": "Hong Kong CDN Performance: Mainland Latency and Origin Optimization"
+    },
+    "excerpt": {
+      "zh": "通过分解TTFB、缓存与回源，判断香港CDN究竟改善哪段链路。本文给出测量顺序、缓存键审查、源站连接和发布失效的优化方法。",
+      "en": "Decompose TTFB, cache state and origin work to identify what Hong Kong delivery improves, then optimize keys, connections and publication."
+    },
+    "category": {
+      "zh": "性能与配置",
+      "en": "Performance and configuration"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "香港CDN能否加速，先看请求是否需要回源",
+          "en": "Start with whether a request reaches the origin"
+        },
+        "paragraphs": [
+          {
+            "zh": "缓存命中的公开资源可以由边缘直接交付，香港节点因此可能减少部分用户跨区域取内容的距离。动态接口和未命中资源仍要经过回源，若源站或数据库在更远区域，收益可能被第二段路径抵消。香港CDN的效果不能只用“靠近大陆”解释，更不能保证所有运营商和所有时间都得到相同延迟。",
+            "en": "Cached public objects can reduce distance, while misses and dynamic operations still reach origins and databases. Hong Kong proximity alone does not guarantee improvements across carriers or times."
+          },
+          {
+            "zh": "[CDN5](https://www.cdn5.com/)可作为区域与安全需求的试点候选，但公开线路标签并非性能结论。本文提供优化方法而非厂商测速排名，产品资料核实于2026年10月14日。先按[香港三网验收方法](article/hong-kong-cdn-mainland-security/)建立基线，再改变配置，才能知道优化究竟发生在哪一段。",
+            "en": "[CDN5](https://www.cdn5.com/) is a possible pilot candidate, not a measured winner here. Product information was checked on 14 October 2026. Establish the [carrier baseline](article/hong-kong-cdn-mainland-security/) before changing settings."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "TTFB不是一条专线的延迟",
+          "en": "TTFB is not a transit-only measurement"
+        },
+        "paragraphs": [
+          {
+            "zh": "用户看到的首字节时间包含请求发出后的网络与处理过程，具体工具的计时起点还可能不同。排障应同时保留DNS、TCP或QUIC连接、TLS、请求等待和内容下载等阶段，不能把总耗时全部归到线路。源站慢查询、边缘挑战、缓存未命中和重新建立连接，都可能表现为更长TTFB。",
+            "en": "Timing definitions vary; retain DNS, transport, TLS, request wait and download stages. Slow queries, challenges, misses and new connections can all raise TTFB."
+          },
+          {
+            "zh": "冷连接与复用连接、HTTP/2与HTTP/3、首次访问与已有缓存必须分开。[RFC 9000](https://www.rfc-editor.org/rfc/rfc9000.html)定义QUIC传输，[RFC 9114](https://www.rfc-editor.org/rfc/rfc9114.html)定义HTTP/3映射。协议可以改变连接和丢包处理方式，却不会消除物理距离，也不保证任何网络下都更快。启用前检查客户端与路径支持，并保留协议回退。",
+            "en": "Separate reused/cold connections, cache states and protocols. [QUIC](https://www.rfc-editor.org/rfc/rfc9000.html) and [HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html) change transport behavior without eliminating distance or guaranteeing universal gains. Validate support and fallback."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-origin-optimization-flow.svg",
+            "alt": {
+              "zh": "香港回源优化顺序示意图：分阶段测量、缓存键审查、连接与应用、对照验证",
+              "en": "Hong Kong origin optimization: Timing stages, Cache-key review, Connections / app, Validation"
+            },
+            "caption": {
+              "zh": "路径示意：分阶段测量 → 缓存键审查 → 连接与应用 → 对照验证。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Timing stages → Cache-key review → Connections / app → Validation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "先找最有价值的缓存对象",
+          "en": "Find the most valuable cacheable objects"
+        },
+        "paragraphs": [
+          {
+            "zh": "按对象体积、访问频率和回源成本排序，比只追求全站命中率更有效。大量小图命中可能让请求命中率很好看，但少数大文件仍消耗大部分出网；少量昂贵API即使命中率统计中占比很小，也可能决定数据库压力。应同时查看请求命中、字节命中和回源工作，而不是选一个最漂亮的比例。",
+            "en": "Prioritize size, frequency and origin cost. Small-image hits can hide large-file misses, while rare costly APIs dominate database work. Inspect request hits, byte hits and origin work together."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "缓存诊断的不同视角",
+            "en": "Different cache diagnostic views"
+          },
+          "columns": [
+            {
+              "zh": "观察对象",
+              "en": "Observation"
+            },
+            {
+              "zh": "可能原因",
+              "en": "Possible cause"
+            },
+            {
+              "zh": "改动前的检查",
+              "en": "Before changing configuration"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "相同图片反复回源",
+                "en": "Repeated image fetches"
+              },
+              {
+                "zh": "查询参数、Cookie或请求头使缓存键分裂，TTL过短或频繁失效。",
+                "en": "Fragmented keys, short TTLs or repeated purges."
+              },
+              {
+                "zh": "确认参数是否影响内容，验证版本化资源与响应缓存指令。",
+                "en": "Verify content-relevant dimensions and cache headers."
+              }
+            ],
+            [
+              {
+                "zh": "首页快，登录后慢",
+                "en": "Fast homepage, slow account"
+              },
+              {
+                "zh": "匿名内容命中，登录态需要回源并执行鉴权与数据库查询。",
+                "en": "Anonymous hits versus authenticated computation."
+              },
+              {
+                "zh": "关联应用日志，避免把私有页面强制共享来换取命中率。",
+                "en": "Trace application work; never share private pages for metrics."
+              }
+            ],
+            [
+              {
+                "zh": "发布后源站突增",
+                "en": "Origin spike after release"
+              },
+              {
+                "zh": "大范围失效或新版本资源同时填充，热门请求集中到源站。",
+                "en": "Broad invalidation and concurrent refill."
+              },
+              {
+                "zh": "检查发布顺序、分批失效、预热范围与源站容量预算。",
+                "en": "Review release order, targeted purges and refill budgets."
+              }
+            ],
+            [
+              {
+                "zh": "命中仍然慢",
+                "en": "Slow cache hits"
+              },
+              {
+                "zh": "用户到边缘路径、连接建立、对象体积或客户端处理可能占主导。",
+                "en": "Audience transit, setup, object size or client work."
+              },
+              {
+                "zh": "分阶段计时并校验实际服务节点，不能继续盲目加缓存层。",
+                "en": "Measure stages and serving edge before adding layers."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "缓存键优化，必须先证明内容等价",
+          "en": "Prove response equivalence before simplifying keys"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)，共享缓存需要尊重响应语义、新鲜度和验证条件。跟踪参数若不改变内容，可以考虑从缓存键中排除；但语言、权限、图片尺寸和版本可能真正改变响应。对每个拟删除维度，使用不同值比较内容与权限，不能只看状态码一样就认定等价。",
+            "en": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) requires correct freshness and response semantics. Exclude tracking dimensions only after proving they do not affect content or authorization; identical status codes are insufficient."
+          },
+          {
+            "zh": "[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)可以帮助理解请求头、Cookie和查询参数的配置关系。还应区分“是否进入缓存键”与“是否转发源站”，各家产品的具体策略需要核对。配置变更后验证匿名与不同账户的隔离，并规划失效，避免旧缓存与新规则混合造成难以复现的问题。",
+            "en": "[CloudFront cache-key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) clarifies headers, cookies and queries. Key inclusion and origin forwarding are separate questions. Test identity isolation and plan invalidation when policies change."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "回源优化从连接和应用排队开始",
+          "en": "Optimize origin connection and queuing"
+        },
+        "paragraphs": [
+          {
+            "zh": "检查源站是否在每次请求重新建立连接、是否有合理的连接复用与超时，以及边缘到源站的证书和Host是否正确。超时过短会诱发失败与重试，过长则可能让队列积压。动态请求应关联应用处理时间，分辨是网络传输、负载均衡排队、数据库锁还是外部服务等待。搬动源站前先确认真正的瓶颈。",
+            "en": "Inspect connection reuse, timeouts, origin certificates and Host. Very short timeouts can trigger retries; long ones can accumulate queues. Correlate load-balancer, application, database and external-dependency timing before relocating origins."
+          },
+          {
+            "zh": "若采用中间缓存或源站屏蔽层，确认它减少了多少回源请求，以及故障时如何绕行。多个边缘同时刷新热门对象可能形成填充压力，发布应考虑分批更新和受控预热。预热不是无限向源站发请求；应限制范围和并发，先确保新版本文件已存在，再发布引用它们的页面。",
+            "en": "For shield caches, measure fetch reduction and failure behavior. Control refill concurrency, stage releases and warm only selected objects. Publish new assets before pages referencing them."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "响应头是排查入口，日志才提供完整上下文",
+          "en": "Headers start diagnosis; logs supply context"
+        },
+        "paragraphs": [
+          {
+            "zh": "保留Cache-Control、Age、Vary、ETag以及厂商提供的缓存状态字段，有助于解释新鲜度和命中行为，但不能只靠一个头判定整个缓存链。多层代理可能重写字段，响应也可能经过验证后继续使用已有对象。应将浏览器看到的响应与边缘、源站日志关联，确认实际发生了什么。",
+            "en": "Retain Cache-Control, Age, Vary, ETag and provider cache-status fields, but account for multiple layers and revalidation. Correlate browser responses with edge and origin logs rather than inferring the entire chain from one header."
+          },
+          {
+            "zh": "排查时不要为了方便关闭所有缓存指令，也不要把敏感调试信息长期暴露给访客。为测试资源使用明确的版本和可回收路径，记录预期内容校验值。配置修复之后，确认正常页面没有遗留测试头、缓存绕过参数或额外日志开销，避免一次性能排查永久改变生产行为。",
+            "en": "Use versioned, removable test resources and expected content checks. Do not permanently expose sensitive diagnostics or leave cache-bypass parameters and excessive logging behind."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cdn-origin-optimization-review.svg",
+            "alt": {
+              "zh": "香港回源优化顺序示意图：用户到边缘、边缘到源站、应用与数据库",
+              "en": "Hong Kong origin optimization: Audience to edge, Edge to origin, App / database"
+            },
+            "caption": {
+              "zh": "检查重点：用户到边缘 → 边缘到源站 → 应用与数据库。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Audience to edge → Edge to origin → App / database. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "用变化前后的同类样本证明收益",
+          "en": "Validate improvements with comparable samples"
+        },
+        "paragraphs": [
+          {
+            "zh": "一次只改变有限变量，固定测试资源、源站版本和用户分组。记录正常与高峰，保留失败、缓存状态和内容校验；将P50、P95和错误率一起观察。若改动同时更换线路、协议和图片格式，即使总体变快，也无法知道哪项值得保留。对真实用户监测，还应检查设备与访问页面构成是否发生变化。",
+            "en": "Change few variables at a time and hold resources, application version and audience groups stable. Track P50, P95, errors, cache state and content. Audience/device mix changes can distort real-user comparisons."
+          },
+          {
+            "zh": "优化完成后，把规则、验收结果和回退步骤写入运行记录。新页面、营销参数和登录方式都可能重新降低缓存效率，因此需要持续观测。对无法解释的运营商异常，沿[节点路径分析](article/hong-kong-cdn-nodes-routes/)继续定位，而不是反复购买更高档位。加速有效的证据是用户完成任务更顺畅、源站工作更可控，且内容依然正确。",
+            "en": "Document rules and rollback, then monitor new pages, parameters and authentication behavior. Use [path analysis](article/hong-kong-cdn-nodes-routes/) for unexplained carrier problems. Better task completion and controlled origin work matter alongside speed."
+          },
+          {
+            "zh": "如果一轮优化只降低均值而尾部失败增加，应暂停扩量检查。尤其要关注低端设备、移动接入和冷缓存，这些用户最容易在平均数中被忽略。为每次变更设定明确的恢复条件，保存旧配置并确认回退不会引发全站重新填充，性能工程才不会演变成一次不可逆的配置试验。",
+            "en": "If averages improve but failures worsen, pause expansion. Include weaker devices, mobile access and cold caches, and ensure rollback will not trigger an uncontrolled refill."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9000.html",
+        "label": {
+          "zh": "IETF RFC 9000：QUIC",
+          "en": "IETF RFC 9000: QUIC"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9114.html",
+        "label": {
+          "zh": "IETF RFC 9114：HTTP/3",
+          "en": "IETF RFC 9114: HTTP/3"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-cn2-cdn-selection",
+    "seriesOrder": 20,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港CN2 CDN哪家好？CN2线路优势、延迟与服务商选择指南",
+      "en": "Choosing a Hong Kong CN2 CDN: Routing Claims, Latency and Provider Fit"
+    },
+    "excerpt": {
+      "zh": "CN2不是三网速度保证。本文从去程、回程、调度与清洗路径解释如何核验香港CN2 CDN，避免用单次路由截图或网络标签代替业务验收。",
+      "en": "CN2 is not a universal carrier-speed guarantee. Validate forward/return paths, steering and mitigation behavior before paying for Hong Kong routing claims."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "香港CN2 CDN哪家好，先问CN2覆盖哪一段",
+          "en": "Ask which segment the CN2 label covers"
+        },
+        "paragraphs": [
+          {
+            "zh": "选香港CN2 CDN时，最有价值的问题不是“是不是CN2”，而是这个标签覆盖用户到边缘、边缘到源站，还是供应商某个上游出口。不同套餐与不同运营商可能经过不同路径；去程包含某网络，也不能证明回程一致。CN2 GIA等商业标签还应结合有效产品说明和合同，不能仅凭名称推导独享容量、低拥塞或全部用户优先级。",
+            "en": "Ask whether CN2 describes audience ingress, origin transit or one upstream. Different tiers, carriers and directions may use different paths. Commercial labels such as CN2 GIA do not independently prove exclusive capacity or congestion-free service."
+          },
+          {
+            "zh": "[CDN5](https://www.cdn5.com/)公开列出BGP/CN2套餐，[JQCDN](https://www.jqcdn.com/)突出香港CN2定位，均可作为询价与试点候选。资料核实于2026年10月14日，本文没有验证其具体线路端到端构成。优先推荐的含义是值得按你的需求评估，而不是已经证明它们在每个地区领先。",
+            "en": "[CDN5](https://www.cdn5.com/) lists BGP/CN2 and [JQCDN](https://www.jqcdn.com/) emphasizes Hong Kong CN2. Both are trial candidates based on information checked on 14 October 2026, not verified end-to-end path winners."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "线路的实际收益来自哪里",
+          "en": "Where route quality can help"
+        },
+        "paragraphs": [
+          {
+            "zh": "网络路径可能影响往返时延、丢包、拥塞与吞吐稳定性。对于多次交互的动态业务，连接和往返会影响用户等待；对于大文件，持续吞吐和拥塞行为也很重要。线路改善并不会消除源站慢查询、应用锁和过大的前端资源。若页面主要时间花在浏览器执行脚本，换一条昂贵线路未必解决问题。",
+            "en": "Routing can affect RTT, loss, congestion and sustained throughput. It will not repair slow queries, locks or heavy client-side scripts. Interactive applications and large transfers benefit from different characteristics."
+          },
+          {
+            "zh": "[QUIC规范](https://www.rfc-editor.org/rfc/rfc9000.html)说明传输协议的连接与拥塞机制；不同协议和连接复用状态会改变测试结果。比较线路时，应保持资源、协议、缓存状态和客户端条件尽量一致，再看业务错误率与尾延迟。只展示一个最低ping值，无法覆盖TLS、HTTP处理和实际内容交付。",
+            "en": "[QUIC](https://www.rfc-editor.org/rfc/rfc9000.html) illustrates transport mechanisms that influence measurements. Hold resources, protocols, cache and client conditions stable; compare failures and tails rather than minimum ping."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cn2-cdn-selection-flow.svg",
+            "alt": {
+              "zh": "CN2线路标签的核验示意图：标签与套餐、方向与范围、业务样本、合同与复查",
+              "en": "Verify CN2 route claims: Label / plan, Direction / scope, Workload samples, Contract / review"
+            },
+            "caption": {
+              "zh": "路径示意：标签与套餐 → 方向与范围 → 业务样本 → 合同与复查。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Label / plan → Direction / scope → Workload samples → Contract / review. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "路由观察工具的证据边界",
+          "en": "Understand the limits of route observations"
+        },
+        "paragraphs": [
+          {
+            "zh": "链路追踪可以提供沿途响应线索，但中间设备未响应不一定代表转发失败。设备可能降低探测优先级，探测协议也可能与业务流量不同。某个IP对应的组织信息和地理位置并不一定实时准确；节点名称更不能单独证明购买了某种商业服务。不要把一张截图当作全年线路承诺。",
+            "en": "Traceroute shows responding hops, not guaranteed forwarding quality. Routers may deprioritize probes, protocols can differ, and geolocation or naming can be stale. A screenshot is not an annual service commitment."
+          },
+          {
+            "zh": "去程与回程可能不对称。仅从用户端观察通常无法完整还原边缘到用户的路径，应结合供应商可提供的诊断、边缘日志与实际业务结果。若合同强调指定网络，应询问验证方式和路由变化后的通知及处理。验证方法不能依赖供应商不愿提供、团队也无法持续观察的指标，否则后续难以追责。",
+            "en": "Paths can be asymmetric. Combine client observations with provider diagnostics and application outcomes. For contractual route claims, agree on a verification and change-notification method the team can actually maintain."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "把销售术语转成书面问题",
+          "en": "Convert sales labels into written questions"
+        },
+        "paragraphs": [
+          {
+            "zh": "可以向所有候选发送同一份问题表，并要求回答适用套餐。某些问题没有公开答案并不等于产品一定不好，但在付款前应知道哪些属于承诺、哪些只是尽力服务。下表中的要求用于消除歧义，不意味着任何厂商已满足。",
+            "en": "Send all candidates the same tier-specific questions. Missing public answers are not proof of failure, but commitments and best-effort behavior must be distinguishable before purchase."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "CN2线路采购问询表",
+            "en": "CN2 procurement questions"
+          },
+          "columns": [
+            {
+              "zh": "主题",
+              "en": "Topic"
+            },
+            {
+              "zh": "应询问的内容",
+              "en": "Question"
+            },
+            {
+              "zh": "验收依据",
+              "en": "Acceptance evidence"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "适用用户",
+                "en": "Audience"
+              },
+              {
+                "zh": "电信、联通、移动分别如何进入，是否只对部分地区或套餐有效。",
+                "en": "Which carriers, regions and plans are covered?"
+              },
+              {
+                "zh": "主要用户地区与运营商的分组结果，保留失败和高峰样本。",
+                "en": "Segmented carrier evidence including failures and peaks."
+              }
+            ],
+            [
+              {
+                "zh": "方向与范围",
+                "en": "Direction/scope"
+              },
+              {
+                "zh": "指定线路覆盖去程、回程还是回源，是否允许调度到其他地区。",
+                "en": "Which direction/leg is covered, and can serving regions change?"
+              },
+              {
+                "zh": "产品说明、书面答复与可执行诊断方式，不只看地址归属。",
+                "en": "Written scope and practical diagnostics, beyond IP ownership."
+              }
+            ],
+            [
+              {
+                "zh": "清洗状态",
+                "en": "Mitigation state"
+              },
+              {
+                "zh": "攻击期间是否更换入口或回注，线路保证是否仍适用。",
+                "en": "Do scrubbing and reinjection alter the promised path?"
+              },
+              {
+                "zh": "约定事件流程、授权演练记录与合法业务恢复情况。",
+                "en": "Agreed incident procedure and authorized recovery evidence."
+              }
+            ],
+            [
+              {
+                "zh": "超限与变化",
+                "en": "Limits/changes"
+              },
+              {
+                "zh": "正常带宽、连接与流量超限如何处理，线路调整是否通知。",
+                "en": "What happens at delivery/session limits or route changes?"
+              },
+              {
+                "zh": "有效合同、账单规则、告警与升级路径。",
+                "en": "Contract, metering, alerts and escalation."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "怎样组织一轮有意义的对照",
+          "en": "Design a meaningful comparison"
+        },
+        "paragraphs": [
+          {
+            "zh": "使用同一源站和相同资源内容，为候选配置等价缓存和安全策略。测试公开资源、动态接口与长连接，覆盖主要运营商及业务高峰。分别记录冷连接和复用连接、冷缓存和热缓存；不支持的能力直接记为限制，不要用另一种资源替代后继续计算同一排名。样本数量与时间窗口应写进报告。",
+            "en": "Use one origin and equivalent content, cache and security settings. Cover static, dynamic and persistent workflows across carriers and peaks, separating connection/cache states. Record unsupported features as limits rather than substituting incomparable workloads."
+          },
+          {
+            "zh": "静态内容的缓存语义可参考[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)。合法用户挑战、错误重试和内容校验也属于业务成本，不应从测速中排除。若使用[实测工具](lab/)，需说明它反映当前客户端到测试端点的局部结果，无法独自证明生产域名的所有路径。多点持续证据比一次精心挑选的低延迟更可信。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) semantics and include challenges, retries and content checks. The [lab](lab/) supplies local endpoint observations, not complete production-path proof."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一次不理想的试点，如何判断是否值得继续",
+          "en": "Interpret an unsuccessful pilot"
+        },
+        "paragraphs": [
+          {
+            "zh": "若所有运营商都慢，先看共用源站和配置；若只在一个运营商高峰异常，再深入相应路径。若热缓存快而动态接口慢，优先检查回源与应用；若连接正常但下载后半程变慢，观察吞吐、对象大小和持续拥塞。这样的分组可以让下一次调整有明确假设，而不是在几个品牌之间盲目轮换。",
+            "en": "If all carriers are slow, inspect shared origin/configuration; if one fails at peak, focus on that route. Fast hits with slow dynamic requests point toward origin/application work, while transfer degradation needs throughput analysis."
+          },
+          {
+            "zh": "将问题样本的时间、协议、边缘标识、响应码和请求ID提交支持，要求对方说明可改变的配置及预期效果。下一轮只验证这个假设，保留原始对照。若厂商无法解释关键路径或不能满足硬性区域要求，可以结束试点；若瓶颈来自自身应用，换线路不会自动解决。采购记录应把这两种结果分开，避免给错误的原因贴上品牌优劣标签。",
+            "en": "Send timestamped, identified samples to support and test one proposed explanation at a time. Distinguish product-scope failures from application bottlenecks before deciding to continue or switch."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-cn2-cdn-selection-review.svg",
+            "alt": {
+              "zh": "CN2线路标签的核验示意图：去程与回程、正常与清洗、三网与高峰",
+              "en": "Verify CN2 route claims: Forward / return, Normal / mitigation, Carriers / peaks"
+            },
+            "caption": {
+              "zh": "检查重点：去程与回程 → 正常与清洗 → 三网与高峰。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Forward / return → Normal / mitigation → Carriers / peaks. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "什么时候不必为CN2额外付费",
+          "en": "When a CN2 premium may not fit"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果主要用户在欧美，或者大部分性能问题来自源站计算，特定大陆线路的溢价可能不是优先投入。面向多个市场的服务，还需要比较香港固定交付与全球调度；某地区略快不代表整体业务收益更高。反之，若主要收入用户集中于某些大陆运营商，且高峰错误与路径有关，线路优化就值得认真验证。",
+            "en": "A mainland-oriented premium may be low priority for Western audiences or compute-bound applications. Compare regional pinning with global steering against actual business outcomes. For carrier-specific peak failures, route improvements deserve targeted validation."
+          },
+          {
+            "zh": "最终决策可按[香港CDN成本模型](article/hong-kong-cdn-pricing/)把费用与可观察改善放在一起。记录续费复查条件，监测用户构成、源站位置和路由变化。CN2可以是一项有效采购条件，但不能成为免除测试的理由。长期可用的方案需要线路、缓存、应用和运维协同，任何单一网络名称都无法替代这些工作。",
+            "en": "Use the [cost model](article/hong-kong-cdn-pricing/) and review audience, origin and route changes at renewal. CN2 can be a requirement, but not a substitute for testing and operations."
+          },
+          {
+            "zh": "还应警惕把“免备案”和“CN2”合并解释成任意业务可达保证。境外节点接入、内容与经营条件、用户网络路径是不同问题。确认每项条件后再上线，比事后围绕一个模糊标签争论更省时间；对必须使用大陆节点的业务，应另行选择满足接入要求的产品。",
+            "en": "Keep offshore eligibility, business/content obligations and network reachability separate. Mainland-node requirements need an eligible product rather than an expanded interpretation of a marketing label."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9000.html",
+        "label": {
+          "zh": "IETF RFC 9000：QUIC",
+          "en": "IETF RFC 9000: QUIC"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      }
+    ]
+  },
+  {
+    "id": "offshore-cdn-comparison-2026",
+    "seriesOrder": 21,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "免备案CDN推荐：2026年主流服务商价格、线路与功能对比",
+      "en": "Offshore CDN Recommendations for 2026: Pricing, Routes and Features"
+    },
+    "excerpt": {
+      "zh": "免备案CDN通常指境外节点接入方案，并非一项通用技术认证。按交付地区、公开价格、缓存、安全与协议能力建立候选表，避免只凭标签采购。",
+      "en": "Compare offshore delivery eligibility, public pricing, routing, cache, security and protocols without treating “no ICP filing” as a technical certification."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "免备案CDN推荐，先确定服务区域",
+          "en": "Define offshore service scope"
+        },
+        "paragraphs": [
+          {
+            "zh": "通常所说的免备案CDN，是使用香港或其他境外节点交付内容的方案，不能理解为使用中国大陆节点而绕过其接入条件。网站内容、经营资质、数据处理和服务条款仍需要按实际业务确认。若计划进入大陆节点网络，应重新核对备案或许可要求，而不是在原有境外套餐上直接假定拥有资格。",
+            "en": "“No ICP filing” commonly describes offshore-node delivery, not mainland access without eligibility requirements. Business, content, data and service terms still apply. Reassess eligibility before adding mainland nodes."
+          },
+          {
+            "zh": "选型可优先评估[CDN5](https://www.cdn5.com/)的境外安全加速方案，并用[JQCDN免备案CDN](https://www.jqcdn.com/)作为香港线路定位的对照。两者是否适合你的业务，取决于具体节点、协议、出网和支持条件。本文核实日期为2026年10月14日，引用公开报价，不提供虚构的延迟或防护实测结果。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/) and compare [JQCDN](https://www.jqcdn.com/) for Hong Kong-oriented requirements. Suitability depends on actual nodes, protocols and terms. Public information was checked on 14 October 2026; no benchmark results are invented."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "价格与功能必须对应到具体产品",
+          "en": "Match prices to products"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表将区域安全套餐与全球分发产品放在同一候选清单，但不暗示它们具有相同保障。价格只是进入预算模型的一个字段，完整成本仍需加上适用的请求、回源、日志和安全组件。免费档和付费档应单独验收，不能用免费试用的结果推定付费线路。",
+            "en": "This shortlist includes regional-security bundles and global delivery products without equating their guarantees. Add requests, origin, logs and security as applicable. Validate free and paid tiers separately."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "境外CDN候选与公开收费结构",
+            "en": "Offshore candidates and public billing structures"
+          },
+          "columns": [
+            {
+              "zh": "服务",
+              "en": "Service"
+            },
+            {
+              "zh": "已核实信息",
+              "en": "Verified public information"
+            },
+            {
+              "zh": "适用判断",
+              "en": "Fit assessment"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "标准版499美元/月；商业版1999美元/月，列示安全与BGP/CN2网络。",
+                "en": "Standard $499/month; Business $1,999/month with advertised protection/BGP/CN2."
+              },
+              {
+                "zh": "优先讨论中文高防和区域访问需求，确认香港资源及正常流量额度。",
+                "en": "Consider regional protection; verify Hong Kong eligibility and delivery allowances."
+              }
+            ],
+            [
+              {
+                "zh": "JQCDN",
+                "en": "JQCDN"
+              },
+              {
+                "zh": "Startup为399美元/月，Standard为1899美元/月，官网强调香港CN2。",
+                "en": "Startup $399/month; Standard $1,899/month; advertises Hong Kong CN2."
+              },
+              {
+                "zh": "关注指定区域线路时纳入比较，低档不支持WebSocket的限制需保留。",
+                "en": "Useful regional comparator; lower-tier WebSocket exclusion matters."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "Free为0美元；Pro月付25美元，年付折算20美元/月；Business月付250美元。",
+                "en": "Free $0; Pro $25 monthly/$20 annual equivalent; Business $250 monthly."
+              },
+              {
+                "zh": "适合评估全球代理与缓存，不能默认普通套餐能固定香港或包含大陆网络。",
+                "en": "Evaluate global proxy/cache; no assumed Hong Kong pinning or mainland network."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront",
+                "en": "CloudFront"
+              },
+              {
+                "zh": "当前固定套餐为0、15、200、1000美元/月，并与按量模式并存。",
+                "en": "Current flat-rate tiers are $0/$15/$200/$1,000 monthly alongside metered billing."
+              },
+              {
+                "zh": "AWS源站项目可统一评估，核对分发单位、额度、功能和超出条件。",
+                "en": "Relevant to AWS workloads; verify distribution scope, allowances and limits."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN",
+                "en": "Google Cloud CDN"
+              },
+              {
+                "zh": "按缓存交付、填充和查询等计费，地区与GiB单位影响结果。",
+                "en": "Delivery, fill and lookup charges vary by region and GiB units."
+              },
+              {
+                "zh": "适合结合现有云负载均衡与源站架构核算，安全服务需另查范围。",
+                "en": "Evaluate with cloud load balancing/origins and separate security scope."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/offshore-cdn-comparison-2026-flow.svg",
+            "alt": {
+              "zh": "境外CDN部署选择示意图：业务资格、交付区域、功能与费用、迁移验证",
+              "en": "Offshore deployment choices: Eligibility, Delivery regions, Features / cost, Migration check"
+            },
+            "caption": {
+              "zh": "路径示意：业务资格 → 交付区域 → 功能与费用 → 迁移验证。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Eligibility → Delivery regions → Features / cost → Migration check. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "中国大陆访问与全球访问，需要不同证据",
+          "en": "Mainland and global audiences need different evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "境外节点数量再多，也不能保证跨境网络在高峰时稳定。按主要用户运营商和城市测试错误率、连接、TTFB和任务完成，保留冷缓存与动态请求。欧美用户占比较高时，固定香港可能增加他们的路径，因此还要比较全球调度方案。服务范围应由真实用户分布决定，不能只根据站长所在地区选择节点。",
+            "en": "Offshore node count does not ensure stable cross-border peak performance. Test carriers and cities, including errors, cold fetches and dynamic workflows. Hong Kong pinning can disadvantage Western audiences; choose scope from user distribution."
+          },
+          {
+            "zh": "[Cloudflare中国网络文档](https://developers.cloudflare.com/china-network/)明确列出独立订阅和域名条件，说明全球套餐与大陆节点并不是同一产品。对其他候选也应询问实际交付地区。地址定位工具只能提供线索，不能证明合同覆盖；用户体验仍需通过业务请求和日志确认。香港路径的细节见[香港CDN选型](article/hong-kong-cdn-providers-2026/)。",
+            "en": "[Cloudflare China Network](https://developers.cloudflare.com/china-network/) has separate subscription/domain conditions. Ask every candidate for actual service regions; geolocation alone is not contractual evidence. See [Hong Kong selection](article/hong-kong-cdn-providers-2026/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "功能表里最容易遗漏的四件事",
+          "en": "Four easily missed feature checks"
+        },
+        "paragraphs": [
+          {
+            "zh": "证书不仅要在浏览器到边缘有效，边缘到源站也要正确校验；缓存不仅要有开关，还要能区分公开内容、登录态和版本；日志不仅要能看总图，还要有定位单次请求所需字段；长连接不仅要写支持，还要说明超时、并发和重连。功能名称相同，运维可用性仍可能不同。",
+            "en": "Validate both TLS legs, identity-safe cache controls, request-level logs and explicit persistent-session limits. A checkbox does not prove operational usefulness."
+          },
+          {
+            "zh": "如果网站包含支付回调、SDK或开放API，验证它们是否能处理挑战与拒绝响应。为浏览器设计的验证页面不能直接套用所有客户端。后台管理和源站其他端口也不会因为前台接入而自动受保护。将这些项目写进试点清单，往往比继续增加候选品牌更有用。需要长连接时可阅读[WebSocket选择指南](article/websocket-cdn-selection/)。",
+            "en": "Test callbacks, SDKs and APIs against challenges/rejections. Browser verification cannot be applied indiscriminately. Frontend CDN access does not protect every administrative port. Include these gates in trials; see [WebSocket selection](article/websocket-cdn-selection/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "开通之前，用清单确认内容用途",
+          "en": "Confirm permitted content before activation"
+        },
+        "paragraphs": [
+          {
+            "zh": "下载、视频、软件更新和普通网页的流量特征不同，某个套餐允许网站代理，并不必然允许大规模媒体分发。向服务商说明对象大小、访问频率、版权与授权方式，核对使用政策、单对象限制和异常流量处理。若这些条件不明确，即使试用暂时能够访问，也不能推定长期使用获得了承诺。",
+            "en": "Downloads, media, software updates and ordinary pages have different usage requirements. Disclose object size, frequency and authorization, and verify permitted use, object limits and abnormal-traffic policy. A working trial is not proof of long-term eligibility."
+          },
+          {
+            "zh": "还应确认谁控制DNS、证书和账户，是否能够导出必要配置。第三方代开账号或插件集成不应让团队失去域名和回退能力。对于由托管平台管理的站点，先检查现有代理与缓存，避免重复叠加后没人能解释哪个系统决定响应。",
+            "en": "Retain control of DNS, certificates and accounts, including export and rollback. Check existing managed-host proxies before stacking services with unclear ownership."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "用同一负载计算费用，别比较不同的分母",
+          "en": "Use a common workload for cost comparisons"
+        },
+        "paragraphs": [
+          {
+            "zh": "对照[Cloudflare套餐](https://www.cloudflare.com/plans/)、[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)与[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)，先区分固定月费、区域流量、请求及附加功能。年付折算价要同时写出付款条件，计量单位也要统一。GiB与十进制GB不同，缓存填充与用户交付也不是同一类字节。",
+            "en": "Read [Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/) and [Google](https://cloud.google.com/cdn/pricing) pricing with aligned units, terms and feature scope. Annual equivalents require their payment conditions; GiB and GB differ."
+          },
+          {
+            "zh": "建立普通月、活动月和异常请求月三个预算场景，数据使用自己的日志或明确标注的假设。不要把未经证实的固定命中率当作行业标准。询问攻击流量、拦截请求、超限动作和日志存储，记录未知项。固定套餐的价值可能在于确定性与支持，按量方案的价值可能在于弹性；选择哪种取决于业务波动及团队管理能力。",
+            "en": "Model ordinary, campaign and abnormal-request months using real logs or explicit assumptions. Ask about attacks, blocked requests, overages and logs. Choose predictability or elasticity according to workload and operating capacity."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/offshore-cdn-comparison-2026-review.svg",
+            "alt": {
+              "zh": "境外CDN部署选择示意图：境外节点、大陆节点条件、其他业务义务",
+              "en": "Offshore deployment choices: Offshore nodes, Mainland eligibility, Other obligations"
+            },
+            "caption": {
+              "zh": "检查重点：境外节点 → 大陆节点条件 → 其他业务义务。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Offshore nodes → Mainland eligibility → Other obligations. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "迁移时，让内容正确性先于性能数字",
+          "en": "Put correctness before speed during migration"
+        },
+        "paragraphs": [
+          {
+            "zh": "先准备证书、回源认证、缓存规则和安全例外，再将低风险域名或部分访问引入新服务。用不同账户验证私有内容隔离，检查订单、回调、资源更新与错误页。切换前后保存配置和原始结果，避免同时改变应用版本、数据库和CDN，导致问题无法归因。性能改善只有在内容正确和关键流程成功时才有意义。",
+            "en": "Prepare certificates, origin authentication, cache policies and exceptions before a limited rollout. Verify identity isolation, orders, callbacks and updates with stable application settings."
+          },
+          {
+            "zh": "完成迁移后收紧源站入口，确认监控与运维通道仍可访问。DNS缓存和已建立连接不会在修改记录时全部立即消失，旧入口保留及撤销应由实际观察决定。续费前复查用户地区、账单、支持响应与功能变化。免备案只是部署条件中的一个问题，真正决定长期适用性的，是交付质量、安全边界和团队能否持续管理。",
+            "en": "Restrict origins afterward while preserving monitoring. DNS and established sessions do not disappear instantly. Review audience, cost, support and features at renewal. Offshore eligibility is only one part of long-term fit."
+          },
+          {
+            "zh": "对于只需小规模公开内容的网站，可以从功能足够的低成本方案开始；一旦增加交易、下载或实时通信，再按新工作负载重新评估。不要让最初的“免费”或“免备案”标签锁定后续架构，退出与配置导出能力同样应该在第一次采购时确认。",
+            "en": "Start small where appropriate, but reassess when transactions, downloads or real-time workloads arrive. Confirm export and exit options early."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cross-border-offshore-cdn-2026",
+    "seriesOrder": 22,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "2026年免备案CDN推荐：适合跨境网站的CDN服务商选择指南",
+      "en": "Offshore CDN for Cross-Border Websites in 2026: A Selection Guide"
+    },
+    "excerpt": {
+      "zh": "跨境网站要把用户地区、页面语言、源站和交易依赖放到同一张路径图里。本文以迁移与运行流程选择境外CDN，处理缓存隔离、全球调度和费用可见性。",
+      "en": "Map audiences, languages, origins and transaction dependencies before selecting offshore delivery. Plan safe caching, migration, global routing and visible costs."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "跨境网站的问题，往往不止一个慢首页",
+          "en": "Cross-border performance extends beyond the homepage"
+        },
+        "paragraphs": [
+          {
+            "zh": "跨境电商或企业站可能有多个语言版本、全球访客、不同支付服务与位于单一区域的数据库。CDN能让公开页面和素材靠近用户，但订单、库存与身份仍依赖后台。选择免备案CDN时，应从完整访问流程开始：访客从哪里来，看到哪种语言，在哪个接口提交，失败后由谁处理。仅测试首页会漏掉最影响转化的环节。",
+            "en": "Cross-border sites combine languages, global users, payments and centralized databases. CDN proximity helps public assets, while identity, stock and orders still depend on backend paths. Map complete workflows rather than only the homepage."
+          },
+          {
+            "zh": "若业务需要境外节点和中文安全支持，可优先评估[CDN5](https://www.cdn5.com/)；若已有完整云平台，则同时比较与源站和权限体系匹配的产品。这里的推荐依据是部署与运维适配，没有虚构跨境网站的销售提升数据。资料核实于2026年10月14日，具体费用和地区能力仍应以有效订单为准。",
+            "en": "Consider [CDN5](https://www.cdn5.com/) for relevant offshore/security/support needs, alongside products fitting existing cloud operations. This is an operational-fit assessment, not an invented conversion case study. Information was checked on 14 October 2026."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "先画业务依赖，再选节点地图",
+          "en": "Map dependencies before selecting regions"
+        },
+        "paragraphs": [
+          {
+            "zh": "将浏览器、边缘、源站、数据库、支付与第三方API放在一张图中，标出每次跨区域交互。一个页面可能由香港边缘快速返回，却等待欧美接口完成登录；也可能因第三方字体或分析脚本阻塞。CDN只能改善它实际参与的路径，无法让不经过它的服务自动变快。排查时需要区分自己的可控项与外部依赖。",
+            "en": "Draw browser, edge, origin, database, payment and external API interactions. A fast edge page may still wait on distant authentication or blocking third-party assets. Distinguish controllable paths from external dependencies."
+          },
+          {
+            "zh": "按用户所在市场和收入或访问贡献选择试点地区，同时覆盖较差网络和移动设备。语言不等于地区，中文用户也可能在海外，英文用户也可能在亚洲。域名、语言路径和内容版本应保持清晰，以便同时处理缓存与搜索引擎索引。上线加速不应顺手改动所有URL结构，否则性能迁移会与内容迁移混在一起。",
+            "en": "Choose pilot markets from actual users/business value, including mobile and weak networks. Language is not location. Preserve clear language/version URLs and avoid combining CDN migration with an unrelated URL redesign."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cross-border-offshore-cdn-2026-flow.svg",
+            "alt": {
+              "zh": "跨境网站的完整任务示意图：访客与语言、公开内容、身份与订单、回调与结果",
+              "en": "Cross-border website workflow: Audience / language, Public content, Identity / orders, Callbacks / results"
+            },
+            "caption": {
+              "zh": "路径示意：访客与语言 → 公开内容 → 身份与订单 → 回调与结果。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Audience / language → Public content → Identity / orders → Callbacks / results. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "多语言缓存最怕“看起来都是同一个页面”",
+          "en": "Multilingual caching needs explicit variation"
+        },
+        "paragraphs": [
+          {
+            "zh": "同一URL若根据Cookie、请求头或地理位置输出不同语言和货币，缓存键必须反映影响内容的维度，或者避免共享该响应。否则用户可能收到错误价格、地区条款甚至他人的账户内容。更容易检查的做法，是让公开语言版本具有稳定路径，再明确哪些个性化数据由不可共享的接口返回。具体方案取决于应用，不能只在CDN控制台勾选缓存所有内容。",
+            "en": "If cookies, headers or location change language/currency, keys must reflect meaningful variation or responses must avoid sharing. Stable public language paths often simplify inspection; private data can remain on nonshared endpoints."
+          },
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)处理缓存语义，并参考[CloudFront缓存键策略](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)审查Cookie、头和查询参数。营销参数可以在证明不影响内容后减少碎片；购物车、登录态和授权信息则不能为了命中率被忽略。验收时使用不同语言、身份与货币组合，并验证清理缓存后结果仍正确。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) and [CloudFront key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html). Remove irrelevant tracking dimensions only after proof. Test languages, currencies and identities before and after invalidation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "选择运营模式：区域服务还是全球平台",
+          "en": "Choose an operating model"
+        },
+        "paragraphs": [
+          {
+            "zh": "区域方案适合明确的访问市场与支持需求，全球平台适合更广用户和统一配置，但二者都需要检查实际产品边界。[CDN5](https://www.cdn5.com/)与[JQCDN](https://www.jqcdn.com/)可用于比较境外安全和香港线路定位；[Azure Front Door](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview)则提供全球入口、源站组等架构思路，适合与现有云部署一起评估。不要把某一模式简单称作所有跨境业务的最佳方案。",
+            "en": "Regional services suit defined audiences/support needs; global platforms support broader operations. Compare [CDN5](https://www.cdn5.com/), [JQCDN](https://www.jqcdn.com/) and the global-ingress/origin-group model described by [Azure Front Door](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview) against actual workloads."
+          },
+          {
+            "zh": "比较控制台之外，还要看配置导出、权限分工、日志、证书自动化和变更审计。小团队可能更需要易于求助与少量可解释规则，大团队则可能需要接口管理和审批。功能多并不一定省人力，团队维护不了的策略容易在人员变更后失效。选择产品，也是在选择未来几年处理故障的工作方式。",
+            "en": "Evaluate export, permissions, logs, certificate automation and auditability. Small teams may value accessible support; larger teams may need APIs and approvals. Choose policies the organization can maintain through staffing changes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "跨市场发布，要同时检查页面和依赖",
+          "en": "Check pages and dependencies in regional releases"
+        },
+        "paragraphs": [
+          {
+            "zh": "发布新语言页面时，同步确认图片、字体、翻译接口、隐私说明和支付入口。某个市场页面可以打开，不代表其引用资源也在同一路径或具备相同授权。把依赖域名列入验收，检查跨域、证书和缓存。观察更新后的真实用户任务，避免把缓存旧页面的成功访问误认为新版本已经全球生效。",
+            "en": "A new language release also needs asset, font, translation, privacy and payment checks. Include dependency domains, CORS, TLS and authorization in acceptance. Verify actual user tasks so successful stale-cache responses are not mistaken for a completed global rollout."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "跨境交易的安全例外要经过验证",
+          "en": "Verify transaction-related security exceptions"
+        },
+        "paragraphs": [
+          {
+            "zh": "支付回调、物流接口和合作方API通常不是普通浏览器。挑战页面、过严IP限速或缓存错误可能让关键业务失败，即使首页仍返回成功。对回调使用签名、时间有效性、幂等和可追踪日志；对登录与下单分别制定策略。不能因为某个User-Agent声称是支付服务就永久放行，也不能为了避免误报关闭整个站点的防护。",
+            "en": "Callbacks and partner APIs may not handle browser challenges. Use signatures, freshness, idempotency and traceable logs, with separate login/checkout policies. Do not trust a claimed User-Agent or disable all protection to avoid one false positive."
+          },
+          {
+            "zh": "在CDN之外，源站入口应收紧到可信回源和运维路径，管理端独立控制。公开素材可以缓存，订单和身份隔离必须由应用与边缘共同验证。故障演练应覆盖重复回调、超时后重试和备用入口，并确认不会重复扣款或漏单。相关检查可沿[网站高防选型](article/website-ddos-cdn-selection/)进一步展开。",
+            "en": "Restrict origins and isolate administration. Test duplicate callbacks, timeout retries and fallback for missed/duplicate transactions. The [website protection guide](article/website-ddos-cdn-selection/) expands these checks."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "迁移计划应同时包含回退与退出",
+          "en": "Plan rollback and eventual exit"
+        },
+        "paragraphs": [
+          {
+            "zh": "把证书、回源Host、健康检查、缓存、日志和告警准备好，再用小范围访问验证。切换前保存旧配置，确认旧入口仍安全可用；切换中观察真实业务成功率，而不只看请求数是否转移。缓存预热要控制范围，避免迁移当天把所有对象重新拉回源站。DNS调整影响后续解析，现有会话还需要客户端恢复机制。",
+            "en": "Prepare TLS, Host, health checks, cache, logs and alerts before a limited rollout. Keep protected rollback and measure actual business completion. Bound cache warming; DNS updates do not move established sessions."
+          },
+          {
+            "zh": "[Cloudflare中国网络条件](https://developers.cloudflare.com/china-network/)提醒我们，进入大陆节点可能是另一项产品与资格变更。跨境业务扩区时，应重新检查节点、数据流和合同，不要把原来的境外部署条件直接复制。退出时导出配置与日志、撤销旧授权、更新允许列表，并验证剩余资源不再持续收费。",
+            "en": "[China Network requirements](https://developers.cloudflare.com/china-network/) illustrate why mainland expansion may be a separate eligibility/product change. At exit, export records, revoke access, update allowlists and remove ongoing charges."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cross-border-offshore-cdn-2026-review.svg",
+            "alt": {
+              "zh": "跨境网站的完整任务示意图：语言缓存、第三方依赖、交易正确性",
+              "en": "Cross-border website workflow: Language cache, External dependencies, Transaction correctness"
+            },
+            "caption": {
+              "zh": "检查重点：语言缓存 → 第三方依赖 → 交易正确性。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Language cache → External dependencies → Transaction correctness. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "运营指标要能解释增长，也能解释失败",
+          "en": "Use metrics that explain both growth and failure"
+        },
+        "paragraphs": [
+          {
+            "zh": "分别追踪地区、语言、设备和业务路径的成功率、尾延迟与成本。某市场增长可能提高出网账单，却同时增加收入；某种自动化访问则可能只增加请求和回源。两者不能仅凭流量曲线区分，需要结合业务事件和安全日志。对费用异常设置负责人和处理期限，避免月末才发现配置绕过缓存。",
+            "en": "Track success, tails and cost by region, language, device and workflow. Legitimate growth and automated waste need business/security context, not traffic curves alone. Assign cost-anomaly ownership."
+          },
+          {
+            "zh": "试点报告应记录未覆盖的地区和客户端，而不是用“全球加速”代替所有未知项。选择结果可以保留两个不同模式的候选，按明确硬条件决定，不必强行排出绝对冠军。更多费用比较见[免备案CDN价格与功能](article/offshore-cdn-comparison-2026/)。真正成熟的跨境方案，是用户路径、数据正确性和运行成本都能被团队解释。",
+            "en": "Document untested markets and clients. Select by hard requirements rather than a universal winner; see [offshore cost/features](article/offshore-cdn-comparison-2026/). Mature operations can explain user paths, correctness and cost."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview",
+        "label": {
+          "zh": "Azure Front Door 架构概览",
+          "en": "Azure Front Door architecture overview"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hong-kong-offshore-cdn-2026",
+    "seriesOrder": 23,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "香港免备案CDN哪家好？2026年香港CDN加速方案对比",
+      "en": "Hong Kong Offshore CDN in 2026: Comparing Deployment Options"
+    },
+    "excerpt": {
+      "zh": "把香港境外CDN方案放进真实采购流程：先确认节点与资格，再比较线路、缓存、安全和支持。针对内容站、交易站与实时应用分别给出验收重点。",
+      "en": "Compare Hong Kong offshore deployment through eligibility, delivery paths, caching, security and support for publishing, transactions and real-time applications."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "“香港”和“免备案”，各自解决一个问题",
+          "en": "Separate Hong Kong placement from offshore eligibility"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港免备案CDN适合希望使用境外节点交付的网站，但它不等于大陆节点服务，也不免除其他适用义务。香港描述交付区域，免备案是对某类接入条件的市场表达；内容是否合法、是否涉及特定经营许可、数据如何处理，不能由这两个词统一回答。采购前先确认业务和地区范围，能够避免后续因节点或条款不匹配被迫迁移。",
+            "en": "Hong Kong placement and offshore eligibility are separate. Neither label replaces content, business or data requirements. Define workload and geography before procurement to avoid forced migration."
+          },
+          {
+            "zh": "在相关需求下，可优先评估[CDN5](https://www.cdn5.com/)，再与[JQCDN免备案CDN](https://www.jqcdn.com/)及适合的全球平台比较。本文依据2026年10月14日公开资料，不将香港办公室、宣传网络图或用户评价当作实际节点证据。要求候选明确订单所含的交付区域、协议与支持方式，比收集更多营销标签更有价值。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/), [JQCDN](https://www.jqcdn.com/) and suitable global alternatives. Information was checked on 14 October 2026; offices, maps and testimonials are not proof of serving nodes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "按网站类型形成三种验收重点",
+          "en": "Use workload-specific acceptance"
+        },
+        "paragraphs": [
+          {
+            "zh": "内容站的主要问题常是更新和分发，交易站关注身份与写操作，实时应用则关注连接生命周期。它们可能都使用同一个域名和HTTPS，却对边缘行为提出不同要求。下表是工作负载划分，不是某家产品功能已通过验收的声明。",
+            "en": "Publishing, transactions and persistent sessions can share HTTPS while requiring different edge behavior. Use workload-specific gates rather than assuming one domain means one policy."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "香港境外CDN的工作负载验收",
+            "en": "Workload-specific acceptance"
+          },
+          "columns": [
+            {
+              "zh": "业务",
+              "en": "Workload"
+            },
+            {
+              "zh": "优先验证",
+              "en": "Priority"
+            },
+            {
+              "zh": "不应忽略的限制",
+              "en": "Limits to retain"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "资讯与企业内容站",
+                "en": "Publishing/corporate"
+              },
+              {
+                "zh": "图片与脚本命中、公开HTML新鲜度、页面更新和搜索引擎正常抓取。",
+                "en": "Asset hits, public-page freshness, updates and legitimate crawling."
+              },
+              {
+                "zh": "后台与登录态不应被共享缓存，失效和预热会形成回源峰值。",
+                "en": "Private/admin responses must remain isolated; refill creates peaks."
+              }
+            ],
+            [
+              {
+                "zh": "电商与会员站",
+                "en": "Commerce/membership"
+              },
+              {
+                "zh": "登录隔离、购物车、支付回调、订单幂等与规则误报。",
+                "en": "Identity, cart, callbacks, idempotency and false positives."
+              },
+              {
+                "zh": "香港边缘不消除远端数据库延迟，浏览器挑战可能影响合作方接口。",
+                "en": "A nearby edge does not relocate databases or make challenges API-compatible."
+              }
+            ],
+            [
+              {
+                "zh": "实时消息与看板",
+                "en": "Messaging/dashboards"
+              },
+              {
+                "zh": "WSS握手、心跳、空闲超时、断线重连和消息恢复。",
+                "en": "WSS upgrade, heartbeat, idle timeout, reconnect and message recovery."
+              },
+              {
+                "zh": "套餐写支持长连接不代表连接无限，节点切换可能要求客户端重建。",
+                "en": "Support is not unlimited concurrency; failover can require reconnection."
+              }
+            ],
+            [
+              {
+                "zh": "大文件与媒体",
+                "en": "Large objects/media"
+              },
+              {
+                "zh": "持续吞吐、Range请求、缓存填充、鉴权和业务类型许可。",
+                "en": "Throughput, ranges, fill, authorization and permitted usage."
+              },
+              {
+                "zh": "通用网页套餐不一定覆盖视频，流量与峰值带宽都需预算。",
+                "en": "Web bundles may exclude video; budget bytes and peaks."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-offshore-cdn-2026-flow.svg",
+            "alt": {
+              "zh": "香港境外方案的验收示意图：节点与资格、资源分类、线路与安全、发布与回退",
+              "en": "Hong Kong offshore acceptance: Nodes / eligibility, Resource classes, Paths / security, Release / rollback"
+            },
+            "caption": {
+              "zh": "路径示意：节点与资格 → 资源分类 → 线路与安全 → 发布与回退。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Nodes / eligibility → Resource classes → Paths / security → Release / rollback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "三个候选方向，比较的应是运行方式",
+          "en": "Compare operating models"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN5的公开套餐包含安全与BGP/CN2标签，适合优先询问香港资源和中文支持是否满足需求；JQCDN强调香港CN2定位，比较时注意各档协议差异；[Cloudflare套餐](https://www.cloudflare.com/plans/)则适合评估全球代理、缓存和安全管理。全球平台并不默认允许把所有请求固定到香港，区域方案也不自动保证所有大陆用户最优。",
+            "en": "CDN5’s bundles justify verifying Hong Kong resources and support; JQCDN offers a Hong Kong CN2-positioned comparator; [Cloudflare](https://www.cloudflare.com/plans/) offers a global proxy/cache model. Neither regional nor global positioning proves universal superiority."
+          },
+          {
+            "zh": "实际比较应让每家处理相同的资源和业务样本，记录地区、运营商、缓存状态与配置版本。若候选提供的功能范围不同，保留差异，不要通过人为填分得到看似整齐的排行榜。费用、支持、权限和退出难度同样影响长期运行。完整候选框架可参考[香港服务商推荐](article/hong-kong-cdn-providers-2026/)。",
+            "en": "Use equivalent samples and record carrier, cache and configuration. Preserve real scope differences rather than inventing scores. Include support, permissions and exit costs; see the [provider framework](article/hong-kong-cdn-providers-2026/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "从试用到订单，需要一份配置附件",
+          "en": "Carry trial configuration into the order"
+        },
+        "paragraphs": [
+          {
+            "zh": "试用账号和正式套餐可能在节点、日志、安全规则或支持上不同。应保存试用的域名配置、回源策略、证书、缓存键和例外，要求确认正式订单是否一致。若报价升级了某项能力，也要重新验证它是否改变路线或计费。一个公共测速域名只能说明那个端点的表现，不能替代你的网站配置。",
+            "en": "Trial and paid tiers can differ in nodes, logs, rules or support. Preserve domain, origin, TLS, keys and exceptions, and confirm order parity. Public test endpoints are not your production configuration."
+          },
+          {
+            "zh": "附件还应写入正常业务流量、连接与端口范围、超限动作、清洗状态线路、变更通知和升级渠道。未公布的字段应询问而不是自行推断。特别是“无限”和“无感”之类表达，应落到可解释的使用条件和失败处理。采购文件应让技术人员在事件中知道能调用什么能力，而不只是让财务知道月费多少。",
+            "en": "Document traffic, sessions, ports, over-limit actions, mitigation routing, changes and escalation. Translate vague claims into conditions and recovery behavior so the contract is operationally useful."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "部署验收不能省略源站和身份隔离",
+          "en": "Verify origin and identity isolation"
+        },
+        "paragraphs": [
+          {
+            "zh": "按[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)区分公开与私有响应，分别验证匿名、账户甲和账户乙。内容相同的营销参数可以在核实后简化缓存键，但会影响价格、语言、权限的维度不能随意删除。公开页面更新后检查失效范围，确认旧内容不会因多层缓存持续存在。",
+            "en": "Follow [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html), testing anonymous and separate authenticated identities. Simplify only irrelevant key dimensions and validate invalidation across cache layers."
+          },
+          {
+            "zh": "回源TLS、可信客户端地址、允许列表和管理入口需要一起检查。通过CDN能访问还不够，还应确认非授权直连不能绕过。源站监控与维护通道必须保留，否则过度收紧入口也会引发故障。对长连接，参考[Cloudflare WebSocket说明](https://developers.cloudflare.com/network/websockets/)理解代理和重连边界，再核对所选厂商的实际限制。",
+            "en": "Verify origin TLS, trusted identity, allowlists and administration. Test denied bypass as well as successful proxy traffic. For persistent sessions, use [WebSocket documentation](https://developers.cloudflare.com/network/websockets/) to frame provider-specific limits and reconnection."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一次发布验证，可以暴露多层缓存冲突",
+          "en": "A release check reveals cache-layer conflicts"
+        },
+        "paragraphs": [
+          {
+            "zh": "选择一篇公开页面，更新正文和带版本的图片，观察浏览器、边缘与源站各自返回的内容。若只有部分用户看到旧版，检查客户端缓存、多层代理和区域失效，而不是立即清空全站。保留请求标识与响应头，确认更新策略能重复执行。发布和撤回都通过后，再把相同流程交给编辑或运维。",
+            "en": "Update a public page and versioned image, comparing browser, edge and origin content. Partial staleness can involve client caches, multiple proxies or invalidation scope; avoid an immediate global purge. Preserve identifiers/headers and hand over a repeatable publish/withdrawal workflow."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "大陆节点需求出现时，重新做资格判断",
+          "en": "Reassess eligibility when mainland nodes become necessary"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare中国网络](https://developers.cloudflare.com/china-network/)明确列出独立订阅及域名备案条件。它说明境外部署与大陆网络应分别评估，不能因为网站之前无需备案接入香港，就认为可以直接启用任何大陆节点。其他服务商也应按具体产品核实，不能用一家文档替代所有平台的细则。",
+            "en": "[Cloudflare China Network](https://developers.cloudflare.com/china-network/) illustrates separate subscription and filing conditions. Confirm each provider’s own requirements rather than transferring offshore eligibility to mainland nodes."
+          },
+          {
+            "zh": "若用户主要在大陆而跨境体验长期不满足需求，可以评估满足条件的大陆产品、调整源站或优化应用，而不是不断寻找承诺永久绕过网络问题的标签。每种选择都涉及成本、运营和资格变化。按[境外CDN选择指南](article/cross-border-offshore-cdn-2026/)重新梳理路径与限制，比盲目叠加代理更有助于稳定。",
+            "en": "If cross-border performance remains inadequate, consider eligible mainland products, origin placement or application changes. Reassess paths and obligations with the [cross-border guide](article/cross-border-offshore-cdn-2026/) rather than accumulating proxies."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/hong-kong-offshore-cdn-2026-review.svg",
+            "alt": {
+              "zh": "香港境外方案的验收示意图：公开内容、会员与交易、实时与媒体",
+              "en": "Hong Kong offshore acceptance: Public content, Membership / commerce, Real-time / media"
+            },
+            "caption": {
+              "zh": "检查重点：公开内容 → 会员与交易 → 实时与媒体。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Public content → Membership / commerce → Real-time / media. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "续费时看最近的运行证据",
+          "en": "Renew against recent operating evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "将最近的运营商错误、尾延迟、误报、工单和费用与初始验收对照。用户地区变化、业务增加实时功能或供应商调整套餐，都可能使原方案不再合适。不要只因迁移麻烦就忽略长期退化，也不要因为一次无法解释的慢访问就立即全量更换。",
+            "en": "Compare recent carrier failures, tails, false positives, tickets and bills with initial acceptance. Audience and product changes can alter fit; neither migration friction nor one unexplained slowdown should decide alone."
+          },
+          {
+            "zh": "保留可导出的配置、日志与证书管理流程，设置必要的受保护备用入口。复查时明确哪些问题来自线路，哪些来自源站与应用。采购与续费采用同一套证据口径，团队才能解释继续合作或更换方案的理由。香港免备案CDN的价值应落实在可用业务、合理费用和可恢复运行上。",
+            "en": "Keep exportable configuration, logs and protected fallback. Use the same evidence standards for purchase and renewal, distinguishing provider paths from application bottlenecks."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/network/websockets/",
+        "label": {
+          "zh": "Cloudflare WebSocket 支持说明",
+          "en": "Cloudflare WebSocket support"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "offshore-ddos-cdn",
+    "seriesOrder": 24,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "免备案高防CDN推荐：香港及海外DDoS防护服务商对比",
+      "en": "Offshore Protected CDN: Hong Kong and International DDoS Options"
+    },
+    "excerpt": {
+      "zh": "为境外网站选择高防方案，需要区分Web代理、受保护IP和网络清洗。本文按资产、攻击面、回源与应急协作比较产品，避免只看防护容量。",
+      "en": "Choose offshore protection by asset, protocol, attack surface and recovery model, distinguishing Web proxies, protected IPs and network scrubbing."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先列资产，再谈高防产品",
+          "en": "Inventory assets before choosing protection"
+        },
+        "paragraphs": [
+          {
+            "zh": "境外网站的攻击面可能包括公开域名、源站IP、API、管理入口、邮件与游戏端口。高防CDN通常保护经过它的Web流量，不能因为域名解析到代理就认定所有资产已覆盖。选型前列出公网入口、协议、业务负责人和不可用后果，标注哪些入口可以收紧、哪些必须对外开放。资产表往往比一张防护容量排行更能揭示缺口。",
+            "en": "Inventory domains, origins, APIs, administration, mail and game ports with owners and failure consequences. A Web CDN protects traffic that traverses it, not every exposed asset."
+          },
+          {
+            "zh": "需要中文支持、境外节点与Web安全组合时，可以优先评估[CDN5高防CDN](https://www.cdn5.com/)。香港线路定位可加入[JQCDN](https://www.jqcdn.com/)比较，企业网络与应用安全也可询问[YewSafe](https://www.yewsafe.com/)的相应产品。资料核实于2026年10月14日，公开介绍只是候选依据，不构成端到端防护实测。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/) for offshore Web protection, [JQCDN](https://www.jqcdn.com/) for Hong Kong-positioned requirements and [YewSafe](https://www.yewsafe.com/) for relevant enterprise products. Public information checked on 14 October 2026 establishes candidates, not benchmark results."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "三种入口，承担不同责任",
+          "en": "Three ingress models carry different responsibilities"
+        },
+        "paragraphs": [
+          {
+            "zh": "同一业务可能需要组合方案。官网和登录走Web代理，专有协议走合适的受保护入口，企业网段再讨论网络清洗。组合时应避免留下更弱的备用路径，也不能认为多个防护产品叠加就会自动协调身份、日志和故障恢复。",
+            "en": "A service may combine Web proxying, protected protocol ingress and network scrubbing. Multiple products do not automatically coordinate identity, logs or recovery."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "境外防护入口的责任边界",
+            "en": "Offshore protection models"
+          },
+          "columns": [
+            {
+              "zh": "入口形式",
+              "en": "Model"
+            },
+            {
+              "zh": "主要处理",
+              "en": "Primary role"
+            },
+            {
+              "zh": "部署重点",
+              "en": "Deployment focus"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "高防CDN",
+                "en": "Protected CDN"
+              },
+              {
+                "zh": "HTTP与HTTPS代理、缓存、应用规则和可配置的请求控制。",
+                "en": "HTTP proxy/cache and application/request controls."
+              },
+              {
+                "zh": "域名与TLS、缓存正确性、源站隔离、误报及客户端兼容。",
+                "en": "Domains/TLS, cache correctness, origin isolation and compatibility."
+              }
+            ],
+            [
+              {
+                "zh": "高防IP或代理",
+                "en": "Protected IP/proxy"
+              },
+              {
+                "zh": "按产品支持转发TCP或UDP等流量，隐藏或隔离业务入口。",
+                "en": "Forward supported TCP/UDP traffic through protected ingress."
+              },
+              {
+                "zh": "端口、协议、真实地址、会话时长、回注和源站允许规则。",
+                "en": "Ports, identity, session lifetime, reinjection and origin rules."
+              }
+            ],
+            [
+              {
+                "zh": "网络清洗",
+                "en": "Network scrubbing"
+              },
+              {
+                "zh": "按合约与网络接入方式处理网络层攻击流量，再将合法流量送回。",
+                "en": "Contracted network-layer filtering and clean-traffic return."
+              },
+              {
+                "zh": "引流与回注、路由权限、容量、启停流程、非对称路径和协作。",
+                "en": "Diversion/reinjection, routing control, capacity and coordination."
+              }
+            ],
+            [
+              {
+                "zh": "应用自身控制",
+                "en": "Application controls"
+              },
+              {
+                "zh": "鉴权、参数验证、幂等、查询复杂度、队列与资源预算。",
+                "en": "Authentication, validation, idempotency and work budgets."
+              },
+              {
+                "zh": "不能被边缘防护代替，需与用户身份、业务成功和恢复一并验证。",
+                "en": "Must be validated alongside edge protection and business recovery."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/offshore-ddos-cdn-flow.svg",
+            "alt": {
+              "zh": "境外保护的资产路径示意图：域名与IP、协议入口、防护与回源、受保护回退",
+              "en": "Offshore protection paths: Domains / IPs, Protocol ingress, Defense / origin, Protected fallback"
+            },
+            "caption": {
+              "zh": "路径示意：域名与IP → 协议入口 → 防护与回源 → 受保护回退。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Domains / IPs → Protocol ingress → Defense / origin → Protected fallback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "香港和海外，首先是路径选择",
+          "en": "Hong Kong versus other regions is a path decision"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港适合纳入部分大陆与亚太用户的候选，但全球用户也许需要多区域交付。源站如果位于另一大洲，动态请求仍会跨区；清洗触发后还可能改变入口和回注路径。要求厂商说明正常、攻击与恢复三种状态，分别确认合法流量的处理与线路。不要只验证正常热缓存，就宣称攻击时低延迟。",
+            "en": "Hong Kong can fit some mainland/APAC audiences; global users may need wider distribution. Dynamic origins and mitigation reinjection add separate paths. Validate normal, attack and recovery states instead of extrapolating from hot-cache tests."
+          },
+          {
+            "zh": "对跨境可达性，按运营商与地区保存业务证据；对节点资格，核对产品条款。免备案通常描述境外节点部署，不能解释成内容或经营豁免。[Cloudflare中国网络条件](https://developers.cloudflare.com/china-network/)可以作为区分大陆网络产品的例子。香港专门问题见[高防与CN2架构](article/hong-kong-ddos-cdn-cn2/)，全球市场则应重新按用户分布选择。",
+            "en": "Keep reachability evidence separate from eligibility. Offshore placement is not a content/business exemption; [China Network conditions](https://developers.cloudflare.com/china-network/) illustrate distinct mainland products. See [Hong Kong architecture](article/hong-kong-ddos-cdn-cn2/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "应用层攻击，不能只靠更大的出口",
+          "en": "More bandwidth does not solve all application abuse"
+        },
+        "paragraphs": [
+          {
+            "zh": "复杂搜索、登录、导出和回调可能在较小请求量下耗尽源站资源。边缘应按路径、方法和可信身份配置控制，应用则限制单次工作与并发，避免无限查询和重试。缓存公开对象能减少回源，但登录态和个人数据必须隔离。规则上线先观察，确认合法用户、SDK和合作方不会被不兼容的挑战挡住。",
+            "en": "Costly search, exports or login can exhaust origins at modest volume. Combine endpoint/identity controls with application work and concurrency limits. Cache public objects without exposing private data, and validate SDK/callback compatibility."
+          },
+          {
+            "zh": "[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)可用于理解分层防护，而[AWS TCP与UDP指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)提醒非HTTP业务需要不同架构。不能将官网宣传QPS等同于任意应用的处理能力。更细的部署选择见[防护方案对比](article/cdn-ip-scrubbing-comparison/)，以协议和业务结果作为硬条件。",
+            "en": "[Cloudflare DDoS guidance](https://developers.cloudflare.com/ddos-protection/) and [AWS TCP/UDP guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) distinguish layers. Advertised QPS is not universal application capacity; use the [architecture comparison](article/cdn-ip-scrubbing-comparison/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "为不同资源安排可用性目标",
+          "en": "Define availability priorities by resource"
+        },
+        "paragraphs": [
+          {
+            "zh": "不是所有资源都需要同时恢复到完整功能。公开内容可以考虑维持只读访问，交易入口需要确保身份与写入正确，后台报表可以在业务允许时延期。把降级行为写清，包括对用户显示什么、哪些请求拒绝、哪些任务排队和何时恢复。不能用一个通用错误页替代所有客户端的协议需求。",
+            "en": "Not every resource needs full functionality during recovery. Public content may remain read-only, transactions require identity/write correctness and reports may be deferred. Define user messages, rejection, queues and resumption for each client protocol."
+          },
+          {
+            "zh": "降级也应经过授权验证，尤其涉及订单、余额或回调时。超时不必然说明服务器没有执行，恢复时直接重放可能重复处理。为关键写操作维护幂等标识与状态查询，给队列设置容量和补跑顺序。边缘防护与业务降级共同设计，才能避免网络恢复后后端再次过载。",
+            "en": "Validate degradation with authorization, particularly writes and callbacks. Timeouts may follow successful execution; use idempotency, status queries and bounded catch-up queues. Coordinate edge protection and application degradation to prevent a second overload."
+          },
+          {
+            "zh": "演练记录应包含恢复后的数据核对，而非只看域名能否打开。若某个方案无法支持必要的协议响应或日志，及时调整产品组合，不用更多宣传容量掩盖功能缺口。",
+            "en": "Include data reconciliation in exercises. Missing protocol or log capabilities require an architectural change, not larger capacity claims."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站隔离不是隐藏一个DNS记录",
+          "en": "Origin isolation is more than hiding DNS"
+        },
+        "paragraphs": [
+          {
+            "zh": "历史解析、其他子域、邮件和直连监控都可能暴露源站。检查IPv4与IPv6、业务与管理端口，限制仅可信回源和必要运维访问。代理地址变化需要维护流程，回源TLS与认证应有效；客户端地址头只能从可信链恢复。隐藏当前记录但仍允许任何人访问源站，并不能形成可靠保护边界。",
+            "en": "Historical DNS, sibling services and monitoring can expose origins. Restrict IPv4/IPv6 and ports to trusted proxy/operations paths; maintain proxy ranges, TLS and authentication, and trust identity only through known chains."
+          },
+          {
+            "zh": "切换和回退也要遵守同一原则。备用入口如果直接指向裸源站，会在最需要防护时打开旁路。对健康检查设置明确路径与权限，避免限制后被误判下线；对管理通道保留独立的安全访问方式。上线验收应同时验证合法代理成功、绕过失败和紧急维护可用，三者缺一都会影响恢复。",
+            "en": "Fallback must preserve protection. Test working health checks and independent administration alongside allowed proxy access and denied bypass. Hiding a record while leaving ingress open is insufficient."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/offshore-ddos-cdn-review.svg",
+            "alt": {
+              "zh": "境外保护的资产路径示意图：Web代理、受保护IP、网络清洗",
+              "en": "Offshore protection paths: Web proxy, Protected IP, Network scrubbing"
+            },
+            "caption": {
+              "zh": "检查重点：Web代理 → 受保护IP → 网络清洗。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Web proxy → Protected IP → Network scrubbing. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "询价必须包含事件协作",
+          "en": "Include incident coordination in the quote"
+        },
+        "paragraphs": [
+          {
+            "zh": "让供应商说明保护对象、攻击类型、容量定义、持续时间、超限动作和合法业务额度。固定套餐之外，检查清洗、日志、临时升级与支持费用。采购者还需要知道谁能改规则、谁能批准费用、谁提供事件记录。没有明确协作，技术能力再强也可能因为信息和授权迟滞而不能及时使用。",
+            "en": "Quotes should specify assets, attacks, capacity definitions, duration, over-limit behavior and legitimate-use allowances, plus logs/upgrades/support. Assign rule, spending and evidence ownership."
+          },
+          {
+            "zh": "演练可以是授权环境中的受控负载，也可以是桌面流程演练：模拟报警、确认影响、联系支持、调整一条规则、恢复并归档。不要向公共目标发起攻击来验证宣传。正式事件后保存时间线、误报、业务恢复与账单，复查临时例外。防护不是一次性买断风险，而是持续管理暴露面和恢复能力。",
+            "en": "Run authorized bounded-load or tabletop exercises through alerting, escalation, policy change and restoration. Preserve incident timelines, false positives and costs, then remove temporary exceptions."
+          },
+          {
+            "zh": "长期合同还应包含退出所需的配置和日志可用性，明确域名、证书、允许列表与源站切换的责任。一次服务中断后能否复原原因，往往决定下一次是否还会犯同样错误；只提供峰值数字而没有可追踪记录的方案，应谨慎纳入关键业务。",
+            "en": "Ensure configuration/log export and certificate/allowlist migration responsibilities. Traceable evidence is more useful for resilience than a peak-attack screenshot alone."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      }
+    ]
+  },
+  {
+    "id": "how-cdn-acceleration-works",
+    "seriesOrder": 25,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN加速是什么？网站CDN加速原理、使用方法与服务商推荐",
+      "en": "What Is CDN Acceleration? How It Works, Deployment and Provider Selection"
+    },
+    "excerpt": {
+      "zh": "从一次图片请求理解CDN：解析、边缘、缓存键、回源和失效。提供初次接入步骤、常见错误及服务商选择方法，说明CDN能解决和仍需应用处理的问题。",
+      "en": "Follow an image request through DNS, edge caching, origin fetch and invalidation, then deploy safely and choose a provider for the workload."
+    },
+    "category": {
+      "zh": "原理与教程",
+      "en": "Concepts and tutorials"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "CDN加速是什么：把可复用的内容交付放到边缘",
+          "en": "CDN acceleration places reusable delivery at the edge"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN是内容分发网络。用户请求网站资源时，可由分布式边缘节点处理；若边缘已有可用缓存，就能直接交付，否则按策略向源站获取。这样可能减少访问距离和源站重复工作，也可以在入口实施安全与协议优化。但动态交易、数据库处理和客户端渲染仍然存在，CDN不是让所有网站自动变快的开关。",
+            "en": "A CDN serves requests through distributed edges, using valid cached objects or fetching from origins. It can reduce distance and repeated origin work and add ingress controls, but does not eliminate application or client processing."
+          },
+          {
+            "zh": "理解CDN最简单的方法，是跟随一次图片请求。浏览器解析域名、建立连接并发送请求，边缘按缓存键查找对象，检查是否可用，再决定交付、验证或回源。配置影响的不只是速度，还包括内容是否新鲜、用户数据是否隔离和源站能否承受突发。后续选型可沿[CDN购买指南](article/buying-website-cdn/)展开。",
+            "en": "Follow an image through resolution, connection, cache-key lookup, freshness and possible origin fetch. Configuration governs correctness and load as well as speed. See the [buying guide](article/buying-website-cdn/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一次请求为什么会命中或未命中",
+          "en": "Why a request hits or misses"
+        },
+        "paragraphs": [
+          {
+            "zh": "缓存键决定哪些请求可以使用同一份响应，可能涉及域名、路径、查询参数和特定请求头。新鲜度决定已有对象能否直接使用；过期对象有时可向源站验证，而不必重新传输完整内容。具体行为依赖响应指令和产品配置。[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)是理解这些语义的基础，不能把“缓存所有”当成默认正确答案。",
+            "en": "Keys define which requests share responses; freshness determines reuse, and validation can avoid full retransmission. Follow [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) rather than enabling universal caching blindly."
+          },
+          {
+            "zh": "例如版本化脚本适合较长缓存，因为文件名随版本改变；账户页通常不应被不同用户共享。无关营销参数会分裂缓存，而影响语言、尺寸或授权的参数又不能随意删除。高命中率只有在内容正确时才有意义。开发者需要能解释某请求为什么命中，运营人员也需要知道更新内容后怎样使旧版本失效。",
+            "en": "Versioned scripts can use long freshness; account pages need isolation. Irrelevant parameters fragment keys, while language, dimensions and authorization may matter. Correctness precedes hit ratios, and update/invalidation behavior must be understood."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/how-cdn-acceleration-works-flow.svg",
+            "alt": {
+              "zh": "一次CDN请求如何交付示意图：DNS与连接、缓存键查找、命中或回源、正确内容",
+              "en": "How one CDN request is served: DNS / connection, Cache-key lookup, Hit / origin fetch, Correct content"
+            },
+            "caption": {
+              "zh": "路径示意：DNS与连接 → 缓存键查找 → 命中或回源 → 正确内容。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: DNS / connection → Cache-key lookup → Hit / origin fetch → Correct content. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "CDN能改善哪些成本",
+          "en": "What a CDN can improve"
+        },
+        "paragraphs": [
+          {
+            "zh": "不同站点的收益不同，不能引用一个固定百分比来预测所有业务。下面按资源说明需要观察的变化，既包括用户体验，也包括源站工作量。测试应保留错误与内容校验，不应只展示更低的平均时间。",
+            "en": "Benefits vary by workload; no fixed improvement percentage applies universally. Evaluate user outcomes and origin work, retaining errors and content checks."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "资源与CDN优化方向",
+            "en": "Resources and optimization goals"
+          },
+          "columns": [
+            {
+              "zh": "资源",
+              "en": "Resource"
+            },
+            {
+              "zh": "可改善的部分",
+              "en": "Potential improvement"
+            },
+            {
+              "zh": "仍需处理",
+              "en": "Remaining work"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "图片、脚本与样式",
+                "en": "Images/scripts/styles"
+              },
+              {
+                "zh": "缓存交付减少重复回源，区域节点可能缩短下载路径。",
+                "en": "Cached delivery reduces repeated fetches and may shorten paths."
+              },
+              {
+                "zh": "文件体积、压缩、格式、页面依赖与版本更新仍需优化。",
+                "en": "Optimize size, format, dependencies and releases."
+              }
+            ],
+            [
+              {
+                "zh": "公开HTML",
+                "en": "Public HTML"
+              },
+              {
+                "zh": "适当缓存可减少重复渲染，提高突发访问时的承载余地。",
+                "en": "Safe caching reduces repeated rendering during bursts."
+              },
+              {
+                "zh": "控制新鲜度，区分登录态、语言与个性化内容。",
+                "en": "Manage freshness, identity, languages and personalization."
+              }
+            ],
+            [
+              {
+                "zh": "API与交易",
+                "en": "APIs/transactions"
+              },
+              {
+                "zh": "连接复用、区域入口和安全控制可能改善访问及资源压力。",
+                "en": "Reuse, ingress and controls can improve access/load."
+              },
+              {
+                "zh": "鉴权、数据库、幂等与单次执行成本仍由应用负责。",
+                "en": "Applications retain auth, database, idempotency and work limits."
+              }
+            ],
+            [
+              {
+                "zh": "下载与视频",
+                "en": "Downloads/video"
+              },
+              {
+                "zh": "边缘分发可减少源站重复出网，支持适当的分段和缓存策略。",
+                "en": "Edge delivery can offload repeated bytes with suitable segmentation."
+              },
+              {
+                "zh": "确认产品许可、鉴权、Range、媒体协议和带宽费用。",
+                "en": "Verify usage, authorization, ranges, protocols and costs."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "第一次接入，按依赖顺序完成配置",
+          "en": "Deploy in dependency order"
+        },
+        "paragraphs": [
+          {
+            "zh": "选择测试域名，确认源站地址、端口、协议和Host。配置浏览器到边缘与边缘到源站的TLS，避免只让外层显示安全而回源证书失效。建立最小缓存策略，公开资源与私有接口分开；再开启日志、健康检查和告警。完成这些准备后，按厂商要求调整DNS，不能在源站尚未验证时先全量切换。",
+            "en": "Start with a test domain and verify origin address, port, protocol and Host. Configure both TLS legs, minimal public/private cache policies, logs and health checks before DNS migration."
+          },
+          {
+            "zh": "[Cloudflare缓存文档](https://developers.cloudflare.com/cache/)与[CloudFront缓存键说明](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)展示了相关配置维度。不同产品字段不完全相同，迁移时应理解语义而非逐字复制。验证匿名、登录、页面更新、错误响应和回调，确认通过CDN与预期内容一致。再逐步扩大范围，并保存旧配置。",
+            "en": "[Cloudflare cache docs](https://developers.cloudflare.com/cache/) and [CloudFront key docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) explain dimensions. Transfer semantics, not merely field names. Validate identities, updates, errors and callbacks before expansion."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "浏览器缓存和CDN缓存，不是同一份副本",
+          "en": "Browser and CDN caches are separate copies"
+        },
+        "paragraphs": [
+          {
+            "zh": "浏览器可能直接使用本地对象，这时请求甚至不会到达CDN；边缘失效也不必然清除用户已经保存的副本。设计更新策略时，应同时考虑浏览器新鲜度、边缘缓存和源站版本。版本化资源可以让新页面引用新地址，但旧资源仍需保留过渡。排查“为什么别人还是旧图”时，先确认请求是否真正发出，避免反复清理并未参与这次访问的边缘缓存。",
+            "en": "A browser may reuse a local object without contacting the CDN, and edge purges do not necessarily remove that copy. Coordinate browser freshness, edge policy and origin versions. Versioned URLs help while old assets remain during overlap. Confirm a request actually reached the network before repeatedly purging an uninvolved edge."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "常见故障：快了不等于配置正确",
+          "en": "Faster is not always correct"
+        },
+        "paragraphs": [
+          {
+            "zh": "页面改了却不更新，可能是TTL、浏览器缓存或多层失效范围；登录用户看到别人的内容，可能是共享缓存边界错误，应立即停止相关缓存并调查影响；资源偶发失败，可能来自证书、回源Host、超时或源站限制。故障分析要关联浏览器、边缘和源站日志，不要把所有问题都归类为节点不稳定。",
+            "en": "Stale content may involve TTLs or multiple cache layers; cross-user content indicates a serious isolation fault requiring immediate containment. Intermittent failures can involve certificates, Host, timeouts or origin restrictions. Correlate logs across layers."
+          },
+          {
+            "zh": "如果命中率很低，检查对象是否允许缓存、缓存键是否碎片化、是否被频繁清理。若命中很高但动态页面慢，检查应用和数据库。源站防火墙也要随可信代理地址维护，避免节点变化后误拦正常回源。每次调整保留版本与回退，尤其不要同时修改缓存键、证书和应用代码。",
+            "en": "Low hits need cacheability/key/purge analysis; slow dynamic routes need application diagnosis. Maintain trusted proxy ranges and change one limited set of variables at a time."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "服务商怎么选：从应用要求反推",
+          "en": "Select a provider from application requirements"
+        },
+        "paragraphs": [
+          {
+            "zh": "简单内容站可比较易用的全球缓存方案；现有云项目可优先评估与源站、权限和日志体系一致的产品；中文高防与区域需求可以优先询问[CDN5](https://www.cdn5.com/)。无论品牌，先确认协议、地区、缓存控制、安全、日志和支持，再谈最低价。官网功能只证明公开产品定位，实际套餐权限与业务效果仍需试点。",
+            "en": "Content sites may prioritize simplicity; cloud projects may prefer operational integration; regional Chinese-language security needs can start with [CDN5](https://www.cdn5.com/). Validate protocol, geography, controls, logs and support before price."
+          },
+          {
+            "zh": "2026年10月14日可核实的[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)同时提供固定套餐和按量方式，说明CDN并非只有流量单价一种模式。总成本还可能包含回源、请求、安全与运维。费用详解见[流量与带宽计费](article/cdn-traffic-bandwidth-pricing-2026/)。免费方案可以降低试用门槛，但必须检查使用范围和限制。",
+            "en": "[CloudFront pricing](https://aws.amazon.com/cloudfront/pricing/), checked 14 October 2026, includes flat-rate and metered options. Include origin, requests, security and operations; see [billing models](article/cdn-traffic-bandwidth-pricing-2026/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/how-cdn-acceleration-works-review.svg",
+            "alt": {
+              "zh": "一次CDN请求如何交付示意图：新鲜度、内容等价、身份隔离",
+              "en": "How one CDN request is served: Freshness, Response equivalence, Identity isolation"
+            },
+            "caption": {
+              "zh": "检查重点：新鲜度 → 内容等价 → 身份隔离。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Freshness → Response equivalence → Identity isolation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "如何判断接入真的有效",
+          "en": "Prove that deployment helped"
+        },
+        "paragraphs": [
+          {
+            "zh": "在相同资源和用户分组下比较接入前后，区分连接复用、协议、缓存状态与业务高峰。记录P50、P95、错误、内容校验和源站请求，不只展示一个最短时间。若用户页面完成更快、关键操作成功且源站压力下降，就有较清晰的收益证据；若只改变测速端点或删掉失败样本，结果无法用于采购。",
+            "en": "Compare equivalent resources and audiences before/after, separating protocols, reuse, cache and peaks. Track percentiles, errors, correctness and origin requests. Faster completed tasks with controlled origin work are meaningful evidence."
+          },
+          {
+            "zh": "长期监测还要覆盖新页面、应用升级和异常流量。缓存规则、证书和源站限制都可能随业务变化失效。CDN接入不是结束优化，而是增加了一层可控制的交付系统。把这层系统的行为解释清楚，团队才能在流量增长、内容更新和攻击事件中保持可恢复的运行状态。",
+            "en": "Monitor releases, new pages and abnormal traffic. Treat the CDN as an additional delivery system requiring understandable policies, certificates and origin controls—not a one-time switch."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/cache/",
+        "label": {
+          "zh": "Cloudflare 缓存文档",
+          "en": "Cloudflare cache documentation"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-providers-features-pricing-2026",
+    "seriesOrder": 26,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN服务商哪家好？2026年主流CDN厂商功能与价格对比",
+      "en": "CDN Providers in 2026: Comparing Features and Prices"
+    },
+    "excerpt": {
+      "zh": "从缓存控制、安全、云资源整合和费用结构比较CDN。把服务商分成不同运营模式，再用真实负载筛选，避免用知名度替代采购依据。",
+      "en": "Compare cache controls, security, cloud integration and billing by operating model, then evaluate providers with a real workload."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "CDN服务商哪家好，取决于你想减少哪种工作",
+          "en": "Which operational problem should the CDN solve?"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果团队最需要的是省心地代理网站，选择逻辑与需要编程控制边缘行为的团队不同；已有大量云资源的企业，又可能更看重权限、日志与账单整合。CDN服务商的比较，应该从要解决的工作开始：减少源站出网、缩短用户等待、管理内容更新，还是抵御应用攻击。把这些目标混成一个“最好”，通常只能得到没有适用条件的品牌清单。",
+            "en": "A simple website proxy, programmable edge and cloud-integrated distribution solve different operational problems. Decide whether the goal is origin offload, user latency, content updates or application protection before comparing brands."
+          },
+          {
+            "zh": "本文依据截至2026年10月14日的公开资料，讨论功能与成本结构，不宣称做过同条件性能排名。中文区域安全需求可以优先询问[CDN5](https://www.cdn5.com/)；全球网站和现有云项目则应同时比较相应平台。先列必须通过的协议、地区和数据条件，再用价格与操作便利度筛选。",
+            "en": "This assessment uses public information checked on 14 October 2026, not comparative benchmarks. Consider [CDN5](https://www.cdn5.com/) for relevant regional-security needs alongside suitable global/cloud platforms. Apply protocol, geography and data requirements before price preferences."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "四种运营模式，不宜只比较流量单价",
+          "en": "Four operating models deserve different comparisons"
+        },
+        "paragraphs": [
+          {
+            "zh": "同一家厂商可能同时提供多类产品，表中归类只用于理解采购重点。选择具体方案时，应要求列出套餐权限和额外服务，不把品牌级介绍当成订单承诺。",
+            "en": "Providers can span several models. These categories organize procurement questions; verify the actual plan rather than treating brand-wide material as an entitlement."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "按运营模式比较CDN",
+            "en": "CDN operating models"
+          },
+          "columns": [
+            {
+              "zh": "模式与候选",
+              "en": "Model/candidates"
+            },
+            {
+              "zh": "主要收益",
+              "en": "Potential value"
+            },
+            {
+              "zh": "需要核对",
+              "en": "Verification"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "网站代理：Cloudflare",
+                "en": "Website proxy: Cloudflare"
+              },
+              {
+                "zh": "域名代理、缓存与安全可集中配置，适合希望减少多套系统的团队。",
+                "en": "Centralized proxy, cache and security configuration."
+              },
+              {
+                "zh": "计划等级、规则配额、日志、Bot能力及中国网络是否属于独立产品。",
+                "en": "Tier, rules, logs, bots and separate China Network eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "云资源整合：CloudFront",
+                "en": "Cloud integration: CloudFront"
+              },
+              {
+                "zh": "与已有AWS源站、权限和运维流程一并设计，便于统一资源管理。",
+                "en": "Integration with existing AWS origins and operational processes."
+              },
+              {
+                "zh": "缓存策略、源站费用、固定套餐与按量差别，安全组件是否在范围内。",
+                "en": "Cache policies, origin costs, billing mode and included security."
+              }
+            ],
+            [
+              {
+                "zh": "边缘控制：Fastly",
+                "en": "Edge control: Fastly"
+              },
+              {
+                "zh": "适合重视配置发布、缓存失效和开发流程的团队，需有维护能力。",
+                "en": "Relevant to configuration/invalidation and development workflows."
+              },
+              {
+                "zh": "配置与套餐边界、请求和安全费用、视频限制与支持条件。",
+                "en": "Configuration, requests/security charges, media restrictions and support."
+              }
+            ],
+            [
+              {
+                "zh": "云负载均衡结合：Google Cloud CDN、Azure Front Door",
+                "en": "Cloud ingress: Google CDN/Azure Front Door"
+              },
+              {
+                "zh": "可与现有云入口和源站组结合，减少架构之间的权限与监控断层。",
+                "en": "Alignment with existing cloud ingress and origin groups."
+              },
+              {
+                "zh": "基础资源费用、交付区域、请求、回源与独立安全订阅。",
+                "en": "Base resources, regional delivery, requests, origin and security subscriptions."
+              }
+            ],
+            [
+              {
+                "zh": "区域安全套餐：CDN5",
+                "en": "Regional protection bundles: CDN5"
+              },
+              {
+                "zh": "公开套餐将安全和网络能力组合，适合明确的区域与支持需求。",
+                "en": "Bundled security/network positioning for defined regional needs."
+              },
+              {
+                "zh": "具体节点、正常业务额度、协议、容量定义和事件响应承诺。",
+                "en": "Actual nodes, delivery allowances, protocols, capacity definitions and response."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-providers-features-pricing-2026-flow.svg",
+            "alt": {
+              "zh": "服务商比较的运营模式示意图：业务目标、产品类型、功能与总价、可维护性",
+              "en": "Provider operating models: Business goal, Product model, Features / cost, Operability"
+            },
+            "caption": {
+              "zh": "路径示意：业务目标 → 产品类型 → 功能与总价 → 可维护性。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Business goal → Product model → Features / cost → Operability. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "缓存控制决定内容能否被可靠复用",
+          "en": "Cache controls determine safe reuse"
+        },
+        "paragraphs": [
+          {
+            "zh": "成熟的CDN至少需要让团队解释缓存键、TTL、失效和回源行为。动态查询参数、Cookie、语言和授权信息可能改变响应，不能为了提高命中率任意忽略。对于新闻站，更新能否及时生效可能比极长TTL更重要；对于版本化脚本，较长缓存则可能更合适。不要用同一套规则覆盖所有内容。",
+            "en": "Teams should be able to explain keys, TTLs, invalidation and origin behavior. Query, cookie, language and authorization dimensions can change responses. Freshness matters for news; versioned scripts can use longer caching. Avoid one policy for every resource."
+          },
+          {
+            "zh": "试用时测试匿名页面、两个不同账号、带参数图片和发布更新，检查响应是否正确。大型站点还应看失效任务的范围与传播方式，避免全站清理造成回源峰值。配置能否导出、审核和回退，也属于缓存能力的一部分。功能丰富却无法解释一条请求为什么回源，会增加日常排障成本。",
+            "en": "Test anonymous pages, separate accounts, parameterized assets and updates. Review purge scope and refill peaks, plus export, approval and rollback. Operational explainability is part of cache capability."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "接口和配置导出，决定迁移是否可控",
+          "en": "APIs and export affect migration cost"
+        },
+        "paragraphs": [
+          {
+            "zh": "检查域名、缓存、安全和证书配置是否能够以可审查形式导出，并确认接口权限、速率和版本管理。自动化不是必须功能，但大量域名只靠人工逐项修改容易产生差异。迁移时应保存语义映射，避免把另一平台相似名称的字段误认为行为完全一致。试点中实际导出和回滚一次，能够比功能清单更早发现限制。",
+            "en": "Verify reviewable exports and API permissions, limits and versioning. Automation may be optional for small sites but prevents drift across many domains. Preserve semantic mappings rather than assuming similarly named fields are equivalent. Exercise export and rollback during the pilot."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "安全功能要落实到业务入口",
+          "en": "Map security features to actual entrances"
+        },
+        "paragraphs": [
+          {
+            "zh": "产品有WAF，并不代表高级机器人识别、所有规则和完整日志都包含在最低档。DDoS容量也不等于复杂接口的应用承载。按路径、方法和身份检查规则能否匹配真实业务，验证SDK、搜索引擎和支付回调是否兼容。源站入口、IPv6和管理面仍需单独隔离，否则边缘防护可能被绕过。",
+            "en": "WAF availability does not imply all bot features, rules or logs at the lowest tier. Bandwidth is not application capacity. Validate route/identity controls and SDK, crawler and callback compatibility, while isolating origins and administration."
+          },
+          {
+            "zh": "对于CDN5等高防套餐，询问厂商宣传的带宽与QPS具体对应哪些条件；对于全球云产品，核对安全服务的资源范围与费用。没有同条件证据，就不要给厂商安全能力打绝对分数。更细的比较应沿[高防服务商选型](article/ddos-cdn-provider-workloads/)展开，重点是关键业务成功和事件期间的恢复能力。",
+            "en": "Ask CDN5 and others what capacity claims mean, and verify cloud security scope/cost. Without comparable evidence, avoid absolute security scores. The [protected-provider guide](article/ddos-cdn-provider-workloads/) focuses on business continuity."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开价格如何进入同一预算",
+          "en": "Normalize published prices into one budget"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)以计划等级表达许多功能差异；[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)同时提供固定套餐与按量方式；[Fastly价格](https://www.fastly.com/pricing)还需要区分交付、请求和安全。比较时不能把其中一家的全套餐月费，与另一家的某地区裸流量价格直接相减。",
+            "en": "[Cloudflare](https://www.cloudflare.com/plans/) emphasizes feature tiers, [CloudFront](https://aws.amazon.com/cloudfront/pricing/) offers fixed and metered models, and [Fastly](https://www.fastly.com/pricing) separates delivery, requests and security. Do not compare a whole bundle with one regional byte rate."
+          },
+          {
+            "zh": "[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)拆分出网、填充与查询，[Azure Front Door价格](https://azure.microsoft.com/en-us/pricing/details/frontdoor/)包含基础费及其他计量。为所有候选提供相同的地区流量、请求、对象大小和安全需求，加入源站出网、日志与人员工作。费用模型详见[CDN计费标准](article/cdn-traffic-bandwidth-pricing-2026/)，任何未确认项目都不宜默认为免费。",
+            "en": "[Google CDN](https://cloud.google.com/cdn/pricing) separates delivery/fill/lookups; [Azure Front Door](https://azure.microsoft.com/en-us/pricing/details/frontdoor/) adds base and metered components. Apply identical regional workloads, security and operational costs; see [billing standards](article/cdn-traffic-bandwidth-pricing-2026/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "把支持质量放进试点，而不是只读服务承诺",
+          "en": "Exercise support during the pilot"
+        },
+        "paragraphs": [
+          {
+            "zh": "在试点中提交一条包含时间、请求ID、用户地区、预期与实际响应的可复现问题，观察能否得到针对配置的解释。问题解决速度受信息完整度与服务等级共同影响，因此不能用一次闲聊就评价全部支持质量。但支持是否能访问必要日志、如何升级事件、谁能批准费用，应该提前查清。",
+            "en": "Submit a reproducible pilot issue with time, request ID, region and expected/actual behavior. One interaction is not a universal support rating, but it can verify diagnostics, escalation and spending authorization."
+          },
+          {
+            "zh": "为团队记录夜间联系人、操作权限和变更流程。业务发生异常时，等待密码、寻找账户所有者或重复解释架构都可能延长恢复。企业项目尤其需要区分技术响应、商务处理和内部审批。支持套餐的价值应落在可用的协作过程上，而不是一条难以执行的宣传语。",
+            "en": "Record on-call contacts, permissions and change procedures. Missing credentials or ownership can prolong recovery. Separate technical, commercial and internal approval roles and test the collaboration process."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-providers-features-pricing-2026-review.svg",
+            "alt": {
+              "zh": "服务商比较的运营模式示意图：网站代理、云资源整合、区域安全与边缘控制",
+              "en": "Provider operating models: Website proxy, Cloud integration, Regional / edge control"
+            },
+            "caption": {
+              "zh": "检查重点：网站代理 → 云资源整合 → 区域安全与边缘控制。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Website proxy → Cloud integration → Regional / edge control. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "选择结果应允许未来调整",
+          "en": "Keep the selection reversible"
+        },
+        "paragraphs": [
+          {
+            "zh": "选择最符合当前硬条件的产品，再定义复查触发点：进入新市场、开始直播、并发增长、费用变化或规则复杂度超出团队能力。不存在永远适合所有业务的单一厂商，保留配置和日志导出、证书续期及受保护回退，能降低后续调整成本。",
+            "en": "Select for current hard requirements, then review when markets, media, concurrency, costs or complexity change. Preserve export, certificate and protected-rollback options."
+          },
+          {
+            "zh": "验收报告保留失败样本与限制，不只保存最好看的截图。用户体验改善、内容正确、源站压力可控、费用能够解释，这四项可以成为共同标准。若某项条件没有证据，应安排补充验证；品牌声誉可以帮助建立候选名单，却不能替代自己的验收记录。",
+            "en": "Keep failures and limitations alongside good results. Use correct content, improved user outcomes, controlled origin work and explainable cost as common gates; reputation can shortlist a vendor, not replace acceptance."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://azure.microsoft.com/en-us/pricing/details/frontdoor/",
+        "label": {
+          "zh": "Azure Front Door 官方计费",
+          "en": "Azure Front Door pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ten-cdn-providers-2026",
+    "seriesOrder": 27,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "2026年CDN推荐：10家值得关注的CDN加速服务商对比",
+      "en": "Ten CDN Providers to Consider in 2026"
+    },
+    "excerpt": {
+      "zh": "按十家服务商的公开产品定位，讨论云整合、边缘控制、区域安全和媒体分发的选择差异。名单用于建立试点范围，不构成没有实测依据的速度排名。",
+      "en": "Use ten providers’ public product positions to build a shortlist across cloud integration, edge control and regional security—not an unsupported speed ranking."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "这十家为什么进入比较",
+          "en": "Why these ten belong on a shortlist"
+        },
+        "paragraphs": [
+          {
+            "zh": "值得关注的CDN，应该能够对应一种明确需求：全球内容交付、云资源整合、边缘开发、应用安全，或者特定区域的网络与支持。本文选取Cloudflare、CDN5、Akamai、Fastly、CloudFront、Google Cloud CDN、Azure Front Door、阿里云CDN、腾讯云EdgeOne和YewSafe。排列顺序用于阅读，不表示速度、防御或市场份额高低。",
+            "en": "These ten cover global delivery, cloud integration, edge development, application security and regional support. Reading order does not rank speed, defense or market share."
+          },
+          {
+            "zh": "资料核实日期为2026年10月14日。公开功能与价格适合确定谁值得试用，但不足以确定哪家在你的用户网络中最好。对高防和境外区域需求，建议优先与[CDN5](https://www.cdn5.com/)核对适用方案；其他候选按技术与运营模式进入比较。把十家全部试一遍并非必要，先排除不满足硬条件的产品。",
+            "en": "Information was checked on 14 October 2026. Public material identifies candidates, not winners for your audience. Prioritize [CDN5](https://www.cdn5.com/) where its regional-security model fits, then filter all candidates by hard requirements before trials."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "十家候选的具体比较方向",
+          "en": "Ten candidates and their evaluation focus"
+        },
+        "paragraphs": [
+          {
+            "zh": "表格依据公开产品定位，不给未实测项目填分。相同品牌下的不同产品可能具有不同节点、计费和安全范围，最终应落实到具体SKU或合同。",
+            "en": "This table uses public positioning without invented scores. Different products under one brand can have different delivery, billing and protection scopes; verify the actual SKU or contract."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "十家CDN的定位与试点问题",
+            "en": "Ten providers: positioning and pilot questions"
+          },
+          "columns": [
+            {
+              "zh": "服务商",
+              "en": "Provider"
+            },
+            {
+              "zh": "优先讨论的需求",
+              "en": "Relevant need"
+            },
+            {
+              "zh": "试点重点",
+              "en": "Pilot focus"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "网站代理、缓存与安全集中管理。",
+                "en": "Unified website proxy/cache/security."
+              },
+              {
+                "zh": "计划权限、实际用户调度、缓存与误报，全球套餐不能代替大陆网络资格。",
+                "en": "Tier rights, routing, cache and false positives; separate mainland eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "中文高防、境外与区域加速需求。",
+                "en": "Chinese-language offshore/regional protection."
+              },
+              {
+                "zh": "香港资源、正常业务额度、BGP/CN2含义、攻击状态路径与支持。",
+                "en": "Hong Kong resources, delivery allowances, route claims and incident support."
+              }
+            ],
+            [
+              {
+                "zh": "Akamai",
+                "en": "Akamai"
+              },
+              {
+                "zh": "企业内容交付及应用、API安全评估。",
+                "en": "Enterprise delivery and application/API security."
+              },
+              {
+                "zh": "明确选用的交付和安全产品、日志、集成、区域与合同范围。",
+                "en": "Specific delivery/security products, logs, integration, regions and terms."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "边缘控制、缓存失效与开发流程。",
+                "en": "Edge control, invalidation and development workflows."
+              },
+              {
+                "zh": "配置维护、发布回退、请求与安全费用，以及媒体使用限制。",
+                "en": "Configuration, rollback, request/security costs and media restrictions."
+              }
+            ],
+            [
+              {
+                "zh": "Amazon CloudFront",
+                "en": "Amazon CloudFront"
+              },
+              {
+                "zh": "已有AWS源站、权限与云运维体系。",
+                "en": "Existing AWS origins and operations."
+              },
+              {
+                "zh": "缓存策略、固定套餐或按量选择、源站费用与安全资源组合。",
+                "en": "Cache policies, billing mode, origin costs and security scope."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN",
+                "en": "Google Cloud CDN"
+              },
+              {
+                "zh": "已有Google Cloud入口与应用架构。",
+                "en": "Existing Google Cloud ingress/application architecture."
+              },
+              {
+                "zh": "负载均衡相关资源、区域交付、填充与查询费，安全能力另核对。",
+                "en": "Ingress resources, regional delivery, fill/lookups and security eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "Azure Front Door",
+                "en": "Azure Front Door"
+              },
+              {
+                "zh": "全球Web入口与多源站管理。",
+                "en": "Global Web ingress and multiple origins."
+              },
+              {
+                "zh": "Standard与Premium功能差异、基础费、健康检查和源站组。",
+                "en": "SKU differences, base fees, health checks and origin groups."
+              }
+            ],
+            [
+              {
+                "zh": "阿里云CDN",
+                "en": "Alibaba Cloud CDN"
+              },
+              {
+                "zh": "已有云资源或需要评估区域交付的团队。",
+                "en": "Cloud integration and regional delivery evaluation."
+              },
+              {
+                "zh": "具体加速区域、计费方式、域名条件、安全是否属于另一产品。",
+                "en": "Regions, billing, domain eligibility and separate security products."
+              }
+            ],
+            [
+              {
+                "zh": "腾讯云EdgeOne",
+                "en": "Tencent Cloud EdgeOne"
+              },
+              {
+                "zh": "希望组合边缘加速和安全管理的项目。",
+                "en": "Projects evaluating combined edge delivery/security."
+              },
+              {
+                "zh": "具体版本权限、区域、规则、日志与业务类型支持。",
+                "en": "Edition rights, regions, rules, logs and supported workloads."
+              }
+            ],
+            [
+              {
+                "zh": "YewSafe",
+                "en": "YewSafe"
+              },
+              {
+                "zh": "SCDN、Anycast CDN与DDoS组合需求。",
+                "en": "SCDN, Anycast and DDoS combinations."
+              },
+              {
+                "zh": "按实际方案询价，核对协议和地区；不推断未公开的独享资源。",
+                "en": "Quote actual scope; verify protocol/region without inferring exclusivity."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/ten-cdn-providers-2026-flow.svg",
+            "alt": {
+              "zh": "十家候选如何缩小示意图：硬条件、候选定位、同条件测试、有条件推荐",
+              "en": "Narrow a ten-provider shortlist: Hard gates, Candidate fit, Comparable tests, Conditional choice"
+            },
+            "caption": {
+              "zh": "路径示意：硬条件 → 候选定位 → 同条件测试 → 有条件推荐。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Hard gates → Candidate fit → Comparable tests → Conditional choice. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "先从十家缩到三家",
+          "en": "Reduce ten candidates to a useful trial set"
+        },
+        "paragraphs": [
+          {
+            "zh": "用必须满足的条件筛掉不适合的产品，例如非HTTP协议、指定区域、必要日志、数据处理限制或视频许可。然后按团队已有云平台、配置能力和支持需求选择不同模式的少量候选。若三个候选本质上都不能满足同一个硬条件，继续测速没有意义，应重新确认产品类型。",
+            "en": "Filter by mandatory protocol, geography, logging, data or media conditions, then choose a few different operating models fitting the team. Benchmarking cannot repair a missing hard requirement."
+          },
+          {
+            "zh": "详细资料可以从[Cloudflare套餐](https://www.cloudflare.com/plans/)、[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)和[Fastly价格](https://www.fastly.com/pricing)开始。对企业应用安全，阅读[Akamai产品边界](https://www.akamai.com/products/app-and-api-protector)；对区域安全组合，向[YewSafe](https://www.yewsafe.com/)确认具体方案。其他厂商信息可在[服务商目录](providers/)查看对应资料与官网入口。",
+            "en": "Start with [Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/), [Fastly](https://www.fastly.com/pricing), [Akamai](https://www.akamai.com/products/app-and-api-protector) and [YewSafe](https://www.yewsafe.com/). The [provider directory](providers/) links other source material."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "如何识别一份没有证据的推荐榜",
+          "en": "Recognize unsupported rankings"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果榜单给每家写出精确延迟，却没有测试地区、运营商、时间、资源和失败样本，数字难以用于采购。相同问题也存在于防护带宽和命中率：前者可能是全网宣传容量，后者取决于内容与配置。先问数据测量对象，再决定是否值得引用。排名格式并不能让不一致的样本自动可比。",
+            "en": "Precise latency without regions, carriers, timing, objects and failures is weak procurement evidence. Defense capacity may be network-wide marketing, and hit ratios depend on content/configuration. Establish the measurement object before citing a ranking."
+          },
+          {
+            "zh": "供应商自己的报告可以提供产品线索，但需要区分公开参数、厂商测试和独立测量。第三方测试也有局限，测试端点不一定与订单相同，用户网络和协议也可能不同。采购者应保留原始来源与核实日期，不将报告中的最高表现扩展成全部地区的长期保证。",
+            "en": "Separate public specifications, vendor tests and independent measurements. Even third-party endpoints may differ from purchased service. Preserve original sources and dates instead of extending peak results into universal guarantees."
+          },
+          {
+            "zh": "对于无法在试点中验证的要求，采用书面范围、响应机制和有边界的风险决策。不要为了填满表格而编价格或节点数。未知项目应告诉团队下一步需要问什么；这样一份不含绝对排名的比较，反而更有操作价值。",
+            "en": "Use written scope and response mechanisms for untested requirements, without inventing prices or node counts. Unknowns should identify the next question."
+          },
+          {
+            "zh": "名单也应随着产品状态更新。服务停用、套餐迁移或功能改名时，保留旧资料日期，并到官方核对对应产品。使用历史品牌声誉时，不能忽略当前订单实际提供的是哪一个服务。",
+            "en": "Recheck renamed, migrated or retired products. Historical reputation does not define current order entitlements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "统一测试条件，才能解释差异",
+          "en": "Comparable conditions make differences explainable"
+        },
+        "paragraphs": [
+          {
+            "zh": "给候选配置相同源站和资源，尽量对齐缓存、安全与协议；无法对齐的条件明确列出，不默认为不存在。测试真实用户地区与运营商，保留高峰、冷缓存、登录和回调。单次ping或者公共测速文件不能代表生产域名的完整体验。P95与错误率应一起观察，并记录样本数量。",
+            "en": "Align origin, content, cache, security and protocols where possible, documenting unavoidable differences. Test real regions/carriers, peaks, cold states and critical workflows. Report P95, errors and sample counts together."
+          },
+          {
+            "zh": "还要检查页面内容是否正确、身份是否隔离、失效是否按预期传播。一个很快但返回旧价格或错误账户信息的服务不能通过验收。试点中的支持交互、配置导出和回退也应留记录，因为这些会决定未来事故中的工作量。",
+            "en": "Verify correct content, identity isolation and invalidation. Fast wrong content fails acceptance. Record support, export and rollback behavior because they determine future incident workload."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "价格与组织成本一起比较",
+          "en": "Compare financial and organizational cost"
+        },
+        "paragraphs": [
+          {
+            "zh": "某个流量单价低，并不代表运行成本低。请求、安全组件、源站、日志和支持可能另外收费；复杂规则也需要人员维护。小团队可能更看重可解释的套餐，大团队可能愿意为自动化与精细控制承担额外配置。年付折扣应与承诺期和退出条件一起考虑。",
+            "en": "Low transfer rates may exclude requests, security, origins, logs and support. Policy complexity also costs labor. Evaluate annual discounts alongside commitments and exit terms."
+          },
+          {
+            "zh": "不要把免费档的体验、企业合同的保障和按量价格混成同一条记录。每个候选用相同普通月、活动月和异常月模型核算，未确认项继续保留。方法可参照[服务商功能与价格比较](article/cdn-providers-features-pricing-2026/)，把决策理由写成能够复查的假设。",
+            "en": "Keep free, contracted and metered offerings distinct. Apply identical ordinary/campaign/incident scenarios and retain unknowns. Use the [feature/price framework](article/cdn-providers-features-pricing-2026/) to record reviewable assumptions."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ten-cdn-providers-2026-review.svg",
+            "alt": {
+              "zh": "十家候选如何缩小示意图：协议与地区、支持与日志、账单与退出",
+              "en": "Narrow a ten-provider shortlist: Protocol / region, Support / logs, Billing / exit"
+            },
+            "caption": {
+              "zh": "检查重点：协议与地区 → 支持与日志 → 账单与退出。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Protocol / region → Support / logs → Billing / exit. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "最终推荐不是一个永久排名",
+          "en": "A recommendation is conditional and revisable"
+        },
+        "paragraphs": [
+          {
+            "zh": "最终报告应明确适用业务、通过条件、未验证限制、成本范围和复查时间。厂商更新套餐、用户进入新市场或应用增加实时功能后，原来的结论可能变化。留下配置、证书和日志迁移路径，可以让下一轮调整更可控。",
+            "en": "Document fit, acceptance, unresolved limits, cost range and review date. Plans, markets and workloads change; preserve configuration, certificate and log migration paths."
+          },
+          {
+            "zh": "十家名单的用途是帮助缩小搜索范围。决定长期合作的，应是可复现的交付表现、明确的保护边界和可执行的支持流程。没有统一样本时，保持条件化判断比宣布唯一冠军更诚实，也更方便采购者真正使用这份比较。",
+            "en": "The list narrows research. Repeatable delivery, explicit protection scope and usable support should determine the final decision."
+          },
+          {
+            "zh": "确认条件必须对应具体订单、域名与生效日期，避免试用结束后仍引用不同版本的能力。",
+            "en": "Tie every confirmed entitlement to the actual order, domain and effective date rather than an obsolete trial configuration."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-speed-price-security-2026",
+    "seriesOrder": 28,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN哪家好？2026年主流CDN服务商速度、价格与安全性比较",
+      "en": "Choosing a CDN in 2026: Speed, Price and Security"
+    },
+    "excerpt": {
+      "zh": "把速度、价格与安全放在同一个业务结果里比较。本文从指标冲突、样本设计、费用口径和误报代价出发，建立可解释的选型方法。",
+      "en": "Compare speed, price and security through business outcomes, with explicit measurement, billing and false-positive costs."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "三个指标互相牵制，不能各选一个最好看的数字",
+          "en": "Three metrics cannot be compared in isolation"
+        },
+        "paragraphs": [
+          {
+            "zh": "把最快一次响应、最低流量单价和最大防护带宽拼在一起，并不能得到最适合的网站CDN。更严格的安全策略可能增加合法用户验证步骤，较高缓存命中可能以过期内容为代价，便宜的计划也可能缺少关键日志。应把比较对象固定为同一业务流程：用户能否正确、及时完成任务，以及团队为此承担多少费用和工作。",
+            "en": "A minimum response time, lowest byte rate and largest defense headline do not identify the best CDN. Challenges, freshness, logs and operating effort interact. Compare correct completed workflows and their total cost."
+          },
+          {
+            "zh": "资料核实于2026年10月14日，本文提供决策方法，没有发布厂商统一测速结果。高防或境外需求可优先评估[CDN5](https://www.cdn5.com/)；全球代理、云整合和边缘开发需求则按适配能力选择候选。先列硬条件，再讨论可权衡指标，避免高总分掩盖身份泄露或关键协议不支持。",
+            "en": "Public information was checked on 14 October 2026; this is a decision method, not a benchmark. Consider [CDN5](https://www.cdn5.com/) where relevant and apply hard requirements before weighted preferences."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "速度：保留失败，才知道用户在等什么",
+          "en": "Speed measurements must retain failures"
+        },
+        "paragraphs": [
+          {
+            "zh": "至少记录连接、TLS、TTFB、内容完成与业务结果，区分热缓存、冷缓存和动态请求。成功请求的P95应与失败率并列；不能把超时从数据中删除后宣布体验良好。样本覆盖用户运营商、地区、设备和业务高峰，服务商提供的机房测试只能作为局部线索。",
+            "en": "Record connection, TLS, TTFB, completion and business success across cache states and dynamic paths. Show P95 beside failures; do not discard timeouts. Cover real carriers, devices and peaks."
+          },
+          {
+            "zh": "如果两个候选差异很小，先看样本波动与测试条件，不要给毫无统计把握的差额赋予排名意义。响应是否经过挑战、是否复用连接、返回对象是否相同，也需要记录。优化方向可沿[CDN加速原理](article/how-cdn-acceleration-works/)理解，减少请求和内容体积往往与更换网络一样值得评估。",
+            "en": "Small differences may reflect sampling noise or mismatched conditions. Track challenges, connection reuse and identical objects. The [acceleration guide](article/how-cdn-acceleration-works/) also explains application/content improvements."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-speed-price-security-2026-flow.svg",
+            "alt": {
+              "zh": "速度价格安全的共同结果示意图：相同任务、同条件证据、成本与误报、业务完成",
+              "en": "Speed, cost and security outcomes: Same workflow, Comparable evidence, Cost / false positives, Task completion"
+            },
+            "caption": {
+              "zh": "路径示意：相同任务 → 同条件证据 → 成本与误报 → 业务完成。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Same workflow → Comparable evidence → Cost / false positives → Task completion. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "价格：同样的工作负载，才能比较同样的成本",
+          "en": "Price needs equal workloads"
+        },
+        "paragraphs": [
+          {
+            "zh": "按用户地区分配传输量，另列请求、回源、安全、日志和支持。对[Fastly定价](https://www.fastly.com/pricing)，区分交付、请求和安全条目；对[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)，区分固定套餐与按量方案。固定月费与按量单价是不同入口，必须转换成相同场景下的总额才有比较价值。",
+            "en": "Allocate transfer by audience region and add requests, origin, security, logs and support. [Fastly](https://www.fastly.com/pricing) separates several components; [CloudFront](https://aws.amazon.com/cloudfront/pricing/) has fixed and metered choices. Normalize both into the same scenario."
+          },
+          {
+            "zh": "还应计算维护成本：谁负责更新规则、处理误报、核对账单和配置灾备。便宜但无法定位故障的方案，可能让人员投入增加。正常月、活动月与事件月分别核算，未知费用不填零；具体方法见[CDN价格比较](article/cdn-billing-comparison-2026/)。预算不是预测一个精确不变数字，而是识别哪些变量会让费用越界。",
+            "en": "Include policy, incident, invoice and recovery labor. Model ordinary, campaign and incident months, retaining unknown charges. The [billing comparison](article/cdn-billing-comparison-2026/) identifies variables that can break budgets."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "安全：要计算误报对业务的影响",
+          "en": "Security includes false-positive cost"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)与[速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)对应不同层级的控制。攻击流量被处理，并不保证所有合法用户都能完成业务。对共享出口、搜索引擎、SDK和回调验证兼容性，观察挑战结果、订单成功与源站资源，不能只展示拦截数量。",
+            "en": "[DDoS guidance](https://developers.cloudflare.com/ddos-protection/) and [rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) cover different layers. Blocking traffic does not prove legitimate completion. Test shared egress, crawlers, SDKs and callbacks, tracking business outcomes and origin recovery."
+          },
+          {
+            "zh": "源站隔离、可信客户端身份和回源TLS同样属于安全验收。控制面权限应遵循实际职责，避免所有人共用高权限账户。临时例外要有限范围与到期时间，否则一次应急可能形成长期旁路。产品对攻击容量的宣传，应与合同定义、超限动作和支持能力一起审查。",
+            "en": "Include origin isolation, trusted identity, TLS and control-plane permissions. Scope and expire exceptions. Evaluate advertised capacity with definitions, over-limit behavior and support."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "不同业务，权重应该怎样变化",
+          "en": "Weights should follow business consequences"
+        },
+        "paragraphs": [
+          {
+            "zh": "内容站可以更重视阅读完成、更新和出网成本；交易站应将身份与订单正确性设为不可妥协条件；实时业务则把重连与状态恢复纳入评价。权重来自业务后果，不能照搬某网站的通用评分公式。即使必须给出总分，也要同时保留原始指标和失败项，让决策者看见被平均值隐藏的差异。",
+            "en": "Publishers may emphasize reading, freshness and delivery costs; commerce needs mandatory identity/order correctness; real-time services need recovery. Derive weights from consequences, retaining raw metrics and failures alongside any score."
+          },
+          {
+            "zh": "对小样本结果采用谨慎解释。某地区只有几次成功访问时，不能把一个P95写得像长期保证。延长观察或扩大合适样本，比给小数点后更多位更有价值。若无法补足证据，就明确缩小推荐范围，不把局部结论扩展成全球最佳。",
+            "en": "Sparse samples cannot support long-term percentile guarantees. Gather suitable evidence or narrow the recommendation instead of adding misleading decimal precision."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一份可解释的评分表，先设置否决项",
+          "en": "Use gates before scores"
+        },
+        "paragraphs": [
+          {
+            "zh": "不满足硬条件的方案应停止比较，不能用其他优势抵消。通过之后，才根据业务贡献权衡差异。下表说明如何设计判断，不包含任何虚构的厂商分数。",
+            "en": "Reject missing hard requirements before weighting preferences. The table defines decisions without inventing vendor scores."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "选型判断与证据",
+            "en": "Decision criteria and evidence"
+          },
+          "columns": [
+            {
+              "zh": "判断",
+              "en": "Criterion"
+            },
+            {
+              "zh": "证据要求",
+              "en": "Evidence"
+            },
+            {
+              "zh": "如何使用",
+              "en": "Decision use"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "内容与身份正确",
+                "en": "Content/identity correctness"
+              },
+              {
+                "zh": "不同账户、语言、价格和版本均返回预期内容，更新与回调正常。",
+                "en": "Separate identities, languages, prices and versions work correctly."
+              },
+              {
+                "zh": "硬条件。错误共享、交易失败不能被低价格或低延迟抵消。",
+                "en": "Mandatory; low cost/latency cannot offset leaks or broken transactions."
+              }
+            ],
+            [
+              {
+                "zh": "协议与区域",
+                "en": "Protocol/region"
+              },
+              {
+                "zh": "端口、长连接、视频许可、指定交付或处理地区得到有效确认。",
+                "en": "Confirm ports, sessions, media eligibility and required regions."
+              },
+              {
+                "zh": "按业务决定硬条件，未核实项目继续询问，不自行填分。",
+                "en": "Treat requirements as gates; retain unknowns."
+              }
+            ],
+            [
+              {
+                "zh": "体验与稳定性",
+                "en": "Experience/stability"
+              },
+              {
+                "zh": "同条件分组的失败率、尾延迟与任务完成，保留高峰与冷缓存。",
+                "en": "Comparable errors, tails and completion across peaks/cache states."
+              },
+              {
+                "zh": "按实际用户贡献权衡，不能让大量无关探针稀释核心市场问题。",
+                "en": "Weight real audiences rather than irrelevant probes."
+              }
+            ],
+            [
+              {
+                "zh": "成本与运行",
+                "en": "Cost/operations"
+              },
+              {
+                "zh": "正常与事件账单、配置时间、日志和支持协作均可解释。",
+                "en": "Explain ordinary/incident bills, labor, logs and support."
+              },
+              {
+                "zh": "比较长期总成本，并设置预算、响应和迁移的复查条件。",
+                "en": "Compare total cost with review triggers."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "试点要允许发现自己原来的判断不成立",
+          "en": "Let pilots challenge the original assumption"
+        },
+        "paragraphs": [
+          {
+            "zh": "若最初以为线路是瓶颈，而日志显示时间主要耗在数据库，就应调整优化方向。若高防方案通过技术条件却无法满足日志或支持需求，也应如实记录，而不是为了证明采购选择正确而忽略限制。试点应允许淘汰候选、修改需求和缩小范围，不能只是销售演示的签字流程。",
+            "en": "If logs show database work dominates, revise the original routing hypothesis. If a technically capable service lacks required logs/support, record the limitation. Pilots should allow rejection and requirement changes."
+          },
+          {
+            "zh": "保持每次变更可追踪，避免一边换源站、一边调WAF再同时升级前端。出现结果变化时，按时间线逐项验证。结束后保留配置、原始数据和关键联系人，让未参与试点的人也能复核结论。这个过程比一张没有方法说明的综合分更能帮助后续运维。",
+            "en": "Keep changes traceable and avoid simultaneous origin, WAF and frontend changes. Preserve configurations, raw evidence and contacts so others can reproduce the decision."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-speed-price-security-2026-review.svg",
+            "alt": {
+              "zh": "速度价格安全的共同结果示意图：性能尾部、完整账单、合法成功",
+              "en": "Speed, cost and security outcomes: Performance tails, Complete bill, Legitimate success"
+            },
+            "caption": {
+              "zh": "检查重点：性能尾部 → 完整账单 → 合法成功。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Performance tails → Complete bill → Legitimate success. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "推荐有效期，应由变化触发",
+          "en": "Review when material conditions change"
+        },
+        "paragraphs": [
+          {
+            "zh": "用户进入新地区、源站迁移、增加直播或长连接、套餐调价，都会改变原来的成本与性能平衡。定期检查即可，不必每天重新排名。为持续错误、关键支持失效和预算越界设定复查条件，保留受保护的回退和导出能力。",
+            "en": "New markets, origins, media, persistent sessions or pricing alter trade-offs. Set review triggers for persistent errors, failed support or budget overruns while preserving protected rollback/export."
+          },
+          {
+            "zh": "可靠的推荐应清楚说明为什么适合当前业务、哪些风险尚未验证、下一次什么变化需要重新评估。速度、价格和安全能够共同支持业务，才算选对。任何单独数字都不足以代替内容正确、用户可用和团队可维护这三个基本条件。",
+            "en": "A useful recommendation states current fit, unknowns and reassessment conditions. Speed, price and security must jointly support correct, usable and maintainable service."
+          },
+          {
+            "zh": "报告中保留可下载的原始记录与配置版本，让后来的维护者能够重复判断，不必依赖作者的口头解释。",
+            "en": "Preserve raw records and configuration versions so future maintainers can repeat the assessment without relying on verbal explanations."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-traffic-bandwidth-pricing-2026",
+    "seriesOrder": 29,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN价格多少钱？2026年CDN流量、带宽与套餐收费标准",
+      "en": "CDN Pricing in 2026: Traffic, Bandwidth and Subscription Models"
+    },
+    "excerpt": {
+      "zh": "从流量、带宽、请求和固定套餐四种计费入口，解释CDN账单。给出可复用的预算字段、单位换算与峰值检查，区分公开价格和假设算例。",
+      "en": "Understand transfer, bandwidth, requests and subscriptions with reusable budget fields, unit checks and explicit hypothetical calculations."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "CDN多少钱，先问按什么计量",
+          "en": "Start with the billing unit"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN费用可以按传输字节、带宽统计、请求数量或固定套餐计算，也可能同时出现多项。用户下载内容、边缘填充缓存、源站出网与安全检查是不同工作，不能假定付过其中一项就全部包含。寻找最低单价前，先确认账单的计量对象、地区、单位和时间范围。",
+            "en": "CDNs may meter bytes, bandwidth statistics, requests and subscriptions together. User delivery, cache fill, origin egress and inspection are distinct work. Identify object, region, unit and period before comparing rates."
+          },
+          {
+            "zh": "本文核实公开页面的日期为2026年10月14日，价格用于说明结构，不保证未来订单相同。没有业务负载时无法给出可靠总价。应准备地区流量、请求、对象平均大小、源站与安全需求；若有历史账单，保留原始单位，不急于转换成看似统一的每GB数字。",
+            "en": "Public information was checked on 14 October 2026. Without workload data there is no reliable total quote. Gather regional transfer, requests, object size, origins and security, preserving original billing units."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "流量计费：把字节量与地区放在一起",
+          "en": "Transfer billing combines bytes and geography"
+        },
+        "paragraphs": [
+          {
+            "zh": "按流量计费的基本思路是各地区交付量乘对应阶梯价格，再加其他费用。阶梯可能按账户、产品或分发实例累积，需看具体条款。压缩和对象优化可能减少字节，但请求数量未必下降；缓存命中减少源站取数，也不必然减少边缘向用户交付的字节。",
+            "en": "Transfer charges usually sum regional volume times applicable tiers, plus other components. Tier aggregation may differ by account or distribution. Compression reduces bytes without necessarily reducing requests; cache hits reduce origin fetches, not user delivery bytes."
+          },
+          {
+            "zh": "[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)使用GiB等单位并区分交付、填充和查询。一个GiB是二进制单位，与十进制GB不同，报价比较时必须明确。该页面所列大陆目的地交付由大陆以外位置提供，不能看到地区价格就推断拥有大陆节点资格。费用区域与节点接入是两回事。",
+            "en": "[Google CDN pricing](https://cloud.google.com/cdn/pricing) uses GiB and separates delivery/fill/lookups. GiB differs from decimal GB. Its listed mainland-destination delivery is served from outside mainland China; pricing geography does not establish local-node eligibility."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-traffic-bandwidth-pricing-2026-flow.svg",
+            "alt": {
+              "zh": "CDN账单的计量入口示意图：地区字节、请求与填充、固定及安全、总成本核对",
+              "en": "CDN billing inputs: Regional bytes, Requests / fill, Base / security, Cost reconciliation"
+            },
+            "caption": {
+              "zh": "路径示意：地区字节 → 请求与填充 → 固定及安全 → 总成本核对。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Regional bytes → Requests / fill → Base / security → Cost reconciliation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "带宽计费：平均流量不能解释尖峰",
+          "en": "Bandwidth pricing reacts to peaks"
+        },
+        "paragraphs": [
+          {
+            "zh": "带宽是单位时间的传输速率。合同可能按峰值、保底、统计分位或其他约定计费，采样周期与排除规则影响结果。不能把月流量除以整月时长后，用平均带宽直接预测峰值账单。相同月流量可以均匀分布，也可以在发布后短时间集中下载，两种情形需要不同容量。",
+            "en": "Bandwidth is a rate; contracts may use peaks, commitments or percentile statistics with specific sampling rules. Monthly average throughput cannot predict a peak-based bill."
+          },
+          {
+            "zh": "例如预算假设为十进制1TB、三十天均匀传输，平均速率约为3.09Mbps；这只是单位换算，并不是任何网站实测或可购买的峰值容量。实际需要保留时间序列，检查活动峰值、突发持续时间和统计规则。按带宽收费前，要求供应商展示如何从样本生成账单，避免只拿一张峰值图猜费用。",
+            "en": "A hypothetical decimal 1TB uniformly delivered over thirty days averages about 3.09Mbps. This is unit arithmetic, not a benchmark or adequate peak capacity. Retain time-series samples and require a reproducible billing calculation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "请求与安全组件：小对象也可能产生大账单",
+          "en": "Small objects can still create request costs"
+        },
+        "paragraphs": [
+          {
+            "zh": "对象很小而请求很多时，请求计费可能比出网更显著。WAF、机器人、验证码、边缘计算和日志也可能有各自计量。[AWS WAF价格](https://aws.amazon.com/waf/pricing/)公开基础示例包括每月5美元的Web ACL、每条规则每月1美元及每百万请求0.60美元，但额外功能、容量、区域和其他服务可能另计，不能把示例当作所有部署的完整报价。",
+            "en": "Small responses with high frequency can be request-cost dominated. WAF, bots, challenges, compute and logs may meter separately. [AWS WAF](https://aws.amazon.com/waf/pricing/) lists base examples of $5/ACL-month, $1/rule-month and $0.60/million requests, with additional conditions/components."
+          },
+          {
+            "zh": "将重试、轮询和异常访问纳入请求预测。一个客户端每隔很短时间拉取小响应，流量图可能不高，请求数却持续增长。缓存或合并请求、合理退避、事件推送等设计可以改变负载，但应以业务语义选择。不能为了省钱删除必要鉴权，也不能让错误重试无上限地放大压力。",
+            "en": "Include polling, retries and abnormal traffic. Use appropriate caching, coalescing, backoff or push semantics; do not remove authentication or permit unlimited retries to chase a lower bill."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "固定套餐：读清额度、对象与超限行为",
+          "en": "Subscriptions require scope and over-limit checks"
+        },
+        "paragraphs": [
+          {
+            "zh": "[CloudFront现行价格](https://aws.amazon.com/cloudfront/pricing/)列出Free、Pro、Business、Premium固定套餐，月费分别为0、15、200和1000美元，并保留按量选择。应核对其适用分发、包含功能、额度和使用条件，不能把旧的免费层规则直接套到新套餐。套餐名字相似，也不代表不同厂商具有相同保障。",
+            "en": "[CloudFront](https://aws.amazon.com/cloudfront/pricing/) lists fixed Free/Pro/Business/Premium plans at $0/$15/$200/$1,000 monthly alongside metered options. Check distribution scope, allowances and conditions rather than applying legacy free-tier assumptions."
+          },
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)与[CDN5](https://www.cdn5.com/)提供另一类按计划选购的入口。CDN5标准版公开月付499美元、年付5000美元，年付是付款周期而非每月取消的同价选项。确认业务流量、安全档位、域名与端口、协议及支持，再判断套餐是否省心。未公布的额度应询价，不自行认定无限。",
+            "en": "[Cloudflare](https://www.cloudflare.com/plans/) and [CDN5](https://www.cdn5.com/) offer other plan models. CDN5 Standard lists $499 monthly or $5,000 annually; annual prepayment has a different commitment. Verify traffic, domains, protocols and support without inferring unlimited allowances."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存命中率如何影响两种不同账单",
+          "en": "Cache hits affect different bills differently"
+        },
+        "paragraphs": [
+          {
+            "zh": "假设两个对象分别为小图和大视频，前者频繁命中、后者首次回源，仅看请求命中率可能认为源站卸载很好，字节账单却仍然很高。预算应使用字节未命中估计填充，并结合源站实际出网核对。请求命中可以解释处理次数，字节命中解释传输，两者都不能直接替代应用计算成本。",
+            "en": "Frequent small-object hits can hide a large cold-video fetch. Use byte misses for fill estimates and reconcile actual origin egress, while request hits describe counts. Neither alone measures application compute."
+          },
+          {
+            "zh": "发布大范围失效后，即使用户总访问没有增长，多个边缘也可能重新填充。对象更新频率、边缘分布和请求合并策略会影响这部分费用。记录清理与预热操作，避免月末误以为供应商涨价。成本异常应先追踪到工作量变化，再检查计费规则。",
+            "en": "Broad purges can cause regional refill without user growth. Record invalidation/warming and trace work changes before assuming price changes."
+          },
+          {
+            "zh": "同时保留币种和税费。美元报价换算成人民币时，应写明使用汇率的日期与条件；没有可靠现行汇率时，直接保留原币种更清楚，不必为了统一表格给出虚假的精确金额。",
+            "en": "Retain currency and tax terms. Any conversion needs a dated rate; otherwise keeping the original currency is clearer than invented precision."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一张预算表需要哪些输入",
+          "en": "Inputs for a reusable budget"
+        },
+        "paragraphs": [
+          {
+            "zh": "预算表应能改变假设并解释结果，而不是只放一个合计。以下字段能覆盖多数网站的主要变量；媒体和特殊协议还需补充相应计费。成本对比方法见[流量与带宽费用分析](article/cdn-billing-comparison-2026/)。",
+            "en": "A budget should expose assumptions, not only a total. These fields cover common websites; add workload-specific media/protocol charges. See [billing comparison](article/cdn-billing-comparison-2026/)."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "CDN预算输入字段",
+            "en": "CDN budget inputs"
+          },
+          "columns": [
+            {
+              "zh": "字段",
+              "en": "Field"
+            },
+            {
+              "zh": "来源",
+              "en": "Source"
+            },
+            {
+              "zh": "检查事项",
+              "en": "Check"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "地区与交付量",
+                "en": "Region/delivery"
+              },
+              {
+                "zh": "历史账单或按用户分布拆分的预测，保留单位与币种。",
+                "en": "Invoices or audience-based forecasts with original units."
+              },
+              {
+                "zh": "是否按用户地区、节点地区或其他规则归属，阶梯如何合并。",
+                "en": "Regional attribution and tier aggregation."
+              }
+            ],
+            [
+              {
+                "zh": "请求与对象",
+                "en": "Requests/objects"
+              },
+              {
+                "zh": "访问日志、平均对象大小、轮询和重试策略。",
+                "en": "Logs, object sizes, polling and retries."
+              },
+              {
+                "zh": "拦截、失败、请求头和边缘函数是否存在额外计费。",
+                "en": "Blocked/failed requests and extra compute charges."
+              }
+            ],
+            [
+              {
+                "zh": "回源与填充",
+                "en": "Origin/fill"
+              },
+              {
+                "zh": "缓存未命中、发布失效、预热及源站云账单。",
+                "en": "Misses, purges, warming and origin bills."
+              },
+              {
+                "zh": "命中率是请求还是字节指标，跨区域传输是否单独收费。",
+                "en": "Request versus byte hit ratios and cross-region charges."
+              }
+            ],
+            [
+              {
+                "zh": "固定与事件费用",
+                "en": "Fixed/incident costs"
+              },
+              {
+                "zh": "套餐、日志、支持、清洗、临时升级与人工工作。",
+                "en": "Plans, logs, support, scrubbing, upgrades and labor."
+              },
+              {
+                "zh": "承诺期、超限动作、攻击计费、费用保护条件与退出。",
+                "en": "Commitment, overages, attack billing, protections and exit."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-traffic-bandwidth-pricing-2026-review.svg",
+            "alt": {
+              "zh": "CDN账单的计量入口示意图：GB与GiB、流量与峰值、正常与事件",
+              "en": "CDN billing inputs: GB / GiB, Bytes / peaks, Normal / incident"
+            },
+            "caption": {
+              "zh": "检查重点：GB与GiB → 流量与峰值 → 正常与事件。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: GB / GiB → Bytes / peaks → Normal / incident. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "校验预算，比精确预测更重要",
+          "en": "Validate the model against actual invoices"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点后将控制台、日志与账单按同一时区和单位对齐，检查差异来自采样、重试、填充还是计费规则。发现某字段无法核对时，先请求说明，不要在表里用其他数字补齐。为普通、活动和事件场景设置预算区间与提醒，明确谁负责处理。",
+            "en": "Reconcile dashboards, logs and invoices in common units/timezones. Explain differences through sampling, retries, fill or metering rather than inventing balancing numbers. Assign owners to budget alerts."
+          },
+          {
+            "zh": "上线后按[采购流程](article/buying-website-cdn/)保留报价版本、合同和配置，续费时以相同负载重新计算。这样可以区分流量增长、业务结构变化和单价调整。CDN价格没有固定行业公式，但清楚的单位、边界和账单验证，能够让成本保持可解释。",
+            "en": "Preserve quote/contract/configuration versions through the [buying process](article/buying-website-cdn/). Recalculate equal workloads at renewal to distinguish growth, mix and price changes."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/waf/pricing/",
+        "label": {
+          "zh": "AWS WAF 官方定价及费用示例",
+          "en": "AWS WAF pricing and examples"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "buying-website-cdn",
+    "seriesOrder": 30,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN购买指南：网站加速CDN怎么选？价格与配置注意事项",
+      "en": "Buying a Website CDN: Pricing and Configuration Checklist"
+    },
+    "excerpt": {
+      "zh": "按采购前、试点、迁移和续费四个阶段选择CDN。整理域名、证书、缓存、回源、日志和费用，给团队一份能够执行和回退的部署流程。",
+      "en": "Choose and deploy a CDN through procurement, pilot, migration and renewal, with explicit DNS, TLS, cache, origin, logging and cost checks."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "购买前先做一张入口清单",
+          "en": "Start with an ingress inventory"
+        },
+        "paragraphs": [
+          {
+            "zh": "购买CDN之前，先列出域名、源站、端口、协议、负责人和业务用途。把公开素材、匿名页面、登录、API、回调和管理入口分开，标记哪些可以缓存、哪些需要保持身份隔离。很多迁移故障并不是厂商性能不足，而是团队不知道某个旧子域或第三方接口仍在使用原入口。",
+            "en": "Before buying, inventory domains, origins, ports, protocols, owners and purposes. Separate public assets, anonymous pages, identities, APIs, callbacks and administration. Forgotten entrances often cause migration failures."
+          },
+          {
+            "zh": "整理主要用户地区与运营商、日常流量、活动峰值和故障影响，再形成必须满足的条件。需要高防和境外支持时，可优先评估[CDN5](https://www.cdn5.com/)；已有云平台时，也要比较与源站、权限和账单整合的成本。候选越多不一定越好，能进入试点的产品必须先满足协议与区域要求。",
+            "en": "Document audience, ordinary/peak traffic and failure impact. Consider [CDN5](https://www.cdn5.com/) for relevant protection/offshore needs and cloud integration where applicable. Filter mandatory protocol/geography requirements before trials."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "报价单应能映射到真实业务",
+          "en": "Make the quote match the workload"
+        },
+        "paragraphs": [
+          {
+            "zh": "请求供应商按同一负载说明列价，包含基础费、地区交付、请求、回源、安全、日志和支持。固定套餐要确认域名、流量、连接和功能额度；按量模式要确认阶梯、单位与超限风险。年付折扣应写明实际付款和退出条件，不只展示折算月价。本文产品资料核实于2026年10月14日，实际购买仍应刷新有效报价。",
+            "en": "Request the same workload quote from all candidates, including base, regional delivery, requests, origin, security, logs and support. Verify allowances, units, tiers and exit terms. Refresh prices before purchase; reference information was checked on 14 October 2026."
+          },
+          {
+            "zh": "[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)显示固定套餐和按量模式可以并存，[Cloudflare计划](https://www.cloudflare.com/plans/)则体现按功能等级选择的差异。两者不能只用一个价格字段比较。预算方法见[CDN收费标准](article/cdn-traffic-bandwidth-pricing-2026/)，将未确认费用列出来比随意假设为零更可靠。",
+            "en": "[CloudFront](https://aws.amazon.com/cloudfront/pricing/) combines fixed and metered choices, while [Cloudflare](https://www.cloudflare.com/plans/) uses feature tiers. Apply the [billing guide](article/cdn-traffic-bandwidth-pricing-2026/) and retain unknown charges."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/buying-website-cdn-flow.svg",
+            "alt": {
+              "zh": "网站CDN采购流程示意图：入口清单、证书与缓存、试点与切换、回退与续费",
+              "en": "Website CDN procurement: Ingress inventory, TLS / cache, Pilot / rollout, Rollback / renewal"
+            },
+            "caption": {
+              "zh": "路径示意：入口清单 → 证书与缓存 → 试点与切换 → 回退与续费。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Ingress inventory → TLS / cache → Pilot / rollout → Rollback / renewal. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "证书与回源，先在切换前打通",
+          "en": "Validate TLS and origin access before switching"
+        },
+        "paragraphs": [
+          {
+            "zh": "浏览器到边缘和边缘到源站是两段连接，各自需要正确的协议、证书和主机名。不要为了消除报错长期关闭回源证书校验。确认回源Host、端口、路径和健康检查，测试错误页和重定向不会在两层之间循环。若源站按域名区分多个网站，错误Host可能返回另一站内容而不是明显失败。",
+            "en": "Both TLS legs need correct protocols, certificates and hostnames. Validate origin Host, port, health checks, errors and redirects; an incorrect Host can serve another site. Do not permanently disable origin certificate verification to hide errors."
+          },
+          {
+            "zh": "源站允许列表与可信客户端地址也需要准备。只信任来自已确认代理的身份头，限制IPv4、IPv6和必要端口，保留安全管理通道。地址列表更新由谁负责、代理改变后怎样验证，应写入运维记录。迁移完成前不要急于撤销旧入口，但旧入口也应受保护。",
+            "en": "Prepare trusted proxy identity and origin restrictions across IPv4/IPv6 while retaining secure administration. Assign address-update ownership and keep the old entrance protected during transition."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存配置从少量明确规则开始",
+          "en": "Begin with a few explicit cache rules"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)，公开可复用响应与用户私有响应需要不同处理。先对版本化图片、脚本和样式建立明确策略，再决定匿名HTML是否可缓存。登录、购物车和支付接口不要因为默认规则过宽而进入共享缓存。查询参数、Cookie和语言维度只有在证明内容等价后才可简化。",
+            "en": "Follow [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html), starting with versioned assets before public HTML. Keep identities, carts and payments out of unsafe shared caching. Simplify dimensions only after proving equivalence."
+          },
+          {
+            "zh": "[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)有助于理解键与转发维度，但各家配置语义仍需核对。测试两个不同账号、不同语言和更新版本，检查旧内容失效。保留规则说明与负责人，避免日后某人为了提高命中率删除一个看似无用、实际上影响权限的条件。",
+            "en": "Use [CloudFront key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) as a conceptual reference and verify provider semantics. Test separate accounts, languages and versions, documenting why each rule exists."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "试点验收表，应包含失败路径",
+          "en": "Pilot acceptance includes failure paths"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点不仅测首页，还要覆盖更新、错误与恢复。每项写明预期结果、观察方式和失败后动作，避免“看起来能打开”成为唯一通过条件。测试使用授权环境和正常业务样本，不向第三方公共目标施加攻击。",
+            "en": "Test updates, errors and recovery, not just the homepage. Define expected results, evidence and failure actions with authorized environments and ordinary business samples."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "网站CDN试点验收",
+            "en": "Website CDN pilot acceptance"
+          },
+          "columns": [
+            {
+              "zh": "场景",
+              "en": "Scenario"
+            },
+            {
+              "zh": "预期与证据",
+              "en": "Expected evidence"
+            },
+            {
+              "zh": "失败时检查",
+              "en": "Failure investigation"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "缓存与更新",
+                "en": "Cache/update"
+              },
+              {
+                "zh": "热缓存减少回源，新版本按规则更新，内容校验一致。",
+                "en": "Hits offload origin; updates and content checks remain correct."
+              },
+              {
+                "zh": "缓存键、响应指令、失效范围与多层缓存，避免直接清空全站掩盖原因。",
+                "en": "Keys, headers, invalidation and cache layers."
+              }
+            ],
+            [
+              {
+                "zh": "身份与交易",
+                "en": "Identity/transactions"
+              },
+              {
+                "zh": "不同账户隔离，登录、订单和回调完整成功。",
+                "en": "Identity isolation and completed login/order/callbacks."
+              },
+              {
+                "zh": "Cookie、授权头、挑战兼容、签名与幂等，保留请求关联。",
+                "en": "Identity headers, challenges, signatures and idempotency."
+              }
+            ],
+            [
+              {
+                "zh": "异常与超时",
+                "en": "Errors/timeouts"
+              },
+              {
+                "zh": "错误可追踪，重试有限，不返回错误用户的数据。",
+                "en": "Traceable errors and bounded retries without data mixups."
+              },
+              {
+                "zh": "源站日志、队列、超时与健康检查，区分应用与线路。",
+                "en": "Origin logs, queues, timeouts and health checks."
+              }
+            ],
+            [
+              {
+                "zh": "回退与旁路",
+                "en": "Rollback/bypass"
+              },
+              {
+                "zh": "备用路径保持保护，非法直连拒绝，运维可访问。",
+                "en": "Protected fallback, denied bypass and usable administration."
+              },
+              {
+                "zh": "证书、允许列表、旧DNS与连接状态，不以裸源站作为应急捷径。",
+                "en": "Certificates, allowlists, old DNS and established sessions."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "给新供应商一份最小可复现样本",
+          "en": "Prepare a minimal reproducible support case"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点中刻意选择一条可公开或已脱敏的测试路径，记录预期内容、请求条件、时间、客户端网络和边缘标识。出现问题时，支持可以据此复现，团队也能判断建议是否针对当前配置。不要直接发送包含真实用户Cookie、支付信息或私有令牌的完整日志；提供定位所需字段即可。",
+            "en": "Create a public or redacted test path with expected content, conditions, time, network and request identifiers. Share diagnostic fields without private cookies, payments or tokens."
+          },
+          {
+            "zh": "让供应商解释一次缓存未命中、一次回源错误或一次规则命中，并验证调整之后的结果。这个过程能够暴露日志权限、支持等级和协作摩擦。若产品无法提供需要的证据，就把它作为运行限制写进采购记录，而不是在正式事故中才意识到无法排查。",
+            "en": "Ask support to explain a miss, origin error or policy match, then verify the proposed change. This exposes logging and support limitations before production incidents."
+          },
+          {
+            "zh": "交接时将测试样本与配置说明一起保存，并安排另一位维护者重复操作。只有原作者知道的控制台设置，不算团队已经掌握的部署流程。",
+            "en": "Preserve the sample with configuration notes and have another maintainer repeat it; undocumented console knowledge is not an operational handover."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "切换时，限制同时变化的数量",
+          "en": "Limit concurrent changes during migration"
+        },
+        "paragraphs": [
+          {
+            "zh": "先迁移低风险域名或小部分访问，保持应用版本和源站稳定。记录配置与时间，观察运营商分组、错误、业务成功和回源压力。适当调整DNS缓存周期可以帮助后续解析更新，但不能保证所有缓存立即刷新，也不能迁移已建立的长连接。客户端重连与旧入口保留需要单独考虑。",
+            "en": "Migrate a low-risk domain or traffic slice with stable application/origin settings. Track timestamps, carriers, errors, business completion and origin work. TTL changes help later resolutions but do not flush every cache or move persistent sessions."
+          },
+          {
+            "zh": "不要在同一天全量改CDN、数据库和身份系统，除非有明确依赖与充分验证。回退应恢复到已验证且受保护的配置，确认不会触发所有对象同时重新填充。若出现身份混用或交易错误，应优先停止相关策略并保留证据，而不是等待更多测速数据。",
+            "en": "Avoid unrelated simultaneous migrations. Roll back to verified protected settings without uncontrolled refill. Identity or transaction faults require immediate containment, not more speed testing."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/buying-website-cdn-review.svg",
+            "alt": {
+              "zh": "网站CDN采购流程示意图：内容正确、旁路关闭、账单可解释",
+              "en": "Website CDN procurement: Correct content, Closed bypasses, Explainable cost"
+            },
+            "caption": {
+              "zh": "检查重点：内容正确 → 旁路关闭 → 账单可解释。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Correct content → Closed bypasses → Explainable cost. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "续费前，核对账单和配置漂移",
+          "en": "Review invoices and configuration drift before renewal"
+        },
+        "paragraphs": [
+          {
+            "zh": "将控制台使用量与账单按同一单位和时区核对，检查日志、安全或闲置域名是否继续收费。复查新接口是否绕过原规则、证书是否正确续期、源站地址列表是否更新、临时例外是否过期。配置漂移常在业务变化后出现，而不是在最初验收当天。",
+            "en": "Reconcile invoices and usage with common units/timezones. Review idle resources, new endpoints, certificate renewal, proxy ranges and expired exceptions; drift often follows business changes."
+          },
+          {
+            "zh": "按[服务商比较方法](article/cdn-providers-features-pricing-2026/)重新确认需求是否改变。退出前导出必要日志与配置，撤销旧权限，验证剩余业务不依赖停用入口。购买CDN的完成标志，应是团队能够部署、解释、维护和撤回它，而不仅是付款后获得了一个CNAME。",
+            "en": "Reassess fit using the [provider comparison](article/cdn-providers-features-pricing-2026/). Export records and revoke obsolete access at exit. Successful procurement leaves the team able to deploy, explain, maintain and reverse the service."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      }
+    ]
+  },
+  {
+    "id": "website-enterprise-cdn-2026",
+    "seriesOrder": 31,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN加速推荐：2026年适合网站与企业的CDN服务商盘点",
+      "en": "CDN Recommendations for Websites and Enterprises in 2026"
+    },
+    "excerpt": {
+      "zh": "从内容发布、交易、API和企业协作四类任务选择CDN。重点讨论内容生命周期、身份边界、配置治理和总成本，避免把企业级等同于更大套餐。",
+      "en": "Match CDN choices to publishing, commerce, APIs and enterprise operations, focusing on content lifecycle, identity, governance and total cost."
+    },
+    "category": {
+      "zh": "选型与实践",
+      "en": "Selection and practice"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "网站与企业的差别，不只是流量大小",
+          "en": "Enterprise needs are not simply bigger traffic"
+        },
+        "paragraphs": [
+          {
+            "zh": "企业网站的流量未必比个人内容站大，但发布审批、数据边界、权限分工和故障责任可能更复杂。一个有多个业务部门的网站，常同时存在招聘、会员、下载、客服和第三方回调。把这些入口统一接入CDN之前，需要知道哪些规则可以共用，哪些必须独立。企业级的价值应体现为可治理，而不是仅有更高月费或更多节点。",
+            "en": "An enterprise may have modest traffic but complex publishing, permissions and accountability. Inventory recruitment, accounts, downloads, support and callbacks before sharing policies. Enterprise value should mean governability, not simply a higher tier."
+          },
+          {
+            "zh": "2026年10月14日的公开资料提供了几个适合评估的方向：[Cloudflare](https://www.cloudflare.com/plans/)的网站代理模式、[CloudFront](https://aws.amazon.com/cloudfront/pricing/)的云资源整合、[Fastly](https://www.fastly.com/pricing)的边缘控制，以及[CDN5](https://www.cdn5.com/)的区域安全套餐。它们不是同一种产品的不同商标，选型需要回到组织和业务工作。",
+            "en": "Public information checked on 14 October 2026 suggests different models: [Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/), [Fastly](https://www.fastly.com/pricing) and regional-security [CDN5](https://www.cdn5.com/). Match these models to actual work."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "内容型网站，优先管理发布生命周期",
+          "en": "Publishing sites need a content lifecycle"
+        },
+        "paragraphs": [
+          {
+            "zh": "资讯、帮助中心和企业介绍通常有较多可共享内容。重点不只是缓存命中，而是编辑发布后何时可见、撤稿如何失效、图片和脚本是否与页面版本匹配。使用有版本的静态资源，可以减少依赖全站清缓存；公开HTML则根据更新频率和可接受陈旧时间制定策略。错误页面的缓存同样需要审查，避免源站短暂故障留下长时间错误内容。",
+            "en": "For publishing, define update visibility, withdrawal, asset/page version consistency and error caching. Versioned assets reduce reliance on broad purges; public HTML needs workload-appropriate freshness."
+          },
+          {
+            "zh": "团队应定义页面、素材和引用关系的发布顺序。先准备新资源，再更新引用，保留旧版本供仍持有旧HTML的用户使用。对紧急内容修正，验证定向失效流程、权限与传播结果。若每次更新都需要管理员手工清空全部缓存，流量增长后会放大回源和协作成本，应该在选型时把发布接口与权限纳入评估。",
+            "en": "Publish assets before references and retain old versions for clients with older HTML. Test targeted emergency invalidation and permissions. Requiring an administrator to flush everything on every edit creates refill and coordination costs."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-enterprise-cdn-2026-flow.svg",
+            "alt": {
+              "zh": "网站与企业的配置分区示意图：内容发布、身份与交易、API工作、团队治理",
+              "en": "Website / enterprise policy zones: Publishing, Identity / commerce, API work, Governance"
+            },
+            "caption": {
+              "zh": "路径示意：内容发布 → 身份与交易 → API工作 → 团队治理。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Publishing → Identity / commerce → API work → Governance. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "交易型网站，身份和回调优先于命中率",
+          "en": "Commerce prioritizes identity and callbacks"
+        },
+        "paragraphs": [
+          {
+            "zh": "账户页、购物车、订单与支付回调不能用公共内容的配置直接覆盖。CDN需要准确保留鉴权与业务语义，应用需要签名验证、幂等和重试边界。缓存键遗漏一个影响身份的维度，可能比访问慢严重得多；安全挑战若被强制应用到服务端回调，也可能让订单卡在不明确状态。",
+            "en": "Accounts, carts, orders and callbacks require distinct policies, preserved authentication and application idempotency. Unsafe shared caching or browser challenges on callbacks can cause serious failures."
+          },
+          {
+            "zh": "试点时使用两个测试账户验证隔离，检查匿名转登录、退出、跨语言与不同货币场景。对回调记录请求标识、签名验证结果和业务处理状态，避免只看HTTP成功就认为交易完成。相关应用保护可以参考[Akamai产品说明](https://www.akamai.com/products/app-and-api-protector)理解能力范围，再核对实际所购服务是否支持所需控制和日志。",
+            "en": "Test separate accounts, login/logout, languages and currencies. Trace callback authentication and processing, not just HTTP status. [Akamai’s product scope](https://www.akamai.com/products/app-and-api-protector) helps frame application-security questions, subject to purchased entitlements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "API型业务，关注一次请求背后的工作量",
+          "en": "API workloads need cost-aware controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "API响应很小，并不意味着处理便宜。复杂搜索、聚合报表和导出可能占用数据库或外部服务，普通QPS限速不足以表达这种差异。按路径模板、方法、身份和工作类型建立预算，结合并发、超时、队列和应用配额。客户端重试应有限制和退避，不能在上游已经过载时继续同步放大请求。",
+            "en": "Small API responses can trigger expensive searches, reports or dependencies. Budget by route, method, identity and work class, with concurrency, timeout and queue controls. Bound retries with backoff."
+          },
+          {
+            "zh": "能够缓存的公开读取可以明确缓存，个人数据和写操作默认保持隔离。观察P95、错误、队列等待与数据库执行，而不只看网络延迟。选择CDN时确认自定义规则、身份维度、请求关联和日志导出能否满足排查。若只提供总体流量曲线，团队很难知道是哪类客户端或接口消耗了资源。",
+            "en": "Cache safe public reads while isolating writes/private data. Evaluate tails, errors, queues and database time, and require suitable identity controls and traceable logs rather than only aggregate graphs."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "企业协作，把配置权限当作产品能力",
+          "en": "Configuration governance is a product capability"
+        },
+        "paragraphs": [
+          {
+            "zh": "开发人员可能需要发布缓存规则，安全团队负责WAF，运维负责源站与证书，财务负责预算。若产品只能共享一个高权限账号，变更追踪和交接会变得困难。应核对角色、审计、配置导出、审批和接口自动化，并明确紧急状态下谁可以临时操作、事后如何复核。权限过细却没有维护流程，同样会拖慢响应。",
+            "en": "Developers, security, operations and finance need distinct responsibilities. Verify roles, audit, export, approval and APIs, including controlled emergency access. Shared privileged credentials undermine accountability."
+          },
+          {
+            "zh": "多部门可以共用平台，但不宜默认共用所有规则与密钥。按应用划分责任和预算，记录依赖的源站、域名和第三方服务。人员离职、供应商切换与项目关闭时，要撤销访问并归档必要记录。企业采购的长期成本，很大一部分来自这些日常动作，而不是边缘节点本身。",
+            "en": "Separate application ownership, keys and budgets even on one platform. Track dependencies and revoke access on staffing/project changes. Much enterprise cost comes from these routine operational tasks."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "内容所有权也要进入配置流程",
+          "en": "Content ownership belongs in policy changes"
+        },
+        "paragraphs": [
+          {
+            "zh": "企业站可能由不同部门维护子站，技术团队不一定知道哪些页面包含个人报价、招聘信息或合作方资料。变更缓存前让内容负责人确认公开范围与更新时效，安全团队确认身份边界，运维确认回源影响。这样的协作不必变成复杂审批，但应留下可追踪结论。",
+            "en": "Departments may own pages containing personalized prices or partner material. Confirm public scope/freshness with content owners, identity boundaries with security and refill effects with operations, recording a lightweight decision."
+          },
+          {
+            "zh": "关闭业务时也要清理域名、文件、缓存和权限，确认旧入口不再暴露过时或敏感内容。项目结束并不会自动让分发网络停止保存对象，资源回收应作为正常生命周期的一部分。",
+            "en": "At retirement, remove domains, files, caches and permissions deliberately. Project closure does not automatically revoke distributed copies."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一套平台还是组合部署",
+          "en": "One platform or a combination?"
+        },
+        "paragraphs": [
+          {
+            "zh": "统一平台可以减少规则和日志割裂，组合部署可能满足特殊地区或协议，但会增加一致性和故障判断难度。选择前确认真的存在不能由单一产品满足的硬要求。两个CDN如果共用同一源站和数据库，无法自动解决后端故障；两个品牌也可能依赖相同上游，因此不能把数量直接当成独立冗余。",
+            "en": "One platform reduces fragmentation; combinations may satisfy special regions/protocols but add policy and diagnostic complexity. Two CDNs sharing a database do not solve backend failures or necessarily provide independent transit."
+          },
+          {
+            "zh": "组合时维护证书、缓存键、安全例外、真实地址和日志字段的对应关系，验证切换后业务仍正确。对长连接，DNS切换不等于迁移现有会话。可以沿[企业CDN部署](article/enterprise-cdn-deployment/)规划故障域与演练。团队无法持续维护的复杂性，会把理论冗余变成实际操作风险。",
+            "en": "Synchronize TLS, keys, exceptions, identity and logs, and test correct fallback. DNS does not move established sessions. Use the [enterprise deployment guide](article/enterprise-cdn-deployment/) to plan failure domains and exercises."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-enterprise-cdn-2026-review.svg",
+            "alt": {
+              "zh": "网站与企业的配置分区示意图：生命周期、工作预算、权限与审计",
+              "en": "Website / enterprise policy zones: Lifecycle, Work budgets, Permissions / audit"
+            },
+            "caption": {
+              "zh": "检查重点：生命周期 → 工作预算 → 权限与审计。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Lifecycle → Work budgets → Permissions / audit. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "以工作负载采购，以运行证据续费",
+          "en": "Procure by workload and renew against evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "将候选对应到内容、交易、API或组合需求，比较具体套餐与合同。高防及境外区域任务可优先询问CDN5的适用资源，全球和现有云任务则比较相应模型。费用不只包含出网，还包括请求、安全、源站、日志、支持和维护时间。公开价格有日期与条件，不能把旧截图永久当作现价。",
+            "en": "Match concrete plans/contracts to publishing, transactions, APIs or combinations. Consider CDN5 for relevant regional-security work and other models for global/cloud requirements. Include requests, security, origin, logs, support and labor."
+          },
+          {
+            "zh": "上线后保留用户分组、错误、业务成功、回源和账单。续费时检查发布是否更顺畅、故障是否更容易定位、配置是否可交接。进一步筛选可以用[十家CDN候选](article/ten-cdn-providers-2026/)缩小范围。适合企业的服务，应该让多种业务在清楚的责任边界内运行，而不仅让一张首页测速图变好看。",
+            "en": "Renew against audience outcomes, deployability, diagnosis and handover quality. Use [ten candidates](article/ten-cdn-providers-2026/) to narrow research; enterprise fit is accountable operation across workloads."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-billing-comparison-2026",
+    "seriesOrder": 32,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CDN价格对比：2026年主流厂商流量计费与带宽费用分析",
+      "en": "CDN Price Comparison in 2026: Transfer and Bandwidth Cost Analysis"
+    },
+    "excerpt": {
+      "zh": "用相同工作负载比较不同CDN账单，解释地区、单位、缓存填充、请求和峰值统计。给出假设预算表与账单核对流程，不伪造完整产品报价。",
+      "en": "Normalize workloads across transfer, bandwidth, regions, fill and requests, using explicit budget assumptions and invoice reconciliation."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "比较价格前，先让分母相同",
+          "en": "Normalize the denominator first"
+        },
+        "paragraphs": [
+          {
+            "zh": "一家服务商给出每GB价格，另一家给出月费，第三家按带宽统计收费，它们不能直接排序。必须先确定相同用户地区、交付量、请求、源站和安全功能，再分别算出费用。否则比较的可能是不同服务范围，低价只是遗漏了某些项目。本文重点解释如何做可复查的费用分析，而不是用未经证实的折扣制作最低价榜单。",
+            "en": "Per-GB rates, subscriptions and bandwidth bills cannot be ranked without a common workload and feature scope. Missing components can create an illusory low price."
+          },
+          {
+            "zh": "公开资料核实于2026年10月14日。阶梯、区域、税费、承诺期和活动会变化，采购前需要重新确认。若目标是了解各种计费原理，可先看[CDN收费标准](article/cdn-traffic-bandwidth-pricing-2026/)；这里更关注同一负载如何映射到不同产品。",
+            "en": "Public material was checked on 14 October 2026. Refresh tiers, regions, taxes and commitments before procurement. The [billing primer](article/cdn-traffic-bandwidth-pricing-2026/) covers models; this guide maps equal work into them."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "建立基准负载，不使用厂商替你挑选的样本",
+          "en": "Define your own reference workload"
+        },
+        "paragraphs": [
+          {
+            "zh": "从实际日志提取用户地区、请求数、字节、缓存状态与对象类型；没有历史数据时，明确把预测标为假设。不要让每家分别选择对自己有利的流量构成。对象大小、动态比例和活动集中程度都会改变成本，尤其是小对象高请求和大对象低请求，两者可能有相同出网却产生不同费用。",
+            "en": "Extract regions, requests, bytes, cache states and object classes from logs, or label forecasts explicitly. Do not let each provider choose a favorable traffic mix. Equal bytes can hide very different request costs."
+          },
+          {
+            "zh": "预算还需要源站所在地、云出网方式、缓存填充与日志保留。请求命中率不能直接拿来估算字节回源，因为未命中的可能恰好是大文件。将请求与字节两个维度分开，保留发布时间、失效和预热造成的峰值。模型输入越清楚，供应商越容易给出可核对答复。",
+            "en": "Include origin location, egress, fill and logs. Request hit ratio cannot directly estimate byte offload when misses are larger objects. Keep both dimensions and release/refill peaks."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-billing-comparison-2026-flow.svg",
+            "alt": {
+              "zh": "相同负载的费用比较示意图：基准负载、计量映射、地区与阶梯、账单校验",
+              "en": "Compare equal-workload costs: Reference workload, Metering map, Regions / tiers, Invoice check"
+            },
+            "caption": {
+              "zh": "路径示意：基准负载 → 计量映射 → 地区与阶梯 → 账单校验。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Reference workload → Metering map → Regions / tiers → Invoice check. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "一个假设表，展示该怎么算而非承诺多少钱",
+          "en": "A hypothetical ledger shows the method"
+        },
+        "paragraphs": [
+          {
+            "zh": "下面假设某网站每月有亚太与欧美交付，并存在动态请求和发布填充。表格不填未经核实的合同折扣，也不输出貌似精确的全包月价。将每个输入乘以实际报价中的对应价格，再加入固定项；不同产品没有的计量项，应确认是否包含或被其他项目替代。",
+            "en": "This hypothetical workload has APAC/Western delivery, dynamic requests and release fill. Apply actual quoted rates to each input and add fixed components; confirm whether absent line items are included elsewhere."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "假设预算台账：用于计算方法，不是厂商报价",
+            "en": "Hypothetical budget ledger, not a vendor quote"
+          },
+          "columns": [
+            {
+              "zh": "输入项",
+              "en": "Input"
+            },
+            {
+              "zh": "假设或计算方式",
+              "en": "Assumption/calculation"
+            },
+            {
+              "zh": "需要报价确认",
+              "en": "Quote clarification"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "交付量",
+                "en": "Delivery"
+              },
+              {
+                "zh": "假设亚太800GiB、欧美1200GiB，分别套用地区阶梯，不能合成一个平均单价。",
+                "en": "Assume 800GiB APAC and 1,200GiB Western delivery; apply regional tiers."
+              },
+              {
+                "zh": "地区如何归属，GiB或GB，是否按账户合并阶梯。",
+                "en": "Attribution, units and tier aggregation."
+              }
+            ],
+            [
+              {
+                "zh": "请求",
+                "en": "Requests"
+              },
+              {
+                "zh": "假设每月两千万次，单独列出失败、拦截和边缘函数调用是否包含。",
+                "en": "Assume 20 million requests; identify failures, blocks and compute calls."
+              },
+              {
+                "zh": "免费额度、请求单位和安全检查是否再次计费。",
+                "en": "Allowances, unit size and inspection charges."
+              }
+            ],
+            [
+              {
+                "zh": "回源与填充",
+                "en": "Origin/fill"
+              },
+              {
+                "zh": "从字节未命中与发布计划估算，不能直接用请求命中率乘出网。",
+                "en": "Estimate from byte misses and release plans, not request hit ratio."
+              },
+              {
+                "zh": "源站云出网、中间缓存填充和跨区传输是否分别收费。",
+                "en": "Origin egress, shield fill and inter-region charges."
+              }
+            ],
+            [
+              {
+                "zh": "带宽",
+                "en": "Bandwidth"
+              },
+              {
+                "zh": "使用相同流量的时间序列，保留活动尖峰并按合同统计，不用月平均替代。",
+                "en": "Use a time series and contractual statistic rather than monthly average."
+              },
+              {
+                "zh": "采样周期、百分位或峰值、保底与超限价格。",
+                "en": "Sampling, percentile/peak, commitments and overages."
+              }
+            ],
+            [
+              {
+                "zh": "固定与运行",
+                "en": "Fixed/operations"
+              },
+              {
+                "zh": "加入套餐、日志、安全规则、支持和维护时间，避免只显示传输小计。",
+                "en": "Add plans, logs, security, support and labor."
+              },
+              {
+                "zh": "承诺期、币种、税费、升级和退出条款。",
+                "en": "Commitment, currency, tax, upgrades and exit."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "公开定价中，容易漏掉的条目",
+          "en": "Read the less visible pricing lines"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Fastly价格](https://www.fastly.com/pricing)将交付、请求和安全分别列示，部分套餐还带使用范围条件；网页套餐不能自动套用视频业务。[Google Cloud CDN定价](https://cloud.google.com/cdn/pricing)区分缓存交付、填充和查询，单位也要保留。[阿里云CDN计费概览](https://www.alibabacloud.com/help/en/cdn/product-overview/billing-overview)则可用于确认该平台提供的计费模式及适用边界。",
+            "en": "[Fastly](https://www.fastly.com/pricing) separates delivery, requests and security and has package restrictions. [Google CDN](https://cloud.google.com/cdn/pricing) separates delivery/fill/lookups. [Alibaba billing](https://www.alibabacloud.com/help/en/cdn/product-overview/billing-overview) explains its models."
+          },
+          {
+            "zh": "[CloudFront价格](https://aws.amazon.com/cloudfront/pricing/)当前同时有固定套餐与按量选择；[Azure Front Door价格](https://azure.microsoft.com/en-us/pricing/details/frontdoor/)还包含基础费。以上页面只能提供各自字段，不能直接生成跨产品公平总价。应检查安全、源站和支持范围是否一致，公开页面没有说明的地方向供应商确认。",
+            "en": "[CloudFront](https://aws.amazon.com/cloudfront/pricing/) offers fixed and metered choices; [Azure Front Door](https://azure.microsoft.com/en-us/pricing/details/frontdoor/) includes base fees. Align security, origin and support before deriving comparable totals."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "用账期边界解释一次看似异常的差额",
+          "en": "Account for billing-period boundaries"
+        },
+        "paragraphs": [
+          {
+            "zh": "控制台可能采用滚动窗口，发票采用固定账期，日志又使用另一时区。月末活动和迟到记录因此容易落入不同区间。核对前固定起止时间、币种、单位和产品范围，记录抵扣、退款与税费是否独立显示。若这些口径没有统一，继续提高表格精度也不能让比较更准确。",
+            "en": "Dashboards, invoices and logs may use rolling windows, fixed periods and different timezones. Align boundaries, currency, units and product scope, including credits, refunds and taxes, before investigating numerical precision."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "流量平稳与集中爆发，会产生不同结果",
+          "en": "Smooth and bursty workloads can favor different models"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果内容持续被访问，按流量模型通常比较容易由字节估算；若发布后集中下载，带宽承诺和峰值统计就更关键。不能断言某种模式永远便宜，应该用同一份时间序列计算两种结果。统计分位只在合同明确采用时适用，还要知道采样、缺测和异常区间如何处理。",
+            "en": "Use the same traffic time series to compare smooth and bursty billing. Percentile methods apply only when contracted, with understood sampling and missing-data rules."
+          },
+          {
+            "zh": "活动前预热可能改善部分用户体验，却会增加填充请求与源站负载。扩大缓存也可能降低回源，但缓存失效频繁时收益会改变。预算应保留这些变量，让运营人员能调整活动规模、版本发布和保留期限，而不必等月末账单才知道影响。优化成本不等于关闭所有安全与日志，应避免把短期节省变成事故中的盲区。",
+            "en": "Warming, purge frequency and cache retention affect fill and origin cost. Keep these variables adjustable. Do not cut essential security/logging merely to reduce an immediate invoice."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "攻击与异常请求，要做单独敏感性分析",
+          "en": "Stress the budget with abnormal traffic assumptions"
+        },
+        "paragraphs": [
+          {
+            "zh": "增加请求数而保持字节较小，可以检查请求和安全费风险；增加大文件下载，可以检查出网和带宽风险；增加缓存未命中，则会同时影响填充和源站。这里是费用敏感性计算，不需要也不应该对公共网站制造攻击。分别询问拦截、清洗、超限和费用保护的条件，不把宣传“无限”当作无限资源承诺。",
+            "en": "Vary requests, large-object delivery and misses separately to expose request/security, transfer/bandwidth and origin risks. This is budget sensitivity analysis, not a reason to generate attacks. Clarify blocked traffic, scrubbing and cost-protection conditions."
+          },
+          {
+            "zh": "给预算设置分层提醒，明确负责人和可执行动作，如核查流量来源、限制异常接口、修正碎片化缓存键或临时申请额度。不能让预算告警自动切到裸源站，导致降低费用的同时失去保护。更多部署注意事项可参考[购买指南](article/buying-website-cdn/)，费用控制应与恢复能力一起设计。",
+            "en": "Assign tiered alerts and actions such as source investigation, scoped limits or key repair. Never reduce bills by automatically exposing a bare origin. See the [buying guide](article/buying-website-cdn/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-billing-comparison-2026-review.svg",
+            "alt": {
+              "zh": "相同负载的费用比较示意图：传输字节、时间序列峰值、请求与附加项",
+              "en": "Compare equal-workload costs: Transferred bytes, Time-series peaks, Requests / add-ons"
+            },
+            "caption": {
+              "zh": "检查重点：传输字节 → 时间序列峰值 → 请求与附加项。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Transferred bytes → Time-series peaks → Requests / add-ons. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "实际账单是模型的校验，不是意外通知",
+          "en": "Use invoices to validate the model"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点后把请求、字节与费用按同一时区和单位对齐。差异可能来自重试、错误响应、日志采样、阶梯合并或账期边界，应逐项核对。保存价格版本、兑换汇率、税费和合同附件，让后续人员能够重算；不要只保存一张合计截图。",
+            "en": "Reconcile requests, bytes and charges in matching units/timezones. Investigate retries, errors, sampling, tiers and period boundaries. Preserve pricing, currency, tax and contract versions for recalculation."
+          },
+          {
+            "zh": "续费时用相同基准负载计算新价格，再另外计算业务增长。这样可以分辨供应商调价和用户结构变化。可靠的CDN价格比较不一定给出一个永恒最便宜的名字，但应让采购者知道哪项支出可控、哪项条件未知，以及在业务变化时如何重新判断。",
+            "en": "At renewal, price the old reference workload separately from growth. A useful comparison explains controllable costs and unknown terms rather than promising a permanent cheapest provider."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://www.alibabacloud.com/help/en/cdn/product-overview/billing-overview",
+        "label": {
+          "zh": "阿里云 CDN 计费概览",
+          "en": "Alibaba Cloud CDN billing overview"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://azure.microsoft.com/en-us/pricing/details/frontdoor/",
+        "label": {
+          "zh": "Azure Front Door 官方计费",
+          "en": "Azure Front Door pricing"
+        }
+      }
+    ]
+  },
+  {
+    "id": "free-cdn-plans-2026",
+    "seriesOrder": 33,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "免费CDN推荐：2026年免费CDN服务商、使用限制与性能对比",
+      "en": "Free CDN Options in 2026: Service Limits and Performance"
+    },
+    "excerpt": {
+      "zh": "免费计划、长期免费额度与试用抵扣是三种不同承诺。比较Cloudflare、CloudFront、Fastly与CDN5的公开条件，判断哪些适合内容站，哪些只能用于功能验证。",
+      "en": "Distinguish free plans, recurring allowances and trial credits. Compare public Cloudflare, CloudFront, Fastly and CDN5 conditions for low-risk publishing and evaluation."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "免费CDN可以用，但先确认免费的是哪一部分",
+          "en": "Identify what is actually free"
+        },
+        "paragraphs": [
+          {
+            "zh": "个人博客、文档站或低风险公开资源，可以从免费CDN开始。前提是计划支持自己的内容类型、流量和配置，并且团队接受相应支持与服务承诺。免费计划、按量产品中的免费额度、一次性试用抵扣并不相同：前者是一档产品，第二种可能超额付费，第三种到期后可能恢复正常价格。它们不能混在同一张“永久免费”清单里。",
+            "en": "Blogs, documentation and low-risk public assets can start with a free CDN if usage, configuration and support limitations fit. A free product tier, recurring metered allowance and expiring trial credit are different commitments."
+          },
+          {
+            "zh": "本文核实日期为2026年10月14日，所有产品条件仍需在开通时确认。对关键交易，不应把能免费打开网页等同于已有完整运营保障；对小型内容站，也不必因为没有购买最高档就假定不能使用。选择取决于允许用途、可观测性与故障后果。先理解[CDN基本原理](article/how-cdn-acceleration-works/)，再判断免费能力是否覆盖需要的路径。",
+            "en": "Conditions were checked on 14 October 2026 and should be rechecked at signup. Opening a page for free is not complete business assurance, but small publishers do not automatically need the highest tier. Use the [CDN primer](article/how-cdn-acceleration-works/) to identify the required paths."
+          },
+          {
+            "zh": "使用免费服务仍需维护自己的域名与备份。若服务条件变化，准备好可迁移的内容和配置，能够减少被迫停站的影响。零月费不应成为放弃正常运维记录的理由。",
+            "en": "Keep domain ownership, backups and portable configuration even on a free service. A zero subscription does not remove the need for operational records or an exit plan."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "四种公开入口，不能都叫无限免费加速",
+          "en": "Four public entry points with different limits"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare套餐](https://www.cloudflare.com/plans/)、[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)、[Fastly价格](https://www.fastly.com/pricing)和[CDN5官网](https://www.cdn5.com/)均提供可核实的低门槛入口，但范围不同。表格只摘取与选型相关的条件；日志、规则、支持、用途和资源限制还要按具体产品阅读。",
+            "en": "[Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/), [Fastly](https://www.fastly.com/pricing) and [CDN5](https://www.cdn5.com/) offer different entry points. Verify the full product conditions for logs, rules, support and permitted use."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "免费产品与免费额度的区别",
+            "en": "Free products versus free allowances"
+          },
+          "columns": [
+            {
+              "zh": "产品",
+              "en": "Product"
+            },
+            {
+              "zh": "已核实入口",
+              "en": "Verified entry point"
+            },
+            {
+              "zh": "关键边界",
+              "en": "Key boundary"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "Cloudflare Free",
+                "en": "Cloudflare Free"
+              },
+              {
+                "zh": "网络与CDN产品公开列示每月0美元计划，面向个人或非关键项目。",
+                "en": "$0/month Network & CDN plan positioned for personal/noncritical projects."
+              },
+              {
+                "zh": "不能推断高级Bot、完整日志、优先支持或大陆网络全部包含。",
+                "en": "Do not infer advanced bots, full logs, priority support or China Network."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront Free固定套餐",
+                "en": "CloudFront Free flat-rate plan"
+              },
+              {
+                "zh": "现行计划列示0美元/月、100GB传输与100万次请求额度。",
+                "en": "Current plan lists $0/month, 100GB transfer and one million requests."
+              },
+              {
+                "zh": "这是现行套餐条件，不能叠用旧资料中的免费规则或假定其他云资源全免。",
+                "en": "Use current plan terms, not legacy allowances or free unrelated resources."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly计量免费额度",
+                "en": "Fastly metered allowances"
+              },
+              {
+                "zh": "价格页面列出交付100GB和请求100万次的免费档量，相关产品分别计量。",
+                "en": "Pricing lists 100GB delivery and one million requests in free tiers."
+              },
+              {
+                "zh": "不是所有安全和媒体服务的无限免费套餐；检查超额费及产品适用范围。",
+                "en": "Not unlimited security/media; verify overages and product eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "CDN5免费版",
+                "en": "CDN5 Free"
+              },
+              {
+                "zh": "官网提供防护测试入口，列示有限域名、端口与防护宣传值。",
+                "en": "A protection-testing tier lists limited domains/ports and advertised defense figures."
+              },
+              {
+                "zh": "明确不支持网络加速、多线网络及WebSocket，不能推荐成免费加速版。",
+                "en": "Lists no network acceleration, multihoming or WebSocket; not a free acceleration substitute."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/free-cdn-plans-2026-flow.svg",
+            "alt": {
+              "zh": "免费计划的适用判断示意图：允许用途、免费额度、超限条件、升级与退出",
+              "en": "Free-tier fit assessment: Permitted use, Free allowance, Over-limit rules, Upgrade / exit"
+            },
+            "caption": {
+              "zh": "路径示意：允许用途 → 免费额度 → 超限条件 → 升级与退出。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Permitted use → Free allowance → Over-limit rules → Upgrade / exit. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "免费额度不等于零账单风险",
+          "en": "A free allowance does not define the whole bill"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果CDN需要连接对象存储、负载均衡、源站云主机或日志服务，这些资源可能有自己的计费。某项产品包含交付量，也不代表回源、请求、函数执行或数据保留全部无成本。开通前查看是否需要支付方式、额度重置周期、超额动作和取消路径，按实际条件设置预算提醒。不要等额度用完才寻找开关。",
+            "en": "Storage, load balancers, origin servers and logs can have separate charges. Check payment requirements, reset periods, over-limit behavior and cancellation before activation, with budget alerts."
+          },
+          {
+            "zh": "将多个账号拆分使用以规避条件并不是可靠的成本管理。更好的办法是测量资源大小、压缩、缓存行为和异常请求，在合法使用范围内减少不必要工作。预算表中把免费额度与总使用量分开，保留超额后的价格或停用条件。一个可解释的低价方案，往往比不清楚边界的“全免费”承诺更适合长期运行。",
+            "en": "Do not rely on account splitting to evade terms. Measure object size, compression, caching and abnormal traffic. Separate allowances from total use and retain the applicable overage or suspension rule."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "免费计划的性能，也需要真实业务验证",
+          "en": "Free-tier performance needs workload evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "付费等级可能改变功能和支持，但不能仅凭价格推断每个地区的速度。使用相同资源、源站与客户端，分别测试热缓存、冷缓存和动态路径，覆盖主要用户运营商和高峰。保留失败率、P95和内容检查，不只看首页一次打开速度。免费试点的节点调度也不一定代表另一个付费产品的线路，因此升级后仍需验收。",
+            "en": "Price alone does not establish regional performance. Compare identical content and origins across hits, misses, dynamic paths, carriers and peaks, including failures and correctness. Revalidate after moving to a different paid product."
+          },
+          {
+            "zh": "若免费档看不到详细日志，可以先用源站日志和浏览器观察定位一部分问题，但要承认边缘内部证据有限。对于必须迅速解释故障的业务，日志缺失本身可能就是升级理由。若只是低风险文档站，团队可能接受这种取舍；关键在于主动决定，而不是发生事故后才发现无法取得记录。",
+            "en": "Browser and origin observations can partly compensate for limited edge logs, but the gap remains. It may be acceptable for low-risk documentation and unacceptable for incident-sensitive services. Make that trade-off explicitly."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存边界不能因为免费而放松",
+          "en": "Free deployment still requires safe caching"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)，共享缓存只能在正确语义下复用响应。登录页、账户、购物车与私人API不应因为规则方便就共享。免费计划规则数量有限时，更应保持少量清晰规则，不要用一个全站通配绕开业务差异。图片尺寸、语言、授权和版本参数，需要在缓存键中得到正确表达。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) semantics regardless of price. Limited rule counts are a reason for clear scope, not unsafe global caching. Respect identity, language, size and version dimensions."
+          },
+          {
+            "zh": "测试至少包含两个不同账号、退出状态和更新后的内容。出现私人内容混用，应立即停止相关缓存并调查影响；不能因为页面很快就继续运行。回源证书校验、源站访问限制和管理面权限同样必不可少。CDN是否收费，不改变这些部署责任。",
+            "en": "Test separate accounts, logout and updates. Contain any cross-user exposure immediately. Origin TLS, ingress restrictions and administrative controls remain deployment responsibilities even on free tiers."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "什么时候值得付费升级",
+          "en": "Upgrade for a concrete missing capability"
+        },
+        "paragraphs": [
+          {
+            "zh": "升级触发点应该具体：需要可承诺的支持、更多规则、可导出日志、长连接、特定区域或更高合法流量额度。若主要瓶颈是数据库慢查询，升级CDN不一定有用；若需要的视频产品并不在普通套餐内，就应选择相应服务，而不是只提升同一档位。对CDN5，免费测试与付费加速的能力差别应特别确认。",
+            "en": "Upgrade for identifiable needs: support commitments, rules, logs, persistent sessions, regions or allowances. A database bottleneck may not benefit, and media may require a different product. CDN5’s free test and paid acceleration capabilities differ materially."
+          },
+          {
+            "zh": "付款之前保存当前配置与性能基线，核实升级是否改变节点、计费、证书或规则。让供应商说明升级生效、降级和退款条件。详细预算可沿[CDN购买指南](article/buying-website-cdn/)展开。用缺失能力解释升级，比为了追求“企业级”标签而购买更贵套餐更容易得到可衡量收益。",
+            "en": "Preserve configuration and baseline before upgrading; confirm scheduling, billing and policy changes plus downgrade terms. Use the [buying guide](article/buying-website-cdn/) to connect spending to measurable needs."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/free-cdn-plans-2026-review.svg",
+            "alt": {
+              "zh": "免费计划的适用判断示意图：产品免费档、计量免费额度、限时试用",
+              "en": "Free-tier fit assessment: Free product tier, Metered allowance, Time-limited trial"
+            },
+            "caption": {
+              "zh": "检查重点：产品免费档 → 计量免费额度 → 限时试用。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Free product tier → Metered allowance → Time-limited trial. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "即使免费，也要留好退出路径",
+          "en": "Keep an exit path even when the plan is free"
+        },
+        "paragraphs": [
+          {
+            "zh": "免费服务仍可能调整条款、产品或额度。保留域名控制权、配置导出、证书续期流程和必要日志，避免只在单一控制台存放关键运行信息。迁移时逐项验证新入口，旧入口保持保护，确认DNS与已有会话的过渡。停用后撤销旧令牌和回源权限，检查关联资源是否仍收费。",
+            "en": "Plans and terms can change. Keep domain control, exports, certificate procedures and necessary logs. Migrate through protected entrances and revoke obsolete tokens and origin permissions, checking related charges."
+          },
+          {
+            "zh": "每次业务增加新功能或进入新市场，重新核对免费档是否仍适用。公开静态站可能长期保持简单，会员、支付和实时消息则引入新的责任。免费CDN的合理用法，是用清楚的边界降低启动成本，而不是把零月费当作任何负载、故障与服务承诺都已解决的证据。",
+            "en": "Reassess as workloads gain membership, payments or real-time functions. A free CDN can reduce startup cost within clear limits; a zero subscription is not evidence of unlimited capability or assurance."
+          },
+          {
+            "zh": "免费计划的变更通知也应有人接收，账户邮箱与域名所有者保持可联系。",
+            "en": "Assign ownership for plan-change notices and maintain reachable account and domain contacts."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      }
+    ]
+  },
+  {
+    "id": "enterprise-cdn-deployment",
+    "seriesOrder": 34,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "企业级CDN推荐：高并发网站加速、安全防护与部署方案",
+      "en": "Enterprise CDN Deployment: Concurrency, Security and Operations"
+    },
+    "excerpt": {
+      "zh": "企业CDN要把缓存容量、身份边界、控制面权限与故障恢复共同设计。本文从应用分区、配置发布和演练出发，建立适合高并发网站的运行方案。",
+      "en": "Design enterprise CDN caching, identity, control-plane permissions and recovery together through application boundaries, controlled releases and exercises."
+    },
+    "category": {
+      "zh": "架构与运维",
+      "en": "Architecture and operations"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "企业级CDN的起点，是明确谁对什么负责",
+          "en": "Start with ownership and application boundaries"
+        },
+        "paragraphs": [
+          {
+            "zh": "高并发网站需要稳定交付，但采购企业级CDN并不自动产生清晰责任。开发、安全、网络、运维和供应商往往分别掌握一段证据；事故中如果没人能把请求串起来，规模再大的网络也难以快速定位。部署前为域名、源站、缓存、WAF、证书、日志与预算指定负责人，并定义跨团队升级路径。",
+            "en": "Enterprise procurement does not create ownership automatically. Assign responsibility for domains, origins, cache, WAF, TLS, logs and budgets, with escalation across development, security, operations and vendors."
+          },
+          {
+            "zh": "按应用划分策略与权限，而不是所有域名继承同一套规则。公开站、交易API、内部管理和合作方回调具有不同边界。企业方案应能表达这些差异，并支持团队实际需要的审计与交接。本文资料核实于2026年10月14日，架构建议不等于任何厂商默认已包含所有能力。",
+            "en": "Separate public sites, APIs, administration and callbacks rather than inheriting one universal policy. Verify the purchased product supports required governance. Reference information was checked on 14 October 2026."
+          },
+          {
+            "zh": "每项责任同时指定替补，验证对方拥有必要权限和可用联系渠道。组织图上的姓名，只有在真实演练中能够完成操作，才算有效的运行安排。",
+            "en": "Assign deputies and verify their permissions and contact paths through exercises; a name on an organization chart is not proof of operational readiness."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "高并发要拆成连接、请求、字节和工作",
+          "en": "Decompose concurrency into several resource budgets"
+        },
+        "paragraphs": [
+          {
+            "zh": "同样的并发用户数，可能是大量闲置长连接，也可能是密集搜索或大文件下载。分别预算连接数、请求速率、传输带宽、缓存填充和应用并发，不能用一个QPS覆盖全部。合法峰值与攻击流量也需要区分：扩容可以增加处理能力，却不能无限承受昂贵请求和无边界重试。",
+            "en": "Equal concurrent-user counts can mean idle sessions, expensive searches or downloads. Budget sessions, requests, bytes, refill and application concurrency separately. Scaling cannot replace bounded work and retries."
+          },
+          {
+            "zh": "公开内容通过边缘缓存减轻源站，动态业务则依靠应用限额、队列与后端容量。发布后缓存失效可能让大量请求同步回源，因此高并发规划必须包含冷启动与恢复场景。容量测试只在授权环境进行，说明资源、版本、持续时间和业务成功标准，不把瞬时最高吞吐写成长时间生产保证。",
+            "en": "Plan cold starts and post-purge refill as well as warm delivery. Run authorized capacity exercises with documented versions, duration and business-success criteria rather than presenting momentary peaks as guarantees."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/enterprise-cdn-deployment-flow.svg",
+            "alt": {
+              "zh": "企业交付的责任链示意图：边缘入口、缓存与安全、回源与应用、控制与治理",
+              "en": "Enterprise delivery ownership: Edge ingress, Cache / security, Origin / application, Governance"
+            },
+            "caption": {
+              "zh": "路径示意：边缘入口 → 缓存与安全 → 回源与应用 → 控制与治理。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Edge ingress → Cache / security → Origin / application → Governance. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "将公共内容与身份数据放在不同策略边界",
+          "en": "Separate public reuse from identity-bound responses"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)提供缓存语义基础。企业门户可能按语言、区域、会员等级和权限生成内容，必须确认哪些维度影响响应。减少缓存键之前，先证明内容等价；不要只比较页面模板相同就忽略其中的账户和价格。私有响应若被共享，属于正确性与安全故障，不是普通性能调优问题。",
+            "en": "Use [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) and prove equivalence before removing language, region, membership or permission dimensions. Shared private responses are correctness/security failures."
+          },
+          {
+            "zh": "为发布制定版本、TTL和定向失效流程，区分撤稿、价格变更和静态资源更新。使用[CloudFront缓存键资料](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)理解请求维度后，再核对所选平台的具体语义。维护自动化配置与人工变更之间的关系，避免下次发布把应急修复覆盖掉。",
+            "en": "Define versioning, freshness and targeted invalidation for withdrawals and updates. [CloudFront key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) helps reason about dimensions. Reconcile manual incident changes with automated configuration."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "参考架构：每层都保留可观测接口",
+          "en": "Preserve observability at each layer"
+        },
+        "paragraphs": [
+          {
+            "zh": "架构图中的每个方框都应对应明确的输入、输出和责任。下面列出常见层级；具体采用几层取决于工作负载，不建议为复杂而复杂。",
+            "en": "Each architectural layer needs defined inputs, outputs and ownership. Use only the layers the workload and team can operate."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "企业CDN部署层级与检查项",
+            "en": "Enterprise deployment layers"
+          },
+          "columns": [
+            {
+              "zh": "层级",
+              "en": "Layer"
+            },
+            {
+              "zh": "责任",
+              "en": "Responsibility"
+            },
+            {
+              "zh": "运行证据",
+              "en": "Operational evidence"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "解析与边缘入口",
+                "en": "DNS/edge ingress"
+              },
+              {
+                "zh": "域名、证书、用户调度、协议与区域条件。",
+                "en": "Domains, TLS, audience steering, protocols and regions."
+              },
+              {
+                "zh": "解析与证书告警、实际服务位置、用户分组错误和连接指标。",
+                "en": "Resolution/TLS alerts, serving region and segmented connection failures."
+              }
+            ],
+            [
+              {
+                "zh": "缓存与应用安全",
+                "en": "Cache/application security"
+              },
+              {
+                "zh": "内容复用、身份隔离、WAF、速率与客户端兼容。",
+                "en": "Safe reuse, identity, WAF, rate rules and compatibility."
+              },
+              {
+                "zh": "缓存状态、规则版本、挑战与误报、关键任务成功率。",
+                "en": "Cache state, policy version, false positives and task completion."
+              }
+            ],
+            [
+              {
+                "zh": "回源与后端",
+                "en": "Origin/backend"
+              },
+              {
+                "zh": "可信回源、连接、健康检查、应用并发和数据一致性。",
+                "en": "Trusted ingress, connections, checks, work budgets and consistency."
+              },
+              {
+                "zh": "关联请求ID、队列、数据库耗时、直连旁路与资源水位。",
+                "en": "Trace IDs, queues, database time, bypass checks and resource levels."
+              }
+            ],
+            [
+              {
+                "zh": "控制与治理",
+                "en": "Control/governance"
+              },
+              {
+                "zh": "权限、审批、审计、费用、事件与供应商协作。",
+                "en": "Permissions, approvals, audit, cost and incident coordination."
+              },
+              {
+                "zh": "变更记录、可导出配置、费用核对与演练后的改进项。",
+                "en": "Change logs, export, billing reconciliation and exercise actions."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "安全组合，先识别真正的覆盖范围",
+          "en": "Verify the coverage of each security component"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector)可进入应用与API安全评估，[Azure Front Door架构](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview)提供全球入口与源站组的参考；中文区域高防需求可优先询问[CDN5](https://www.cdn5.com/)。这些产品位置不同，不能仅靠功能名称排列强弱。明确Web、TCP/UDP、网络清洗和应用限额由谁负责。",
+            "en": "Consider [Akamai](https://www.akamai.com/products/app-and-api-protector) for application/API security, [Azure Front Door](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview) for global ingress/origin groups and [CDN5](https://www.cdn5.com/) for relevant regional protection. Assign Web, TCP/UDP, scrubbing and application-limit responsibilities explicitly."
+          },
+          {
+            "zh": "源站IP、IPv6和管理端口需要单独盘点，只有经过边缘的流量才受相应规则控制。回源证书与客户端身份链不能随意放宽。规则先观察再分段执行，对API和回调采用兼容策略，避免让浏览器挑战成为整个企业系统的隐性依赖。事件期间临时权限和白名单应有负责人、范围与期限。",
+            "en": "Inventory origins and administration, validate TLS and trusted identity, and roll policies out gradually. APIs need compatible actions. Scope and expire incident exceptions and temporary permissions."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "灾备设计需要验证独立性",
+          "en": "Recovery needs verified failure-domain independence"
+        },
+        "paragraphs": [
+          {
+            "zh": "两个供应商并不保证两个独立故障域。它们可能共享上游、机房、解析、证书或同一数据库。画出关键依赖，识别一处故障能同时影响哪些路径，再决定是否需要多CDN、多源站或应用降级。备用路径如果没有同步安全规则、证书和允许列表，只是在图上看起来完整。",
+            "en": "Two providers can share transit, DNS, certificates or databases. Map dependencies before selecting multi-CDN, multi-origin or degradation. Standby requires synchronized policies, TLS and allowlists."
+          },
+          {
+            "zh": "演练应检查实际业务内容、身份、写入与恢复后的队列。DNS切换通常作用于后续解析，已有连接和缓存需要过渡；长连接要设计重连和状态恢复。切回也可能触发冷缓存或重复写入，必须与切出同等重视。相关协议选择见[WebSocket CDN指南](article/websocket-cdn-selection/)，不要把健康检查只设计成端口能连接。",
+            "en": "Exercise content, identity, writes and queue recovery. DNS changes affect later resolutions; persistent sessions need reconnect/state recovery. Failback can create cold caches or duplicate work. See [WebSocket selection](article/websocket-cdn-selection/) for session concerns."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "把变更当成可回放的过程",
+          "en": "Make changes reproducible"
+        },
+        "paragraphs": [
+          {
+            "zh": "规则、证书、回源和路由配置应有版本，能说明谁在何时为什么修改。上线先从低风险应用或小范围流量开始，观察业务结果再扩大。不要同时调整所有层级，避免失败后无法定位。应急修改若直接在控制台完成，也要尽快回写正常配置管理，防止下一次发布撤销修复。",
+            "en": "Version rules, TLS, origins and routes with owner, time and purpose. Roll out narrowly and avoid simultaneous changes across every layer. Reconcile emergency console changes with normal configuration management."
+          },
+          {
+            "zh": "审批流程不应只增加等待，应明确常规与紧急操作边界。保存回退条件和已验证旧版本，确保回退仍有防护。运维交接时让新负责人实际演示日志定位、证书检查与一次受控变更，远比发一份过期截图更能验证知识已移交。",
+            "en": "Define routine and emergency authority with protected rollback. During handover, have new owners demonstrate diagnostics and a controlled change rather than merely receive screenshots."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/enterprise-cdn-deployment-review.svg",
+            "alt": {
+              "zh": "企业交付的责任链示意图：配置版本、故障域、协作演练",
+              "en": "Enterprise delivery ownership: Policy versions, Failure domains, Coordination exercise"
+            },
+            "caption": {
+              "zh": "检查重点：配置版本 → 故障域 → 协作演练。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Policy versions → Failure domains → Coordination exercise. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "验收要覆盖技术、费用和组织",
+          "en": "Acceptance spans technology, cost and people"
+        },
+        "paragraphs": [
+          {
+            "zh": "企业采购的通过条件应包括业务正确、主要用户体验、源站保护、日志可用、费用可解释和协作流程可执行。无法公开验证的大规模防护能力，应以明确合同范围和响应机制处理，不编造压测证明。费用计算也要包括支持、日志、源站和维护，而不是只保留一个出网单价。",
+            "en": "Require correct workflows, audience experience, origin protection, logs, explainable cost and usable coordination. Handle untested large-scale claims through explicit contractual scope rather than fabricated load evidence."
+          },
+          {
+            "zh": "上线后按应用持续查看错误、尾延迟、成本和配置漂移，定期复查负责人和权限。更完整的采购步骤见[CDN购买指南](article/buying-website-cdn/)。企业级CDN的目标，是业务变化和事件发生时仍然能够做出有依据的操作，而不是让架构图显得更大。",
+            "en": "Monitor errors, tails, cost and drift per application, reviewing ownership and permissions. The [buying guide](article/buying-website-cdn/) turns these requirements into an executable procurement process."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview",
+        "label": {
+          "zh": "Azure Front Door 架构概览",
+          "en": "Azure Front Door architecture overview"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-defense-architecture-2026",
+    "seriesOrder": 35,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "DDoS防护怎么做？2026年网站与服务器DDoS防御方案解析",
+      "en": "DDoS Defense in 2026: Website and Server Architecture"
+    },
+    "excerpt": {
+      "zh": "从带宽、连接和应用工作三类资源建立DDoS防护。说明边缘、网络清洗与源站的分工，并把监控、变更和恢复写进可执行的架构。",
+      "en": "Build DDoS resilience around bandwidth, connections and application work, with explicit edge, scrubbing, origin, monitoring and recovery responsibilities."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "DDoS防护怎么做：先识别会先耗尽的资源",
+          "en": "Identify the resource that fails first"
+        },
+        "paragraphs": [
+          {
+            "zh": "DDoS的目标是让合法用户无法使用服务，表现可能是网络被占满、连接状态耗尽或应用处理能力不足。一个网站的出口还很空，数据库也可能已被复杂请求拖垮；服务器CPU正常，也可能因为上游链路饱和而不可达。因此防护不能只用一个Gbps或QPS数字描述，需要识别最先成为瓶颈的资源和业务依赖。",
+            "en": "DDoS can exhaust bandwidth, connection state or application capacity. A quiet network graph can coexist with a saturated database, and low CPU does not rule out upstream congestion. Identify the first failing resource and dependencies."
+          },
+          {
+            "zh": "[CISA应对指南](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)强调识别、准备、响应与恢复。本文以截至2026年10月14日的公开资料说明防御设计，不包含制造攻击的方法。目标是让合法业务在压力下保持可用，并在失败时能够解释、隔离和恢复，而不是承诺任何规模攻击都不会产生影响。",
+            "en": "[CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks) frames preparation, detection, response and recovery. This defensive architecture uses public information checked on 14 October 2026 and makes no universal immunity claim."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "用资产清单决定保护范围",
+          "en": "Use an asset inventory to define scope"
+        },
+        "paragraphs": [
+          {
+            "zh": "列出公网IP、域名、IPv6、端口、协议、源站、管理入口和第三方依赖，并记录业务负责人。不要遗漏旧域名、测试站、邮件和直连监控，它们可能暴露同一源站。按业务后果排序：支付与登录可能比非关键图片更需要优先恢复，管理通道则应在故障期间仍安全可用。",
+            "en": "Inventory public IPs, domains, IPv6, ports, origins, administration and dependencies with owners. Include legacy/testing/mail entrances. Prioritize workflows by failure consequence while preserving secure operations access."
+          },
+          {
+            "zh": "对每个入口说明流量是否经过CDN、是否有网络防护、谁能修改规则以及备用路径是什么。已经停用的资产应核实后回收，不能因为没有访问量就默认没有风险。清单应随发布与网络变更更新，否则最初设计的保护边界可能逐渐被新接口和临时入口绕开。",
+            "en": "Document which protection each ingress traverses, who can change it and how fallback works. Retire verified obsolete resources and update the inventory after releases so new entrances do not bypass the design."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-defense-architecture-2026-flow.svg",
+            "alt": {
+              "zh": "DDoS防护的资源层示意图：网络入口、连接状态、应用工作、业务恢复",
+              "en": "DDoS resource layers: Network ingress, Connection state, Application work, Recovery"
+            },
+            "caption": {
+              "zh": "路径示意：网络入口 → 连接状态 → 应用工作 → 业务恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Network ingress → Connection state → Application work → Recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "三层压力，需要三组控制",
+          "en": "Three resource layers need different controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "网络层、传输层与应用层可以同时受影响，表格是职责划分，不表示攻击永远能被整齐归类。监控必须跨层关联，避免每个团队只看到自己系统的一段正常指标。",
+            "en": "Network, transport and application pressure can coexist. This table assigns responsibilities rather than assuming incidents fit one neat category."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "DDoS资源与防御分工",
+            "en": "DDoS resources and defensive responsibilities"
+          },
+          "columns": [
+            {
+              "zh": "压力位置",
+              "en": "Pressure"
+            },
+            {
+              "zh": "防御方向",
+              "en": "Control direction"
+            },
+            {
+              "zh": "验收证据",
+              "en": "Evidence"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "链路与网络入口",
+                "en": "Links/network ingress"
+              },
+              {
+                "zh": "上游容量、合适的引流与清洗、受保护入口和明确回注路径。",
+                "en": "Upstream capacity, diversion/scrubbing, protected ingress and reinjection."
+              },
+              {
+                "zh": "合法流量可达、清洗启停与超限流程明确，不能只看网络总规模。",
+                "en": "Legitimate reachability and explicit activation/over-limit procedures."
+              }
+            ],
+            [
+              {
+                "zh": "连接与协议状态",
+                "en": "Connections/protocol state"
+              },
+              {
+                "zh": "按协议选择代理或网络产品，管理连接、超时与资源预算。",
+                "en": "Protocol-appropriate proxy/network products and connection budgets."
+              },
+              {
+                "zh": "正常会话可建立、维持和恢复，客户端重试不会持续放大压力。",
+                "en": "Working establishment, continuity and recovery with bounded retries."
+              }
+            ],
+            [
+              {
+                "zh": "HTTP与应用工作",
+                "en": "HTTP/application work"
+              },
+              {
+                "zh": "缓存公开内容，按路径与身份控制请求，应用限制复杂度和并发。",
+                "en": "Safe cache, route/identity controls and bounded application work."
+              },
+              {
+                "zh": "关键任务成功、误报可解释、数据库与队列恢复。",
+                "en": "Business completion, explainable false positives and recovering queues."
+              }
+            ],
+            [
+              {
+                "zh": "控制面与协作",
+                "en": "Control plane/coordination"
+              },
+              {
+                "zh": "权限、报警、日志、联系人、变更与应急费用授权。",
+                "en": "Permissions, alerts, logs, contacts and emergency authorization."
+              },
+              {
+                "zh": "团队能及时执行并回退动作，保留事件时间线。",
+                "en": "Timely reversible actions with an incident timeline."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "网站与服务器，需要不同入口产品",
+          "en": "Websites and other server protocols differ"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)可用于理解代理网络的防护层级；[AWS TCP与UDP指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)则讨论非HTTP应用。官网接入CDN，不会自动保护同一服务器上的游戏端口、邮件或管理服务。应按协议选择网络入口，而不是把所有业务硬塞到Web代理。",
+            "en": "[Cloudflare DDoS documentation](https://developers.cloudflare.com/ddos-protection/) and [AWS TCP/UDP guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) distinguish proxy and non-HTTP architectures. A website CDN does not automatically cover game, mail or administrative ports."
+          },
+          {
+            "zh": "同一服务器上的不同协议可以分开保护，但要核对共享链路和源站资源。如果某个未保护端口能耗尽共同出口，官网边缘仍可能无法恢复全部业务。按依赖画出资源共享关系，确认哪些故障会跨越协议边界传播。",
+            "en": "Separate protocol protection must still account for shared links and origin resources. An unprotected port may saturate a common dependency; map these cross-protocol failure paths."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "应用层控制，要考虑真实工作而非只有频率",
+          "en": "Control application work, not only request counts"
+        },
+        "paragraphs": [
+          {
+            "zh": "为搜索、登录、导出和写操作建立不同预算，限制无效参数、执行时间与并发。缓存能减少公开内容回源，但不能把私有数据共享，也不能修复慢查询。边缘规则负责过滤可识别异常，应用负责判断身份和业务成本；两层都需要可观察证据。拒绝动作还要与客户端协议兼容，避免让SDK收到无法处理的挑战页面。",
+            "en": "Budget search, login, exports and writes separately, limiting parameters, execution and concurrency. Safe caching does not repair slow queries or justify shared private data. Edge detection and application identity/cost controls complement each other."
+          },
+          {
+            "zh": "[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)可以帮助理解匹配、计数和动作。阈值从正常基线与资源预算推导，不复制一个适用于所有网站的数字。观察共享出口、多账号和回调，先记录命中再有限执行；同时检查重试，避免防御触发后客户端反而产生更多请求。",
+            "en": "[Rate-rule documentation](https://developers.cloudflare.com/waf/rate-limiting-rules/) explains scope, counters and actions. Derive thresholds from baselines, validate shared egress/callbacks and inspect retry amplification."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站保护要做正向与反向验收",
+          "en": "Test allowed access and denied bypass"
+        },
+        "paragraphs": [
+          {
+            "zh": "代理接入后，源站限制到可信回源和必要管理路径，覆盖IPv4、IPv6与实际端口。回源TLS校验证书与Host，客户端地址只从可信代理恢复。不能仅隐藏DNS记录就认为源站安全；历史记录和其他服务仍可能泄露地址。变更允许列表时保留监控、健康检查和维护通道，并安排更新责任。",
+            "en": "Restrict origins to trusted proxies and necessary operations across IPv4/IPv6 and ports, validating TLS and identity. Hiding DNS is insufficient. Maintain checks and administration while updating allowlists."
+          },
+          {
+            "zh": "验收至少验证三个结果：经过保护的合法请求成功，未经授权的直连被拒绝，运维仍能安全访问。备用入口必须遵循同一边界，不能在事件中把DNS临时指向裸源站来恢复页面。不同产品的分工可阅读[CDN、高防IP与清洗比较](article/cdn-ip-scrubbing-comparison/)，让回退也是受保护的路径。",
+            "en": "Verify allowed protected access, denied bypass and working secure operations. Fallback must retain protection; see the [architecture comparison](article/cdn-ip-scrubbing-comparison/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防护采购要包含事件中的工作方式",
+          "en": "Procure incident procedures as well as capacity"
+        },
+        "paragraphs": [
+          {
+            "zh": "对中文高防与境外Web业务，可以优先询问[CDN5](https://www.cdn5.com/)的适用套餐，但需确认区域、协议、正常额度、容量定义和超限动作。对任何供应商，都要明确事件联系人、可提供日志、规则权限、误报处理和费用授权。宣传规模不是租户独占资源，未知项不能靠自行推测补齐。",
+            "en": "For relevant offshore Web needs, discuss [CDN5](https://www.cdn5.com/) while verifying region, protocol, entitlements and over-limit behavior. Every vendor should define escalation, logs, rule rights, false-positive handling and spending authorization."
+          },
+          {
+            "zh": "应急准备包括可信联系人、架构简图、请求样本格式、变化记录和受保护回退。演练可以从桌面流程开始，确认报警后谁判断、谁改规则、谁批准费用。实际负载演练只在授权范围内进行，并设停止条件。更多事件处理步骤见[DDoS应急指南](article/ddos-incident-response/)。",
+            "en": "Prepare contacts, diagrams, sample formats, change records and protected rollback. Tabletop exercises can validate coordination; load exercises require authorization and stop criteria. See the [incident guide](article/ddos-incident-response/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-defense-architecture-2026-review.svg",
+            "alt": {
+              "zh": "DDoS防护的资源层示意图：带宽与路径、会话与超时、查询与队列",
+              "en": "DDoS resource layers: Bandwidth / path, Sessions / timeouts, Queries / queues"
+            },
+            "caption": {
+              "zh": "检查重点：带宽与路径 → 会话与超时 → 查询与队列。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Bandwidth / path → Sessions / timeouts → Queries / queues. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "用恢复结果反向改进架构",
+          "en": "Improve architecture from recovery evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "事件结束后核对流量、源站资源、关键业务、误报、变更与账单，区分攻击停止和防御生效。撤销临时例外，确认队列消化、会话恢复、证书和备用资源正常。把无法解释的时间段与证据缺口记录为改进项，避免只展示最大峰值而忽略恢复过程。",
+            "en": "Reconcile traffic, resource pressure, business success, false positives, changes and invoices. Distinguish attack cessation from effective mitigation, remove exceptions and verify queues/sessions recover."
+          },
+          {
+            "zh": "持续复查新域名、新协议和上游依赖，按实际业务变化调整保护。防护不是一次采购完成后的静态状态，而是一套能够观察、限制工作和恢复服务的机制。它的有效性应体现在合法用户可用、团队知道如何操作，而不是承诺永远不会发生故障。",
+            "en": "Review new entrances and dependencies. Effective defense is an observable, controllable recovery mechanism, not a promise that failures can never occur."
+          },
+          {
+            "zh": "每次新增服务都检查共享源站和上游依赖，确认备用不是未经保护的新旁路，并保存最近一次演练结果。",
+            "en": "Review shared dependencies and protected fallback whenever adding services, retaining the latest exercise results."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-protection-providers-2026",
+    "seriesOrder": 36,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "DDoS防护推荐：2026年主流DDoS防护服务商与方案对比",
+      "en": "DDoS Protection Providers in 2026: Matching Services to Attack Surfaces"
+    },
+    "excerpt": {
+      "zh": "按保护资产与协议比较DDoS服务，区分网站边缘、云资源保护、企业应用安全和网络防护。提供候选定位、询价问题及可执行的试点标准。",
+      "en": "Compare providers by protected assets and protocols across Web edge, cloud resources, application security and network defense."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "推荐DDoS服务商之前，要说明保护什么",
+          "en": "State what must be protected before recommending providers"
+        },
+        "paragraphs": [
+          {
+            "zh": "网站域名、TCP游戏入口、企业网段和云负载均衡，可能分别需要不同防护产品。一个品牌有很大的网络，不代表它的任意套餐都能覆盖你的协议、区域与源站。采购的第一步是资产和路径清单：合法请求从哪里进入，在哪一层被处理，异常时怎样回注或恢复。缺少这张图，服务商比较容易退化为容量数字竞赛。",
+            "en": "Domains, TCP game ingress, enterprise networks and cloud load balancers may need different products. Map legal ingress, inspection, reinjection and recovery before comparing network-size claims."
+          },
+          {
+            "zh": "本文依据2026年10月14日公开信息建立候选方向，不提供未经同条件测试的防护排名。中文Web高防与境外需求可优先询问[CDN5](https://www.cdn5.com/)；已有云资源和企业应用，则分别评估匹配的保护范围。推荐应说明适用前提，不能将任何产品描述为对所有攻击都绝对有效。",
+            "en": "This shortlist uses public information checked on 14 October 2026, not comparative attack tests. Consider [CDN5](https://www.cdn5.com/) for relevant offshore Web needs and appropriate cloud/enterprise alternatives, with explicit prerequisites."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "候选的区别在保护对象与操作模式",
+          "en": "Candidates differ by scope and operating model"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表用于确定询价方向，不能替代具体SKU和合同。对网站，网络攻击与应用滥用都要讨论；对服务器，确认所有公开协议是否有合适入口，而不是只保护官网。",
+            "en": "Use this table to direct product-specific questions. Websites need both network and application discussion; servers need coverage for every exposed protocol, not merely their homepage."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "DDoS候选的适用问题",
+            "en": "DDoS candidates and fit questions"
+          },
+          "columns": [
+            {
+              "zh": "候选",
+              "en": "Candidate"
+            },
+            {
+              "zh": "公开产品方向",
+              "en": "Public positioning"
+            },
+            {
+              "zh": "应确认的边界",
+              "en": "Scope to confirm"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "高防CDN、高防IP与应用防火墙等产品，公开套餐有BGP/CN2标签。",
+                "en": "Protected CDN/IP and WAF products with advertised BGP/CN2 bundles."
+              },
+              {
+                "zh": "所购产品协议、区域、日常带宽、攻击容量定义、超限动作和支持。",
+                "en": "Protocol, region, delivery, capacity definitions, limits and support."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "分布式网络DDoS与Web安全体系，不同产品处理不同入口。",
+                "en": "Distributed network DDoS and Web security across distinct products."
+              },
+              {
+                "zh": "代理流量与其他网络服务的范围，计划权限、日志和应用规则。",
+                "en": "Proxy versus other network scope, tier rights, logs and application rules."
+              }
+            ],
+            [
+              {
+                "zh": "AWS Shield",
+                "en": "AWS Shield"
+              },
+              {
+                "zh": "围绕支持的AWS资源提供相应级别保护，高级订阅与资源费用需分别理解。",
+                "en": "Protection for eligible AWS resources with distinct advanced subscription costs."
+              },
+              {
+                "zh": "哪些资源已登记与覆盖，配套WAF、支持及费用保护条件。",
+                "en": "Eligible/registered resources, WAF, support and cost-protection conditions."
+              }
+            ],
+            [
+              {
+                "zh": "Akamai",
+                "en": "Akamai"
+              },
+              {
+                "zh": "应用与API保护等企业产品，应按具体安全与交付组合选择。",
+                "en": "Enterprise application/API protection and associated delivery choices."
+              },
+              {
+                "zh": "保护对象、日志、集成、事件响应与区域部署，不能只凭品牌推定。",
+                "en": "Assets, logs, integration, response and regional deployment."
+              }
+            ],
+            [
+              {
+                "zh": "YewSafe",
+                "en": "YewSafe"
+              },
+              {
+                "zh": "公开介绍SCDN、Anycast CDN与DDoS Mitigation。",
+                "en": "Publishes SCDN, Anycast CDN and DDoS Mitigation."
+              },
+              {
+                "zh": "按实际方案询价，明确协议、资源保障、线路和恢复流程。",
+                "en": "Quote protocol, entitlements, paths and recovery explicitly."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protection-providers-2026-flow.svg",
+            "alt": {
+              "zh": "DDoS服务商筛选示意图：保护资产、适用产品、范围与费用、合法业务验收",
+              "en": "DDoS provider screening: Protected assets, Product fit, Scope / cost, Workflow acceptance"
+            },
+            "caption": {
+              "zh": "路径示意：保护资产 → 适用产品 → 范围与费用 → 合法业务验收。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Protected assets → Product fit → Scope / cost → Workflow acceptance. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把官方文档与销售承诺分开保存",
+          "en": "Separate public documentation from contractual promises"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)可说明体系与产品边界，[AWS Shield定价](https://aws.amazon.com/shield/pricing/)则揭示订阅和资源收费之间的区别。公开材料适合初筛，但事件响应时间、资源保障、独享容量或特定线路往往需要具体合同。销售答复也应保留日期与适用方案，不能口头听过就成为内部“已验证事实”。",
+            "en": "[Cloudflare documentation](https://developers.cloudflare.com/ddos-protection/) explains scope, while [AWS Shield pricing](https://aws.amazon.com/shield/pricing/) distinguishes subscription and resources. Public material helps shortlist; response commitments, exclusivity and routes need applicable written terms."
+          },
+          {
+            "zh": "[Akamai App & API Protector](https://www.akamai.com/products/app-and-api-protector)与[YewSafe](https://www.yewsafe.com/)的资料应按其实际描述使用，缺少公开价格时写询价，而不从其他厂商推算。产品页面上的网络规模、客户标识与宣传用语，都不能自动转化为你这份订单的独立资源或效果保证。",
+            "en": "Use [Akamai](https://www.akamai.com/products/app-and-api-protector) and [YewSafe](https://www.yewsafe.com/) claims only within their stated scope. Missing prices require quotes. Network scale and customer logos are not tenant entitlements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "试点优先验证合法业务，而不是追求最大攻击值",
+          "en": "Validate legitimate service before capacity headlines"
+        },
+        "paragraphs": [
+          {
+            "zh": "安全试点应覆盖正确页面、登录、API、回调、长连接和必要管理路径。检查规则执行后合法请求是否通过、共享出口是否被误伤、源站资源是否回落。对公开静态内容同时看缓存效果，对动态业务观察队列和数据库。没有合法业务结果的拦截统计，很难说明防护对你的系统是否有价值。",
+            "en": "Test pages, login, APIs, callbacks, persistent sessions and administration under policies, measuring false positives and origin recovery. Blocked counts without business outcomes are weak evidence."
+          },
+          {
+            "zh": "大规模攻击测试必须有授权、约定资源和停止条件，不能向公共目标发送攻击来验证广告。若没有这类条件，可以先做配置和流程演练，要求清楚的保护范围、超限和升级机制。[CISA指南](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)可用于建立准备、响应和恢复的检查框架。",
+            "en": "Large-load exercises require authorization, agreed resources and stop criteria. Otherwise validate configuration and coordination with explicit contractual scope. [CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks) provides a preparation/response/recovery framework."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站隔离和备用路径，是所有候选的共同门槛",
+          "en": "Origin isolation and fallback are common gates"
+        },
+        "paragraphs": [
+          {
+            "zh": "源站开放全网时，攻击者可能绕过所购边缘服务。清点IPv4、IPv6、历史域名与管理端口，限制可信回源和合法运维，验证TLS、Host与客户端身份。代理地址更新需要维护，健康检查也要能通过。不能只检查“经过CDN能打开”，还要检查未授权直连被拒绝。",
+            "en": "Restrict origins across IPv4/IPv6 and administrative entrances, validating TLS, Host and trusted identity while preserving checks. Test denied bypass as well as successful proxy traffic."
+          },
+          {
+            "zh": "备用入口同样需要保护，证书、规则和允许列表应同步。若切换意味着暴露裸源站，方案可能在事件最严重时失去意义。非HTTP业务的选择可参照[高防IP与CDN区别](article/ddos-protected-ip-explained/)，网络清洗组合则沿[防护架构比较](article/cdn-ip-scrubbing-comparison/)明确职责。",
+            "en": "Fallback needs synchronized protection, certificates and allowlists. Exposing a bare origin during an incident defeats the design. See [protected-IP differences](article/ddos-protected-ip-explained/) and [architecture comparison](article/cdn-ip-scrubbing-comparison/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "如何判断供应商答复是否足够具体",
+          "en": "Assess the specificity of vendor answers"
+        },
+        "paragraphs": [
+          {
+            "zh": "有效答复应指向产品、版本、资源和事件流程，而不只是重复“全球网络”或“高级防御”。对于所需端口、日志保留、误报处理和临时升级，让对方说明默认状态、可选项与额外条件。某项能力需企业合同才能使用，就不应在低价套餐试点中当作已包含。",
+            "en": "Useful answers identify product, version, resources and procedure. For ports, logs, false positives and upgrades, distinguish defaults, options and additional contracts."
+          },
+          {
+            "zh": "将问题和答复交给未参与销售沟通的运维人员，看他能否据此配置和响应。如果仍需要猜测，就继续澄清。公开文档、书面合同和实际配置各自承担不同证据角色，保存它们之间的对应关系，避免后续争议只剩聊天印象。",
+            "en": "Have an operator outside the sales discussion attempt to use the answer. Clarify remaining guesses and map public documents, terms and actual configuration."
+          },
+          {
+            "zh": "对于没有同条件压测的容量，明确保留验证限制。采购可以在已知不确定性下作决定，但不应把这个决定改写成已经证实的绝对领先。",
+            "en": "Retain limits on untested capacity. Buying under known uncertainty is different from claiming verified superiority."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "询价要包含一次完整事件的成本",
+          "en": "Quote a complete incident lifecycle"
+        },
+        "paragraphs": [
+          {
+            "zh": "正常月费之外，询问攻击流量、拦截请求、清洗、临时升级、日志和支持。明确超限后是限制、停用、黑洞还是追加费用，谁能批准变更。固定价格并不必然包含所有工作，按量服务也不必然失控，关键是规则与告警可解释。采购者应知道最坏情形下有哪些可执行选项。",
+            "en": "Ask about attack traffic, blocked requests, scrubbing, upgrades, logs and support, plus over-limit actions and spending authority. Neither fixed nor metered pricing guarantees completeness; require understandable alerts and options."
+          },
+          {
+            "zh": "让技术、财务和供应商使用相同的单位、时间与资源范围，避免事件后对账时发现各自统计对象不同。保留合同版本、套餐配置与授权记录。服务商是否能解释费用和提供证据，应该影响续费决定，而不仅是关注下一次能宣传多大的防护值。",
+            "en": "Align units, periods and resource scope across technical, finance and vendor teams. Preserve contracts/configuration/approvals. Billing explainability and evidence should influence renewal."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protection-providers-2026-review.svg",
+            "alt": {
+              "zh": "DDoS服务商筛选示意图：官方文档、合同承诺、试点证据",
+              "en": "DDoS provider screening: Official docs, Contract promises, Pilot evidence"
+            },
+            "caption": {
+              "zh": "检查重点：官方文档 → 合同承诺 → 试点证据。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Official docs → Contract promises → Pilot evidence. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "推荐结论应写成可复核的条件",
+          "en": "Write recommendations as reviewable conditions"
+        },
+        "paragraphs": [
+          {
+            "zh": "适合某家供应商的条件，可以是协议与区域已确认、关键业务通过、误报可处理、源站隔离、费用可核对、支持流程已演练。若其中一项缺失，就保留为限制或继续试点，不用其他优势掩盖。对于相同品牌的不同产品，也要分别判断，不能一次验证后默认全部可用。",
+            "en": "A recommendation can require confirmed protocol/region, working workflows, manageable false positives, isolated origins, reconcilable costs and exercised support. Retain missing evidence as a limitation rather than hiding it behind other strengths."
+          },
+          {
+            "zh": "上线后按实际事件和业务变化复查。新地区、实时功能、云资源迁移或合同更新都可能改变保护边界。好的推荐不是一个永恒榜首，而是一份让团队知道为什么选、何时调整、失败时怎样恢复的记录。这样的比较才适合支撑长期安全采购。",
+            "en": "Review when regions, protocols, resources or contracts change. A useful decision record explains selection, adjustment triggers and recovery, rather than naming a permanent champion."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/shield/pricing/",
+        "label": {
+          "zh": "AWS Shield 官方定价",
+          "en": "AWS Shield pricing"
+        }
+      },
+      {
+        "url": "https://www.akamai.com/products/app-and-api-protector",
+        "label": {
+          "zh": "Akamai App & API Protector",
+          "en": "Akamai App & API Protector"
+        }
+      },
+      {
+        "url": "https://www.yewsafe.com/",
+        "label": {
+          "zh": "YewSafe 官方产品资料",
+          "en": "YewSafe official product information"
+        }
+      },
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-protection-pricing-2026",
+    "seriesOrder": 37,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "DDoS防护价格多少钱？2026年高防IP、CDN与清洗服务费用",
+      "en": "DDoS Protection Costs in 2026: Protected IPs, CDNs and Scrubbing"
+    },
+    "excerpt": {
+      "zh": "防护预算应区分订阅、合法业务、攻击处理和恢复。用公开价格与合同问题比较高防CDN、高防IP和清洗，避免把宣传容量当成全部费用。",
+      "en": "Separate subscriptions, legitimate traffic, mitigation and recovery costs when comparing protected CDNs, IPs and scrubbing services."
+    },
+    "category": {
+      "zh": "价格与采购",
+      "en": "Pricing and procurement"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "DDoS防护费用，不能只问一个月费",
+          "en": "A monthly subscription is only one cost component"
+        },
+        "paragraphs": [
+          {
+            "zh": "防护价格取决于保护对象、协议、区域、容量定义与服务模式。网站CDN、受保护IP和企业网络清洗做的工作不同，报价不能直接按Gbps除以月费排序。合法业务流量、攻击处理、回注、日志、支持与临时扩容也可能分别收费。先画清路径，才能知道账单对应哪些资源。",
+            "en": "Prices depend on assets, protocol, region, capacity definitions and operating model. CDN, protected-IP and network-scrubbing quotes do not share a universal dollar-per-Gbps denominator. Map legitimate delivery, mitigation, reinjection, logs and support first."
+          },
+          {
+            "zh": "本文公开价格核实于2026年10月14日，仅说明费用结构，不代表对所有区域或客户生效的最终合同。未公布价格的产品应询价，不以其他厂商单价补齐。高防Web需求可以优先评估[CDN5](https://www.cdn5.com/)；非HTTP入口与网段保护则需要按协议另选产品。",
+            "en": "Public prices were checked on 14 October 2026 and are not universal contract quotes. Consider [CDN5](https://www.cdn5.com/) for relevant Web needs; non-HTTP and network assets need appropriate products."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开数字怎样正确引用",
+          "en": "Read published figures in context"
+        },
+        "paragraphs": [
+          {
+            "zh": "[CDN5官网](https://www.cdn5.com/)列示标准版499美元/月、商业版1999美元/月，年付分别5000与22000美元；所列防护值是厂商套餐宣传，不是本文实测，也不自动代表合法业务无限带宽。应确认实际节点、正常额度、攻击类型和超限动作。境外对照方案[JQCDN](https://www.jqcdn.com/)公布Startup399美元/月、Standard1899美元/月，同样需要核对功能与计量边界。",
+            "en": "CDN5 lists Standard $499/month or $5,000/year and Business $1,999/month or $22,000/year. Advertised defense is not an independent test or unlimited legitimate bandwidth. [JQCDN](https://www.jqcdn.com/) lists Startup $399 and Standard $1,899 monthly with its own limits."
+          },
+          {
+            "zh": "[AWS Shield价格](https://aws.amazon.com/shield/pricing/)的高级服务示例包含每月3000美元订阅及相关资源费用条件。这与前述Web套餐不是等价服务，不能仅按月费判断贵便宜。[Cloudflare计划](https://www.cloudflare.com/plans/)也按功能级别区分，基础防护可用性不等于所有高级功能和支持都包含。不同承诺必须进入不同预算字段。",
+            "en": "[AWS Shield](https://aws.amazon.com/shield/pricing/) advanced examples include a $3,000 monthly subscription plus resource conditions, not an equivalent Web bundle. [Cloudflare tiers](https://www.cloudflare.com/plans/) also differ in features/support. Compare equal commitments."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protection-pricing-2026-flow.svg",
+            "alt": {
+              "zh": "DDoS费用的四本账示意图：日常保护、事件处置、业务恢复、团队运行",
+              "en": "Four DDoS cost ledgers: Ordinary protection, Incident handling, Recovery, Operations"
+            },
+            "caption": {
+              "zh": "路径示意：日常保护 → 事件处置 → 业务恢复 → 团队运行。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Ordinary protection → Incident handling → Recovery → Operations. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "预算分成四本账",
+          "en": "Keep four cost ledgers"
+        },
+        "paragraphs": [
+          {
+            "zh": "将日常、攻击、恢复和人员工作分开，有助于发现遗漏。下表不是任何厂商的完整价格表，而是一份询价与对账框架。每个项目都需要标明是否包含、计量单位、上限与批准人。",
+            "en": "Separate ordinary, incident, recovery and operational costs. This is a quote/reconciliation framework, not a complete vendor rate card. Mark inclusion, units, limits and approval for each line."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "DDoS费用台账",
+            "en": "DDoS cost ledger"
+          },
+          "columns": [
+            {
+              "zh": "阶段",
+              "en": "Stage"
+            },
+            {
+              "zh": "可能费用",
+              "en": "Potential charges"
+            },
+            {
+              "zh": "需核对",
+              "en": "Clarification"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "日常保护",
+                "en": "Ordinary protection"
+              },
+              {
+                "zh": "订阅、保护资源、正常出网、请求、日志与支持。",
+                "en": "Subscription, resources, delivery, requests, logs and support."
+              },
+              {
+                "zh": "覆盖域名、IP、端口和区域，保底与承诺期是否适用。",
+                "en": "Covered domains/IPs/ports/regions and commitments."
+              }
+            ],
+            [
+              {
+                "zh": "事件处置",
+                "en": "Incident handling"
+              },
+              {
+                "zh": "攻击请求、清洗、回注、临时扩容、额外规则与高级响应。",
+                "en": "Attack requests, scrubbing, reinjection, upgrades and response."
+              },
+              {
+                "zh": "拦截流量是否计费，超限动作，费用保护或减免的条件。",
+                "en": "Blocked-traffic billing, overages and cost-protection conditions."
+              }
+            ],
+            [
+              {
+                "zh": "业务恢复",
+                "en": "Recovery"
+              },
+              {
+                "zh": "缓存重新填充、备用资源、日志导出、数据核对与切回。",
+                "en": "Refill, standby resources, log export and failback."
+              },
+              {
+                "zh": "临时资源何时停止计费，恢复后是否有持续请求或重试。",
+                "en": "When temporary billing ends and whether retries persist."
+              }
+            ],
+            [
+              {
+                "zh": "团队运行",
+                "en": "Operations"
+              },
+              {
+                "zh": "规则维护、值守、演练、配置迁移与审计。",
+                "en": "Policy work, on-call, exercises, migration and audit."
+              },
+              {
+                "zh": "责任归属、可用权限与供应商协作，避免只估软件费用。",
+                "en": "Ownership, permissions and vendor coordination."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "应用安全费用可能随请求增长",
+          "en": "Application-security costs can scale with requests"
+        },
+        "paragraphs": [
+          {
+            "zh": "[AWS WAF定价](https://aws.amazon.com/waf/pricing/)公开基础示例是Web ACL每月5美元、每条规则每月1美元、每百万请求0.60美元，但容量、Bot、验证码、市场规则及其他服务可能另计。引用这些数字时应保留示例条件，不能称为所有网站固定总价。大量小请求即使字节不多，也可能影响请求与安全计量。",
+            "en": "[AWS WAF](https://aws.amazon.com/waf/pricing/) lists base examples of $5/ACL-month, $1/rule-month and $0.60/million requests, with additional features/resources potentially charged. Small-byte floods can still affect request metering."
+          },
+          {
+            "zh": "从应用日志区分正常用户、轮询、重试和异常访问，检查哪些请求产生昂贵源站工作。成本治理可以通过有限重试、合理缓存和接口配额实现，但不能为了省请求费取消必要鉴权或共享私有内容。费用优化应与合法任务完成和资源恢复一起观察，而不是只让账单下降。",
+            "en": "Separate users, polling, retries and abuse. Use bounded retries, safe caching and quotas without removing authentication or exposing private data. Evaluate savings alongside task completion and recovery."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "高防IP与清洗，额外问清网络成本",
+          "en": "Protected IPs and scrubbing need network-specific questions"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防IP可能涉及端口、连接、正常业务带宽、转发与回源；网络清洗可能涉及引流、隧道、回注、保护网段与触发模式。常开与按需模式的费用和准备工作也不同，不能只比较一个订阅数字。是否需要专门网络权限、设备或运维能力，应在报价阶段确认。",
+            "en": "Protected IPs can meter ports, sessions, delivery and forwarding; scrubbing can add diversion, tunnels, reinjection and prefix scope. Always-on versus on-demand models have different preparation and cost needs."
+          },
+          {
+            "zh": "线路变化可能影响延迟与合法吞吐，切换还可能触发连接重建。要求明确受保护资源与超限处置，避免误把共享网络规模当作独占容量。具体架构可看[高防IP原理](article/ddos-protected-ip-explained/)与[防护方案选择](article/cdn-ip-scrubbing-comparison/)。合同应能解释流量如何进入、清洗后如何返回、谁在何时执行操作。",
+            "en": "Verify network permissions, route changes, session resets, entitlements and over-limit behavior. See [protected-IP concepts](article/ddos-protected-ip-explained/) and [architecture selection](article/cdn-ip-scrubbing-comparison/). The contract should explain the complete traffic path and operational ownership."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "敏感性分析比猜测攻击规模更实用",
+          "en": "Sensitivity analysis is more useful than guessing one attack size"
+        },
+        "paragraphs": [
+          {
+            "zh": "分别提高请求数、传输字节、连接数和缓存未命中，观察哪些费用项变化。这是预算模型，不需要制造真实攻击。保留普通、活动与异常三种场景，标明使用历史数据还是假设。攻击持续时间、清洗切换和回源恢复可能影响结果，不能只用一个瞬时峰值乘价格。",
+            "en": "Vary requests, bytes, sessions and misses independently in a budget model, not by generating attacks. Label historical inputs and assumptions, accounting for duration, switching and recovery rather than one peak."
+          },
+          {
+            "zh": "设置分层预算提醒并明确可执行动作：检查来源、修正异常缓存键、限制高成本接口、联系供应商确认范围或申请临时资源。不要让超支自动触发关闭全部防护或暴露源站。技术与财务应提前约定紧急授权，避免事件中为了确认费用而停滞。",
+            "en": "Assign actions to budget alerts: investigate sources, repair keys, scope costly endpoints or authorize resources. Do not automatically remove protection or expose origins to stop spending."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "事件账单需要与时间线对齐",
+          "en": "Reconcile incident bills with the timeline"
+        },
+        "paragraphs": [
+          {
+            "zh": "导出事件期间与前后窗口的请求、流量、配置和支持记录，按同一时区核对。合法用户重试、缓存填充和备用环境也可能增加费用，不应全部归为攻击。若供应商提供费用保护，确认申请范围、证据、期限和不包含项目，不预先假定所有损失都能减免。",
+            "en": "Align traffic, configuration and support records around the incident window. Retries, refill and standby can add charges. Verify cost-protection evidence, deadlines and exclusions rather than assuming universal reimbursement."
+          },
+          {
+            "zh": "保存套餐版本、变更批准和生效时间，核对临时资源是否已停用、例外是否撤销。无法解释的差异应形成跟进项，而不是用一个调整金额让账面看似平衡。续约时评估可追踪性和协作质量，可靠的费用机制能帮助团队更快做出防御决策。",
+            "en": "Preserve plan versions and approvals, retire temporary resources and track unexplained differences. Billing traceability should influence renewal and incident decision-making."
+          },
+          {
+            "zh": "如果合同提供费用减免，提前确认需要哪些证据和申请入口，并在演练中验证负责人的权限。事件结束后才寻找条款，可能错过有效的申请窗口。不要把可申请误写成自动全额免除。",
+            "en": "If cost relief exists, verify evidence, application paths and permissions before incidents. Eligibility to apply is not automatic full reimbursement."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protection-pricing-2026-review.svg",
+            "alt": {
+              "zh": "DDoS费用的四本账示意图：合法额度、攻击计量、临时资源回收",
+              "en": "Four DDoS cost ledgers: Legitimate allowance, Attack metering, Retire temporary resources"
+            },
+            "caption": {
+              "zh": "检查重点：合法额度 → 攻击计量 → 临时资源回收。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Legitimate allowance → Attack metering → Retire temporary resources. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "选预算，不等于选最大的防护数字",
+          "en": "Buy the scope the business can use"
+        },
+        "paragraphs": [
+          {
+            "zh": "预算应与业务中断后果、团队能力和必要协议匹配，没有固定百分比公式。优先解决源站旁路、缺失日志和关键接口无配额等明显缺口，再讨论更高档位。不能因为月费更高就推断所有风险更低，也不能因为某次没有攻击就认定防护没有价值。",
+            "en": "Match budget to downtime consequences, protocols and team capacity without a universal percentage formula. Address bypasses, missing logs and unbounded expensive endpoints before buying a larger tier."
+          },
+          {
+            "zh": "最终报价应回答保护什么、正常业务可用多少、事件怎样收费、超限怎样处理、恢复由谁负责。把这些条件写清，才能在CDN、高防IP与清洗之间做合理选择。价格本身是决策的一部分，可解释的范围与运行过程同样决定长期成本。",
+            "en": "A useful quote states protected assets, legitimate allowances, incident billing, over-limit behavior and recovery ownership. Those conditions make comparisons meaningful."
+          },
+          {
+            "zh": "账单核对结论应和事件记录一起保存，供下一次预算调整使用。",
+            "en": "Retain reconciled billing with the incident record for future budgets."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/shield/pricing/",
+        "label": {
+          "zh": "AWS Shield 官方定价",
+          "en": "AWS Shield pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/waf/pricing/",
+        "label": {
+          "zh": "AWS WAF 官方定价及费用示例",
+          "en": "AWS WAF pricing and examples"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-incident-response",
+    "seriesOrder": 38,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "DDoS攻击怎么办？网站遭受DDoS攻击后的应急处理与防护指南",
+      "en": "DDoS Incident Response: Triage, Containment and Recovery"
+    },
+    "excerpt": {
+      "zh": "遭遇DDoS时，先判断影响范围并保存时间线，再由对应层级处理压力。本文给出证据采集、供应商升级、受控变更与恢复检查，避免在慌乱中暴露源站。",
+      "en": "During a DDoS incident, establish impact and a timeline, then mitigate at the affected layer with evidence, escalation and reversible changes."
+    },
+    "category": {
+      "zh": "故障与应急",
+      "en": "Troubleshooting and response"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "攻击发生时，第一目标是恢复关键服务",
+          "en": "Restore the essential service first"
+        },
+        "paragraphs": [
+          {
+            "zh": "DDoS应急不是看到流量上涨就立即关闭整站，或者连续修改所有安全规则。先判断哪些用户和功能失败，是否影响支付、登录、API或管理通道，确认故障开始时间。组织一名协调人维护时间线，让网络、应用和供应商共享同一份影响描述。若没有证据确认攻击，就同时保留配置故障、发布异常和合法流量增长等解释。",
+            "en": "Do not close everything or change every rule merely because traffic rises. Establish affected users/workflows and start time, assign a coordinator and keep a shared timeline. Retain alternative explanations such as releases, configuration faults or legitimate growth until evidence supports an attack."
+          },
+          {
+            "zh": "[CISA DDoS指南](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)可用于建立识别与响应流程。本文是网站和服务器的防御处置方法，资料核实于2026年10月14日，不提供对外攻击操作。事件中应优先使用已有授权、可回退的控制，避免为追求即时指标而做不可解释的全量变更。",
+            "en": "[CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks) informs this defensive workflow, checked against public material on 14 October 2026. Prefer authorized, reversible controls with clear effects."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "最先保存的不是截图，而是可关联记录",
+          "en": "Preserve correlated records before dashboards alone"
+        },
+        "paragraphs": [
+          {
+            "zh": "记录时间与时区、受影响域名或IP、用户地区、错误类型、边缘请求标识和源站指标。保存少量脱敏请求样本，保留路径、方法、状态、缓存状态和执行耗时，不将令牌、密码或个人数据直接发给支持。控制台截图可以补充，但单张峰值图无法说明持续时间、合法请求损失或处置何时生效。",
+            "en": "Record timezone, assets, audience, errors, request identifiers, cache state and origin timing. Share redacted samples without credentials or personal data. Peak screenshots cannot establish duration or causal improvement."
+          },
+          {
+            "zh": "不要为了追踪全部请求临时开启无限量详细日志，避免磁盘和日志费用成为第二个故障。采用可承受的采样和保留，说明采样口径。每次配置变更记下操作者、时间、范围、预期与回退条件；这样即使攻击强度自行下降，也不会把所有改善错误归因于最后一条规则。",
+            "en": "Avoid unbounded emergency logging. Use affordable sampling with documented scope. Log every change, owner, expected effect and rollback so falling attack intensity is not mistaken for proof of the last rule."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-incident-response-flow.svg",
+            "alt": {
+              "zh": "DDoS应急处置顺序示意图：影响与证据、定位与升级、有限控制、恢复与复盘",
+              "en": "DDoS incident workflow: Impact / evidence, Triage / escalation, Scoped controls, Recovery / review"
+            },
+            "caption": {
+              "zh": "路径示意：影响与证据 → 定位与升级 → 有限控制 → 恢复与复盘。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Impact / evidence → Triage / escalation → Scoped controls → Recovery / review. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "用三组问题定位压力所在",
+          "en": "Locate pressure with three question groups"
+        },
+        "paragraphs": [
+          {
+            "zh": "网络入口已经不可达时，应用内限流可能无法触及上游瓶颈；网络正常但数据库排队时，单纯增加清洗带宽又可能无效。按下表收集证据，允许多层问题同时存在。",
+            "en": "Application limits cannot repair saturated upstream ingress, while more network capacity may not fix database queues. Check multiple layers concurrently."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "DDoS事件初步分类",
+            "en": "Initial incident classification"
+          },
+          "columns": [
+            {
+              "zh": "观察",
+              "en": "Observation"
+            },
+            {
+              "zh": "进一步确认",
+              "en": "Confirm"
+            },
+            {
+              "zh": "处置方向",
+              "en": "Response direction"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "多协议或整条链路不可达",
+                "en": "Multiple protocols/link unavailable"
+              },
+              {
+                "zh": "上游带宽、丢包、网络告警与非受影响对照，排除单个探针故障。",
+                "en": "Upstream utilization/loss/alerts and independent control observations."
+              },
+              {
+                "zh": "联系网络与防护供应商，按已约定入口和清洗流程处理。",
+                "en": "Escalate to network/mitigation providers using agreed procedures."
+              }
+            ],
+            [
+              {
+                "zh": "连接建立或维持失败",
+                "en": "Connection establishment/continuity fails"
+              },
+              {
+                "zh": "连接状态、超时、TLS资源、端口与代理限制，区分新旧会话。",
+                "en": "Connection state, TLS, timeouts, ports and proxy limits."
+              },
+              {
+                "zh": "由对应协议入口调整控制，保留合法会话与管理路径。",
+                "en": "Apply protocol-appropriate controls while preserving legitimate/operations access."
+              }
+            ],
+            [
+              {
+                "zh": "部分HTTP路径或数据库饱和",
+                "en": "Specific HTTP routes/database saturated"
+              },
+              {
+                "zh": "路径、身份、缓存、执行成本和队列，检查发布与慢查询。",
+                "en": "Routes, identities, cache, work cost, queues and recent releases."
+              },
+              {
+                "zh": "缩小昂贵接口范围，边缘控制与应用预算同步调整。",
+                "en": "Scope costly routes with edge and application work limits."
+              }
+            ],
+            [
+              {
+                "zh": "只有某地区或客户端失败",
+                "en": "One region/client fails"
+              },
+              {
+                "zh": "运营商、协议、规则命中和挑战兼容，检查是否误伤。",
+                "en": "Carrier, protocol, matched rules and challenge compatibility."
+              },
+              {
+                "zh": "修正具体条件，不据此全站封禁或关闭全部安全。",
+                "en": "Repair the specific condition rather than globally blocking or disabling security."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "联系供应商时，给出能执行的请求",
+          "en": "Escalate with actionable evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "向支持说明保护资源、开始时间、影响地区、业务后果和已做变更，附脱敏请求标识与关键指标。询问当前是否已触发防护、流量走向是否变化、合法请求如何识别、下一步需要谁批准。对容量或费用升级，要求写清范围与生效时间，避免多个团队各自发起互相冲突的请求。",
+            "en": "Provide assets, timing, regions, impact, changes and redacted identifiers. Ask whether mitigation is active, routes changed and approvals are needed. Record upgrade scope and effective time to prevent conflicting requests."
+          },
+          {
+            "zh": "[Cloudflare DDoS资料](https://developers.cloudflare.com/ddos-protection/)用于理解其产品控制边界；[AWS TCP/UDP指南](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)提醒非Web业务需要相应入口。若使用[CDN5](https://www.cdn5.com/)等安全套餐，应按实际订单和支持路径升级事件，不假设官网宣传的网络能力已自动应用到所有IP和端口。",
+            "en": "Use [Cloudflare scope](https://developers.cloudflare.com/ddos-protection/) and [AWS protocol guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) appropriately. For [CDN5](https://www.cdn5.com/) or other bundles, escalate against the actual order—not brand-wide assumptions."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "临时控制要窄、可观察、可撤回",
+          "en": "Keep temporary controls narrow and reversible"
+        },
+        "paragraphs": [
+          {
+            "zh": "优先保护关键路径，为已确认异常的接口、方法或可信身份维度施加有限控制，记录合法业务是否恢复。暂停非必要的昂贵导出、降低可延后的后台工作，可为关键交易释放资源，但应由业务负责人确认降级范围。缓存只用于确定可共享的内容，不能在应急中把账户页强制缓存。",
+            "en": "Protect critical routes with scoped controls and observe legitimate completion. Defer expensive nonessential work with owner agreement, and cache only verified shareable content."
+          },
+          {
+            "zh": "不要只按共享出口严格封禁所有用户，也不要把每个API改成必须完成浏览器挑战。[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)可帮助检查匹配、计数和动作。若某规则误伤，调整其局部条件并保留保护；撤销整个安全层往往会让攻击重新直达源站。重试也应有限，避免客户端在拒绝后同步放大请求。",
+            "en": "Avoid indiscriminate shared-IP blocks or browser challenges for APIs. [Rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) help separate scope, counters and action. Fix local false positives without removing the whole layer, and bound client retries."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "对内信息同步，减少互相覆盖的变更",
+          "en": "Coordinate changes to avoid conflicting actions"
+        },
+        "paragraphs": [
+          {
+            "zh": "由协调人维护当前影响、正在执行的动作和下一次评估时间。每位操作人员先记录计划，再确认是否与其他团队冲突；网络切换、缓存失效和应用重启尤其需要相互知情。并行工作应有清楚分工，不让多个账户同时修改同一条规则。",
+            "en": "Maintain shared impact, active actions and reassessment timing. Coordinate routing, purges and restarts so multiple operators do not overwrite the same controls."
+          },
+          {
+            "zh": "对用户或业务团队的说明保持可验证，只描述已确认影响与恢复进展，不在缺少证据时断言攻击来源或规模。内部记录可以更细，但凭据和个人信息仍需控制访问。",
+            "en": "Communicate verified impact and recovery, avoiding unsupported attacker or scale claims. Restrict sensitive incident records."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "回退必须仍然经过保护",
+          "en": "Rollback must retain protection"
+        },
+        "paragraphs": [
+          {
+            "zh": "不要把DNS临时指向裸源站作为通用恢复办法。先检查备用入口的证书、规则、允许列表、容量与应用状态，确认它能处理同一业务。DNS变更会受到缓存影响，现有连接也可能继续使用旧路径；回退效果需要从用户和两侧日志验证，不能以控制台提示保存成功作为结束。",
+            "en": "Do not use bare-origin DNS as a universal recovery shortcut. Verify standby TLS, policies, allowlists, capacity and state. DNS caches and existing sessions create overlap; validate both paths and user results."
+          },
+          {
+            "zh": "若源站已经暴露，按可信回源和运维路径收紧访问，并确认健康检查不被挡住。涉及数据库写入或会话时，切换还要考虑幂等与一致性，避免访问恢复却出现重复操作。网站恢复细节见[网站DDoS恢复指南](article/website-ddos-recovery/)，应用请求型事件可进一步看[CC排查](article/website-cc-incident-response/)。",
+            "en": "Restrict exposed origins while preserving checks. Stateful recovery needs idempotency and consistency. See [website recovery](article/website-ddos-recovery/) and [CC triage](article/website-cc-incident-response/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-incident-response-review.svg",
+            "alt": {
+              "zh": "DDoS应急处置顺序示意图：共享时间线、受保护回退、撤销临时例外",
+              "en": "DDoS incident workflow: Shared timeline, Protected rollback, Revoke exceptions"
+            },
+            "caption": {
+              "zh": "检查重点：共享时间线 → 受保护回退 → 撤销临时例外。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Shared timeline → Protected rollback → Revoke exceptions. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "恢复窗口与事件复盘",
+          "en": "Verify recovery and close the incident"
+        },
+        "paragraphs": [
+          {
+            "zh": "恢复不仅看首页返回200，还要看关键任务、用户分组、尾延迟、源站队列和错误是否回到可接受范围。逐步放宽临时策略，观察正常峰值与客户端重连，避免一次性释放积压导致第二次过载。对于无法确认的残余异常，保留明确的跟进人和观察窗口。不要规定一个适合所有系统的固定等待分钟数。",
+            "en": "Recovery means completed workflows, acceptable segmented errors/tails and drained queues—not just HTTP 200. Relax controls gradually, watching reconnection and backlogs, with owners for residual issues."
+          },
+          {
+            "zh": "事件后保存时间线与有效配置，核对攻击、合法重试、缓存填充和临时资源造成的费用。撤销例外和临时权限，归档日志，确认没有遗留裸露入口。复盘应找出检测、协作、规则或架构缺口，并给改进项负责人和验证方式。只有业务恢复和控制重新稳定，事件才适合关闭。",
+            "en": "Archive timelines/configurations, reconcile retries/refill/temporary costs, revoke exceptions and close exposed paths. Assign and verify improvements to detection, coordination, policies and architecture before closure."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      }
+    ]
+  },
+  {
+    "id": "website-ddos-recovery",
+    "seriesOrder": 39,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "网站被DDoS攻击怎么办？快速恢复访问与长期防护方案",
+      "en": "Website DDoS Recovery: Restore Access and Build Lasting Protection"
+    },
+    "excerpt": {
+      "zh": "网站遭DDoS后，按页面、身份、交易与源站逐层恢复。区分真实恢复、缓存掩盖与误报，处理DNS切换、队列、账单和长期防护缺口。",
+      "en": "Restore pages, identity, transactions and origins after DDoS, distinguishing genuine recovery from cached appearances, false positives and unresolved queues."
+    },
+    "category": {
+      "zh": "故障与应急",
+      "en": "Troubleshooting and response"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "首页打开了，不代表网站已经恢复",
+          "en": "A working homepage is not full recovery"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN可能仍能返回缓存首页，而登录、搜索或支付已不可用；也可能主页被挑战拦住，但后端实际健康。因此恢复判断必须从业务出发，列出用户需要完成的关键任务和对应接口。把静态内容、身份、读写操作和外部回调分开观察，避免一个成功状态码掩盖关键路径失败。",
+            "en": "A CDN can serve a cached homepage while login or payments fail, or challenge a healthy backend. Define critical tasks across public content, identities, reads/writes and callbacks. HTTP 200 alone is insufficient."
+          },
+          {
+            "zh": "攻击是可能原因之一，发布故障、证书失效和数据库异常也可能同时出现。按[CISA响应资料](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)保留证据与时间线，核对异常前后的配置。本文资料核实于2026年10月14日，恢复建议需结合自己的应用语义，不提供“改一条记录立即全站正常”的承诺。",
+            "en": "Releases, TLS or databases may fail alongside an attack. Preserve evidence using [CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks). This workflow, based on material checked on 14 October 2026, requires application-specific validation."
+          },
+          {
+            "zh": "为这些任务保留独立检查，可以避免缓存首页长期掩盖后端故障。",
+            "en": "Independent workflow checks prevent a cached homepage from concealing backend failure."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "建立恢复清单，按业务后果排序",
+          "en": "Prioritize a recovery checklist by impact"
+        },
+        "paragraphs": [
+          {
+            "zh": "先确认管理与诊断通道安全可用，再选择必须恢复的用户功能。对于交易站，订单状态、支付回调与身份正确性通常不能用“稍后重试”无限推迟；对于内容站，关键页面可读与编辑更新可能更重要。排序由业务负责人确认，不应完全由监控图上哪个指标最红决定。",
+            "en": "Secure diagnostic access first, then prioritize essential workflows with business owners. Orders, callbacks and identity may be urgent for commerce; readability and publishing may dominate content sites."
+          },
+          {
+            "zh": "每项记录当前表现、依赖、负责人和通过标准。恢复标准应包含正确内容或处理结果，不能只写接口返回成功。检查外部支付、邮件和物流等依赖是否积压，确认重复通知不会重复执行。对可延后的报表和批处理，临时暂停时也记录恢复时间与补跑要求，避免应急降级变成长期遗漏。",
+            "en": "For each task record dependencies, owner and correct-result criteria. Check external queues and duplicate notifications. If reports or batch work are deferred, record resumption and catch-up requirements."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-ddos-recovery-flow.svg",
+            "alt": {
+              "zh": "网站恢复的业务路径示意图：公开页面、身份与接口、交易与回调、数据核对",
+              "en": "Website recovery path: Public pages, Identity / APIs, Transactions, Data reconciliation"
+            },
+            "caption": {
+              "zh": "路径示意：公开页面 → 身份与接口 → 交易与回调 → 数据核对。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Public pages → Identity / APIs → Transactions → Data reconciliation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "先区分边缘错误与源站错误",
+          "en": "Distinguish edge and origin failures"
+        },
+        "paragraphs": [
+          {
+            "zh": "关联用户请求、边缘动作与源站日志。请求未到源站，可能被规则、路由或连接问题阻断；请求已到但耗时增长，要看应用队列、数据库和外部调用。缓存命中也可能返回过期错误或不合适的页面，检查内容与相关响应字段，不能只看“命中”就认为状态正常。",
+            "en": "Correlate user, edge and origin records. Missing origin arrivals suggest edge/path issues; slow arrivals require application/dependency analysis. Cache hits can still contain stale errors, so validate content."
+          },
+          {
+            "zh": "[Cloudflare缓存文档](https://developers.cloudflare.com/cache/)帮助理解产品行为，[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)则提供缓存新鲜度与验证语义。不要为了清除疑似错误一次性失效所有对象，先限定受影响路径，估计回源影响。全站冷缓存可能在源站最脆弱时造成新的请求峰值。",
+            "en": "Use [Cloudflare cache guidance](https://developers.cloudflare.com/cache/) and [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html). Purge affected paths deliberately rather than causing a full cold-cache surge during recovery."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "恢复动作与验收信号",
+          "en": "Recovery actions and acceptance signals"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表把常见动作与其风险配对，目的是让每次调整都能被验证。一次只改变有限变量，并记录时间；若没有改善，也保留这个结果，避免重复尝试同一错误方向。",
+            "en": "Pair every recovery action with validation and a rollback condition. Change limited variables and preserve negative results as well as successes."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "网站恢复检查表",
+            "en": "Website recovery checks"
+          },
+          "columns": [
+            {
+              "zh": "动作",
+              "en": "Action"
+            },
+            {
+              "zh": "验证信号",
+              "en": "Evidence"
+            },
+            {
+              "zh": "防止二次故障",
+              "en": "Prevent a second failure"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "调整局部安全规则",
+                "en": "Adjust scoped security"
+              },
+              {
+                "zh": "受影响合法客户端完成任务，异常请求仍被适当控制。",
+                "en": "Legitimate clients complete tasks while abnormal work remains controlled."
+              },
+              {
+                "zh": "例外限制路径、身份与期限，不将整个站点永久放行。",
+                "en": "Scope exceptions by route/identity/expiry."
+              }
+            ],
+            [
+              {
+                "zh": "恢复公开内容",
+                "en": "Restore public content"
+              },
+              {
+                "zh": "页面、素材与版本一致，更新可以生效，错误内容不继续传播。",
+                "en": "Pages/assets/versions agree and updates propagate."
+              },
+              {
+                "zh": "定向失效和受控填充，避免源站被同时重新请求。",
+                "en": "Target invalidation and bound refill concurrency."
+              }
+            ],
+            [
+              {
+                "zh": "恢复动态处理",
+                "en": "Restore dynamic work"
+              },
+              {
+                "zh": "队列消化、数据库等待下降，订单与回调状态可以核对。",
+                "en": "Queues drain and transactions/callbacks reconcile."
+              },
+              {
+                "zh": "有限重试与幂等，避免重复写入和连接突然集中。",
+                "en": "Bound retries and make writes idempotent."
+              }
+            ],
+            [
+              {
+                "zh": "切换入口或源站",
+                "en": "Switch ingress/origin"
+              },
+              {
+                "zh": "主要用户分组通过，证书与鉴权有效，旧新路径均有记录。",
+                "en": "Audience checks, TLS/auth and overlap logs are valid."
+              },
+              {
+                "zh": "备用仍受保护，验证数据一致性与已有会话过渡。",
+                "en": "Keep protection and handle consistency/established sessions."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "网站防CC，不能把所有访客都当成浏览器",
+          "en": "Preserve client compatibility during containment"
+        },
+        "paragraphs": [
+          {
+            "zh": "支付通知、监控、移动SDK和搜索引擎与普通浏览器不同。应依据可信身份、签名和业务路径选择策略，不只凭User-Agent判断。对共享出口的用户，过严IP限速可能让正常访问相互争抢额度；对昂贵接口，仅放宽IP阈值又可能不解决资源问题。需要结合应用成本与真实用户结果。",
+            "en": "Callbacks, monitors, SDKs and crawlers differ from browsers. Use trusted identity and signatures, accounting for shared egress and endpoint cost. User-Agent alone is not proof."
+          },
+          {
+            "zh": "[Cloudflare速率限制文档](https://developers.cloudflare.com/waf/rate-limiting-rules/)可用于理解条件和计数维度。先看规则命中与合法失败是否对应，再局部调整，避免一次误报导致全站关闭防御。若大量请求集中于应用层，按[CC应急指南](article/website-cc-incident-response/)继续处理；不是所有网站不可用都需要扩大网络带宽。",
+            "en": "[Rate-rule documentation](https://developers.cloudflare.com/waf/rate-limiting-rules/) helps correlate matches and legitimate failures before scoped changes. Follow [CC response](article/website-cc-incident-response/) when application work dominates rather than assuming more bandwidth is the answer."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "堵住旁路，才能避免恢复后再次失守",
+          "en": "Close bypasses before declaring lasting recovery"
+        },
+        "paragraphs": [
+          {
+            "zh": "检查源站是否仍对任意地址开放，历史解析和其他子域是否指向同一入口。限制可信回源、IPv6和管理端口，验证证书、Host及代理身份链。防火墙变更必须保留健康检查与运维路径，不能为了隔离攻击把自己也锁在外面。通过保护访问成功和非法直连失败，应一起进入恢复验收。",
+            "en": "Audit historical/alternate origin entrances and restrict trusted proxy/operations access across IPv4/IPv6, validating TLS and identity. Preserve checks and administration. Test allowed protected traffic and denied bypass together."
+          },
+          {
+            "zh": "如果正在接入新的高防服务，可优先评估[CDN5](https://www.cdn5.com/)对现有协议和区域的适用性，但不要在压力中跳过配置核对。新服务的存在不自动撤销旧旁路。入口切换后观察DNS重叠与现有连接，确认旧地址何时可以收紧或停用，并保留受保护的回退。",
+            "en": "If adding a service such as [CDN5](https://www.cdn5.com/), verify protocol and region without skipping configuration under pressure. New protection does not automatically close old entrances. Observe DNS/session overlap before retiring them."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "恢复后检查数据，而不只是网络",
+          "en": "Reconcile business data after network recovery"
+        },
+        "paragraphs": [
+          {
+            "zh": "对订单、回调和异步任务核对成功、失败、重试与未决状态。重复请求可能已被客户端发送，超时也不一定意味着服务器没有执行。应用应通过幂等标识与可靠记录判断结果，不能把所有超时写操作直接重放。恢复脚本或补跑任务同样需要范围、审计和停止条件。",
+            "en": "Reconcile successful, failed, retried and unresolved transactions. A timed-out write may already have executed; use idempotency and durable records rather than replaying every timeout. Scope and audit recovery jobs."
+          },
+          {
+            "zh": "检查缓存是否仍持有过期价格、错误页面或应急提示，逐步恢复被暂停的后台工作。源站队列清空前不要骤然解除所有限制，否则可能形成第二次过载。持续观察主要用户和客户端，而不是只使用内部高速网络确认页面打开。事件结束需要业务负责人和技术证据共同支持。",
+            "en": "Remove stale prices/errors/notices carefully, resume background work gradually and avoid releasing every limit before queues drain. Validate real audiences, with business-owner confirmation alongside technical evidence."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-ddos-recovery-review.svg",
+            "alt": {
+              "zh": "网站恢复的业务路径示意图：缓存正确、队列消化、源站隔离",
+              "en": "Website recovery path: Correct cache, Queue drain, Origin isolation"
+            },
+            "caption": {
+              "zh": "检查重点：缓存正确 → 队列消化 → 源站隔离。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Correct cache → Queue drain → Origin isolation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "把本次恢复变成下一次的准备",
+          "en": "Turn recovery into preparation"
+        },
+        "paragraphs": [
+          {
+            "zh": "归档变更、指标与供应商工单，区分已证明有效的措施和仅与改善同时发生的动作。核对事件费用、备用资源与日志开销，撤销临时权限及例外。更新资产清单、联系路径和恢复步骤，给每项缺口明确负责人，安排一次能验证改进的演练。",
+            "en": "Archive changes, evidence and tickets, distinguishing causal improvements from coincidence. Reconcile temporary costs and revoke exceptions. Update inventories and runbooks with owned, verifiable actions."
+          },
+          {
+            "zh": "长期方案可沿[DDoS架构指南](article/ddos-defense-architecture-2026/)完善，包含上游、边缘、源站与应用共同控制。一个网站恢复得更成熟，意味着下次可以更快确认影响、做更少的无效改动，并让用户真正完成业务。最大流量数字并不能替代这些运行能力。",
+            "en": "Use the [defense architecture guide](article/ddos-defense-architecture-2026/) to improve upstream, edge, origin and application controls. Better recovery means faster diagnosis, fewer ineffective changes and completed user tasks."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/cache/",
+        "label": {
+          "zh": "Cloudflare 缓存文档",
+          "en": "Cloudflare cache documentation"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cc-attack-defense",
+    "seriesOrder": 40,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CC防护怎么做？网站CC攻击识别、防御方法与高防CDN方案",
+      "en": "CC Protection: Detect Abuse and Protect Expensive Website Work"
+    },
+    "excerpt": {
+      "zh": "从应用成本和可信身份设计CC防护，区分正常突发、恶意自动化与慢查询。把边缘规则、NGINX和应用配额组合成可观察、可回退的控制。",
+      "en": "Design CC protection around application cost and trustworthy identity, combining edge, NGINX and application limits with observable rollback."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "CC防护保护的是工作量，不只是请求数",
+          "en": "Protect work rather than request counts alone"
+        },
+        "paragraphs": [
+          {
+            "zh": "中文行业常把恶意消耗网站资源的应用层请求称作CC攻击，但它不是一种单一协议或固定请求形态。防御首先要回答：哪些请求让系统做了超出预算的工作？静态图片可能很便宜，一次报表却可能长时间占用数据库。把全站设置成同一个频率，既可能漏掉高成本滥用，也可能误伤正常浏览。",
+            "en": "“CC” commonly describes application-layer resource abuse, not one protocol or request pattern. Identify work exceeding the application budget: images and reports can have radically different costs. One global rate can both miss costly abuse and harm readers."
+          },
+          {
+            "zh": "本文聚焦长期配置，事件处理中可先阅读[网站CC应急步骤](article/website-cc-incident-response/)。资料核实于2026年10月14日。推荐方案以可解释的识别、合法任务成功和源站恢复为依据，不把某厂商宣传的QPS当成所有网站通用承载保证。",
+            "en": "This article addresses lasting configuration; use [CC incident response](article/website-cc-incident-response/) during outages. Information was checked on 14 October 2026. Judge protection by legitimate completion and controlled origin work."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "识别异常前，建立正常行为的分组",
+          "en": "Build a segmented baseline"
+        },
+        "paragraphs": [
+          {
+            "zh": "按路径模板、方法、身份、响应码、缓存和执行时间整理请求。模板化路径可以避免订单号等变量把同类请求分散。活动流量与日常流量分开看，监控、爬虫和合作方接口也各有节奏。新活动发布后请求增长，并不足以单独证明攻击；需要结合任务成功、资源压力和请求行为。",
+            "en": "Group route templates, methods, identities, status, cache and execution time. Separate campaigns, monitors, crawlers and partners. Traffic growth alone does not establish abuse; correlate resource pressure and task outcomes."
+          },
+          {
+            "zh": "保存正常工作窗口的分布与峰值，不只存平均数。检查连接池、队列、数据库等待与外部依赖，确定每类请求的可接受并发。原始日志应保护身份和令牌，提供给第三方时脱敏。基线不是永久常数，新接口、缓存和客户端版本上线后应更新，否则规则会逐渐偏离业务。",
+            "en": "Keep distributions and resource budgets, redact sensitive logs and refresh baselines when applications or clients change."
+          },
+          {
+            "zh": "建立基线时排除已知故障和异常重试，不要把一次事故的峰值直接变成正常阈值。对日夜差异、活动和不同客户端分别保留分布，才能在业务增长后解释为什么需要调整策略。",
+            "en": "Exclude known failures and abnormal retries from baselines. Retain time, campaign and client distributions so future policy changes remain explainable."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cc-attack-defense-flow.svg",
+            "alt": {
+              "zh": "CC防护的工作预算示意图：正常基线、可信身份、路径与配额、合法任务",
+              "en": "CC work-budget controls: Baseline, Trusted identity, Routes / quotas, Legitimate tasks"
+            },
+            "caption": {
+              "zh": "路径示意：正常基线 → 可信身份 → 路径与配额 → 合法任务。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Baseline → Trusted identity → Routes / quotas → Legitimate tasks. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "身份计数，比单一IP更需要信任边界",
+          "en": "Identity counters require a trust boundary"
+        },
+        "paragraphs": [
+          {
+            "zh": "共享出口可能承载许多正常用户，过严IP限速容易产生连带影响。账号、API令牌或会话可以提供更细维度，但只能使用已验证身份，不能任由请求者随意填写一个新值就得到新的预算。匿名路径仍需要整体和局部限制，登录路径也要防止计数规则变成枚举或锁定用户的工具。",
+            "en": "Shared egress can aggregate legitimate users. Accounts or tokens offer finer control only when authenticated; arbitrary client values must not mint unlimited budgets. Anonymous traffic still needs aggregate limits."
+          },
+          {
+            "zh": "源站在代理后面时，要从可信代理恢复客户端地址。若直接按代理IP计数，所有用户可能被归成一组；若无条件信任任意传入的转发头，又允许伪造。先限制回源入口，再配置可信链并测试多级代理。身份系统与边缘规则的关系应写清，不能靠某个请求头名称猜测其可信性。",
+            "en": "Behind proxies, restore identity only through trusted ingress. Counting proxy IPs groups unrelated users, while trusting arbitrary forwarding headers permits spoofing. Validate the full proxy chain."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "动作分层，给不同客户端合适的响应",
+          "en": "Choose client-compatible actions"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)提供匹配、计数与动作的文档。浏览器可以适用某些挑战，但支付回调、移动SDK和机器API未必能执行。为它们使用签名、配额和协议可处理的错误，明确重试条件。对合法搜索引擎也应验证身份，不能只信User-Agent自述。",
+            "en": "[Rate-rule documentation](https://developers.cloudflare.com/waf/rate-limiting-rules/) separates matching, counting and action. Browser challenges may be unsuitable for SDKs and callbacks; use authenticated quotas and protocol-compatible errors. Verify crawler identity."
+          },
+          {
+            "zh": "先观察，再在有限路径或用户范围启用。记录挑战通过、合法拒绝和业务成功，必要时调整具体规则。不要把“阻断更多”当成唯一目标，拦住订单或合作方回调同样是事故。临时例外包含路径、可信身份、负责人和到期时间，让恢复后能够收回。",
+            "en": "Observe before narrow enforcement and track legitimate refusals. Scope temporary exceptions with owners and expiry."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存治理与应用预算需要同时做",
+          "en": "Combine cache hygiene and application budgets"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)规定共享缓存的语义。公开对象可减少回源，但私人页面不能为了抗压而共享。无意义参数可能分裂缓存键，治理前证明其不影响内容或权限；语言、授权与版本参数不能随意丢弃。缓存变更后使用不同账号检查内容，同时观察回源是否真正下降。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html), simplifying keys only after proving equivalence and never sharing private data. Verify both correctness and offload."
+          },
+          {
+            "zh": "应用侧限制参数长度、查询复杂度、分页范围、导出并发和执行时间，避免一次允许的请求仍能消耗无限资源。具体限额来自业务要求，不照搬统一数字。异步队列必须有容量与过载处理，不能把即时等待转成无限积压。数据库索引和慢查询仍需正常优化，边缘防护无法替代这些工作。",
+            "en": "Bound query complexity, pagination, export concurrency and runtime. Queues need capacity and overload behavior. Edge protection does not replace indexes or database tuning."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "NGINX限流如何成为第二道约束",
+          "en": "Use NGINX as a second work constraint"
+        },
+        "paragraphs": [
+          {
+            "zh": "[NGINX请求限速模块](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html)支持按定义的键和速率控制，并提供观察相关配置。理解突发、延迟和拒绝之间的差别，再决定哪种适合接口。排队并非免费：等待连接也占资源，已经超出应用容量时，缓慢放行所有请求可能延长恢复。",
+            "en": "The [NGINX rate module](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html) exposes key/rate controls and observation options. Understand burst delay versus rejection; queued connections consume resources."
+          },
+          {
+            "zh": "上线前验证真实IP与共享出口，记录限流事件与应用日志。边缘和源站阈值应有清晰分工，避免互相遮蔽导致无法判断谁拒绝了请求。重试使用有限次数和退避，写操作保持幂等。配置应有旧版本和回退，先在授权测试范围观察，不把生产用户当作无条件试验样本。",
+            "en": "Validate real-IP handling and distinguish edge from origin refusals. Bound retries, preserve idempotency and retain tested rollback."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "高防CDN与Bot能力，应该补在哪一层",
+          "en": "Place protected CDN and bot controls deliberately"
+        },
+        "paragraphs": [
+          {
+            "zh": "需要Web入口安全与区域支持时，可优先评估[CDN5高防CDN](https://www.cdn5.com/)，核对规则、日志、协议和误报协作。宣传QPS应询问计量对象、攻击形态和合同范围，不能用它直接估算复杂业务。源站还必须隔离，保证请求确实通过购买的保护。",
+            "en": "For regional Web protection, evaluate [CDN5](https://www.cdn5.com/) for rules, logs, protocols and false-positive support, while isolating origins. Advertised QPS is not complex-workload capacity."
+          },
+          {
+            "zh": "[Cloudflare Bot文档](https://developers.cloudflare.com/bots/)说明机器人管理是另一组产品能力，普通限速不等于完整自动化识别。需要识别合法自动化、恶意批量操作和复杂会话时，评估产品支持及隐私、客户端兼容条件。没有必要的证据就不要声称识别率达到某个数字；用自己的合法成功和资源预算验证适用性。",
+            "en": "[Bot documentation](https://developers.cloudflare.com/bots/) describes capabilities beyond rate limits. Verify legitimate automation and client compatibility without inventing detection accuracy."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cc-attack-defense-review.svg",
+            "alt": {
+              "zh": "CC防护的工作预算示意图：边缘规则、源站限流、应用复杂度",
+              "en": "CC work-budget controls: Edge policies, Origin rate limits, Application complexity"
+            },
+            "caption": {
+              "zh": "检查重点：边缘规则 → 源站限流 → 应用复杂度。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Edge policies → Origin rate limits → Application complexity. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "持续验证，比一次调好更重要",
+          "en": "Maintain the policy as the application evolves"
+        },
+        "paragraphs": [
+          {
+            "zh": "把规则与应用发布一起审查，新增接口说明成本、身份和缓存，修改客户端重试时同步评估。定期抽查合法失败，防止某个地区或共享出口长期被误伤却没有人反馈。业务看板包含关键任务成功、源站队列与异常费用，让安全动作能够被产品和运维共同理解。",
+            "en": "Review rules with releases, endpoints and retry changes. Sample legitimate failures by audience and track task success, queues and cost."
+          },
+          {
+            "zh": "保留规则清单、负责人、理由与撤销条件，淘汰已经无用的临时规则。演练可以使用授权、有限的合法与异常样本，验证观察、执行、回退链条。进一步的HTTP分析见[HTTP Flood与WAF指南](article/http-flood-waf-cdn/)。成熟CC防护的结果是工作可控、用户可用，而不是不断积累无法解释的封禁。",
+            "en": "Maintain owners, reasons and removal conditions, exercising bounded authorized samples. See [HTTP Flood/WAF analysis](article/http-flood-waf-cdn/) for deeper diagnosis. The goal is controlled work with usable service."
+          },
+          {
+            "zh": "规则退役也要记录原因和验证结果，避免日后因为没有说明又被重新启用。",
+            "en": "Record policy-retirement reasons and evidence to prevent accidental reactivation."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://nginx.org/en/docs/http/ngx_http_limit_req_module.html",
+        "label": {
+          "zh": "NGINX 请求限速模块",
+          "en": "NGINX request rate limiting"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/bots/",
+        "label": {
+          "zh": "Cloudflare Bot 产品文档",
+          "en": "Cloudflare bot documentation"
+        }
+      }
+    ]
+  },
+  {
+    "id": "http-flood-waf-cdn",
+    "seriesOrder": 41,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "CC攻击防护指南：HTTP Flood识别、WAF规则与CDN防御方案",
+      "en": "HTTP Flood Defense: Identification, WAF Rules and CDN Controls"
+    },
+    "excerpt": {
+      "zh": "用请求证据区分HTTP Flood、活动流量与应用故障。围绕匹配、计数、动作和反馈设计WAF策略，同时处理缓存旁路、重试与源站预算。",
+      "en": "Distinguish HTTP floods, campaigns and application faults using request evidence, then design WAF matching, counters, actions and feedback."
+    },
+    "category": {
+      "zh": "安全与防护",
+      "en": "Security and protection"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "HTTP Flood不是“流量多”的同义词",
+          "en": "High traffic alone does not establish an HTTP flood"
+        },
+        "paragraphs": [
+          {
+            "zh": "HTTP Flood通过大量或高成本HTTP请求消耗服务资源，但请求数量上升也可能来自活动、爬虫或客户端重试。识别时不能只看QPS峰值，需要同时检查请求分布、业务完成、缓存行为与源站工作。正常活动通常也会集中访问热门路径，因此一条“热门页面即攻击”的规则很容易误判。",
+            "en": "High QPS can come from campaigns, crawlers or retries as well as HTTP floods. Correlate distribution, completion, cache and origin work; popularity alone is a poor detector."
+          },
+          {
+            "zh": "本文基于2026年10月14日可核实文档，讨论防御识别与配置，不提供生成攻击流量的方法。已经发生不可用时，先按[CC应急流程](article/website-cc-incident-response/)保护关键路径。长期策略则需要能解释为什么某组请求超出业务预算，而不是简单给所有自动化流量贴相同标签。",
+            "en": "This defensive guide uses documentation checked on 14 October 2026. During outages follow [CC incident response](article/website-cc-incident-response/); lasting policies need explainable work-budget evidence."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "从一条请求追到实际消耗",
+          "en": "Trace requests into resource consumption"
+        },
+        "paragraphs": [
+          {
+            "zh": "保留时间、路径模板、方法、状态、身份类别、缓存状态与边缘动作，再关联源站处理时间、队列和数据库。将可变ID归一到路由模板，避免一个接口被分成成千上万条不同URL。敏感参数与令牌脱敏，采样保留说明，防止日志本身造成成本和数据风险。",
+            "en": "Correlate normalized routes, methods, identity classes, cache and edge actions with origin timing, queues and databases. Redact secrets and document sampling."
+          },
+          {
+            "zh": "观察哪些请求得到业务有效结果，哪些持续触发错误或重复工作。错误比例高可能是滥用，也可能是新客户端存在缺陷；执行时间长可能是复杂参数，也可能是数据库计划变化。给每个假设准备一项可验证证据，不要只看来源地址数量或某种浏览器标识就下定论。",
+            "en": "High errors may indicate abuse or a broken client; long execution may reflect costly inputs or database changes. Validate hypotheses rather than relying on address counts or browser labels."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/http-flood-waf-cdn-flow.svg",
+            "alt": {
+              "zh": "HTTP Flood的证据链示意图：请求分组、缓存与成本、规则决策、业务反馈",
+              "en": "HTTP Flood evidence chain: Request groups, Cache / work cost, Policy decision, Business feedback"
+            },
+            "caption": {
+              "zh": "路径示意：请求分组 → 缓存与成本 → 规则决策 → 业务反馈。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Request groups → Cache / work cost → Policy decision → Business feedback. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "WAF匹配、计数与动作是三个独立决定",
+          "en": "Separate matching, counting and action"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)可用于核对产品中的条件与计数能力。先定义目标路径和方法，再选择可信身份或地址维度，最后选择观察、挑战或阻断等适用动作。不同套餐允许的字段和控制可能不同，不能从另一平台教程直接复制配置。",
+            "en": "Use [rate-rule documentation](https://developers.cloudflare.com/waf/rate-limiting-rules/) to verify tier-specific fields. Define route/method scope, trustworthy counters and then suitable action."
+          },
+          {
+            "zh": "对共享出口，用总量和细分身份共同管理；对可伪造请求头，不把它作为无限新预算的来源。观察模式命中并不表示请求已被拒绝，报告中区分检测与执行。每条规则附负责人、用途、上线时间和回退条件，避免多条重叠规则让团队无法知道究竟谁影响了用户。",
+            "en": "Handle shared egress with meaningful identities and aggregate budgets. Distinguish observation from enforcement and document ownership and rollback for overlapping policies."
+          },
+          {
+            "zh": "还要检查规则执行顺序和已有例外。前一条放行可能让后续限制没有机会生效，多个重叠规则也可能产生不同动作。以实际平台语义核对，并用有限样本确认最终决策，不能只看单条规则配置正确。",
+            "en": "Check evaluation order and exceptions: earlier decisions can bypass later controls. Verify actual platform semantics with bounded samples rather than inspecting one rule in isolation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "四类常见行为的处理方向",
+          "en": "Respond to behavior, not one signature"
+        },
+        "paragraphs": [
+          {
+            "zh": "下面是排查方向，不是可直接套用的攻击签名。正常客户端也可能出现相似行为，执行前需要业务样本与误报观察。",
+            "en": "These are diagnostic directions, not universal signatures. Legitimate clients can show similar behavior, so validate before enforcing."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "HTTP请求行为与防御问题",
+            "en": "HTTP behavior and defensive questions"
+          },
+          "columns": [
+            {
+              "zh": "行为",
+              "en": "Behavior"
+            },
+            {
+              "zh": "需要确认",
+              "en": "Confirm"
+            },
+            {
+              "zh": "控制方向",
+              "en": "Control direction"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "随机参数大量变化",
+                "en": "Varying parameters"
+              },
+              {
+                "zh": "是否真正改变内容，是否导致缓存键分裂与重复填充。",
+                "en": "Do parameters change content or only fragment cache?"
+              },
+              {
+                "zh": "验证等价后简化键，应用约束参数，不盲目删除授权或版本。",
+                "en": "Simplify proven-irrelevant keys and validate inputs."
+              }
+            ],
+            [
+              {
+                "zh": "昂贵搜索与导出集中",
+                "en": "Costly search/exports"
+              },
+              {
+                "zh": "数据库工作、并发、身份与正常业务峰值。",
+                "en": "Database work, concurrency, identity and normal peaks."
+              },
+              {
+                "zh": "身份配额、查询复杂度、队列和执行预算同时约束。",
+                "en": "Combine quotas, complexity and execution budgets."
+              }
+            ],
+            [
+              {
+                "zh": "错误后同步重试",
+                "en": "Synchronized retries"
+              },
+              {
+                "zh": "客户端版本、错误码、超时和重试上限。",
+                "en": "Client versions, errors, timeouts and retry caps."
+              },
+              {
+                "zh": "修正退避和幂等，避免仅扩容后继续放大工作。",
+                "en": "Repair backoff/idempotency and bound amplification."
+              }
+            ],
+            [
+              {
+                "zh": "单IP高频访问",
+                "en": "High rate from one IP"
+              },
+              {
+                "zh": "共享出口、监控、代理与真实客户端身份可信度。",
+                "en": "Shared egress, monitors, proxies and identity trust."
+              },
+              {
+                "zh": "先验证，再按路径及身份细分，不随意永久封禁整类用户。",
+                "en": "Validate and scope by route/identity rather than blanket bans."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "缓存旁路治理需要内容语义",
+          "en": "Cache-bypass controls need content semantics"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)定义共享缓存的新鲜度和使用边界。把公开、稳定的响应留在边缘，能够降低重复源站工作；但动态身份与写入不能为了抗压而共享。检查请求头、Cookie与查询参数，确认哪些决定内容、哪些仅是跟踪。配置优化需要比较响应与权限，而不是只看URL形状。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html): cache stable public responses without sharing identity-bound work. Inspect meaningful headers, cookies and parameters before simplifying keys."
+          },
+          {
+            "zh": "大规模清缓存可能让防御中的源站突然收到更多请求，失效与预热应限定范围。错误缓存也需要审查，避免源站短暂异常被边缘延长。使用[Cloudflare缓存文档](https://developers.cloudflare.com/cache/)理解实际产品行为，保留请求命中与字节命中两类证据。命中率很高却数据库仍饱和时，继续排查少量昂贵动态路径。",
+            "en": "Bound purges/warming and inspect cached errors. [Cloudflare cache documentation](https://developers.cloudflare.com/cache/) helps map product behavior; high overall hits can hide costly dynamic routes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "机器人管理与浏览器挑战的适用边界",
+          "en": "Bot controls and challenges have limits"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare Bot资料](https://developers.cloudflare.com/bots/)说明普通速率限制之外还有机器人产品能力。采购时核对可用计划、信号、日志与执行方式，不编造识别率。合法爬虫、无障碍工具、合作方API和移动SDK可能与普通网页用户不同，策略应以可信验证和业务需求为依据。",
+            "en": "[Bot documentation](https://developers.cloudflare.com/bots/) describes additional capabilities requiring tier/log verification. Do not invent accuracy rates. Legitimate automation and accessibility clients need appropriate treatment."
+          },
+          {
+            "zh": "给所有请求返回挑战页面，可能阻断并不支持交互的客户端。对回调采用签名和幂等，对API用合适身份与限额。搜集合法失败样本，观察挑战完成与关键任务，必要时只调整对应路径。防护目标不是消灭所有自动化，而是控制未经授权或超出预算的工作。",
+            "en": "Interactive challenges may break APIs and callbacks. Use authenticated quotas and signatures, tracking legitimate failures and task completion. The goal is controlling unauthorized or excessive work, not all automation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站必须保留自己的资源约束",
+          "en": "Origins still need work limits"
+        },
+        "paragraphs": [
+          {
+            "zh": "CDN规则只处理经过它的流量，因此先关闭未经授权的旁路。应用还需要参数约束、执行超时、连接池和并发预算。允许一个请求通过并不意味着它可以无限占用资源；拒绝也需要明确错误与有限重试。写操作使用幂等，避免一次网络超时造成多次执行。",
+            "en": "Close bypasses and enforce application validation, timeouts, pools and concurrency. An allowed request must still have bounded work; rejected writes need safe retries and idempotency."
+          },
+          {
+            "zh": "对需要中文Web高防的团队，可优先核对[CDN5](https://www.cdn5.com/)的规则、日志和支持范围，但不能认为购买套餐就替代了应用治理。更完整的配置思路见[CC长期防护](article/cc-attack-defense/)。评估产品时让供应商解释具体接口如何观测和处理，比只问最大QPS更接近实际需求。",
+            "en": "Evaluate [CDN5](https://www.cdn5.com/) where relevant for controls, logs and support without treating a bundle as application governance. See [lasting CC protection](article/cc-attack-defense/)."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/http-flood-waf-cdn-review.svg",
+            "alt": {
+              "zh": "HTTP Flood的证据链示意图：匹配范围、计数信任、客户端动作",
+              "en": "HTTP Flood evidence chain: Match scope, Counter trust, Client-compatible action"
+            },
+            "caption": {
+              "zh": "检查重点：匹配范围 → 计数信任 → 客户端动作。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Match scope → Counter trust → Client-compatible action. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "如何证明规则改善了系统",
+          "en": "Demonstrate improvement rather than coincidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "在相同业务窗口比较合法完成、源站资源、错误与尾延迟，记录流量本身是否下降。每次改动限定范围，留对照样本，不把攻击自然结束算作规则全部功劳。测试使用授权环境和有限样本，规则失败或误伤也保留记录，让后续人员知道为什么撤销。",
+            "en": "Compare legitimate completion, origin resources, errors and tails while accounting for traffic changes. Preserve controlled changes and negative results; do not credit natural attack cessation entirely to a policy."
+          },
+          {
+            "zh": "上线后与应用版本共同复查，删除无效规则与过期例外。将事件样本整理成可脱敏复现的检查，验证新客户端和新接口没有意外被阻断。可维护的WAF策略应让团队解释一条请求为什么通过或拒绝，并且能够在业务变化时安全调整。",
+            "en": "Review rules with releases, remove expired exceptions and reuse redacted regression samples. Maintain explainable, reversible decisions."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/cache/",
+        "label": {
+          "zh": "Cloudflare 缓存文档",
+          "en": "Cloudflare cache documentation"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/bots/",
+        "label": {
+          "zh": "Cloudflare Bot 产品文档",
+          "en": "Cloudflare bot documentation"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "website-cc-incident-response",
+    "seriesOrder": 42,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "网站被CC攻击怎么办？CC攻击排查、紧急防护与恢复方法",
+      "en": "Website Under CC Attack: Triage, Emergency Controls and Recovery"
+    },
+    "excerpt": {
+      "zh": "网站遭遇CC攻击时，先找出被消耗的应用资源和关键业务，再调整边缘规则、源站限流与回退。本文提供排查顺序和恢复后的长期修复。",
+      "en": "When a website is hit by a CC attack, identify the consumed application resources and critical workflows before adjusting edge, origin limits and fallback."
+    },
+    "category": {
+      "zh": "故障与应急",
+      "en": "Troubleshooting and response"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先确认是攻击、故障还是合法峰值",
+          "en": "Separate abuse from faults and legitimate peaks"
+        },
+        "paragraphs": [
+          {
+            "zh": "页面变慢或错误增加，不一定是CC攻击。新版本慢查询、第三方依赖、活动推广和缓存失效都可能产生类似现象。先记录开始时间、受影响路径、用户地区、请求变化、源站队列和最近变更，再判断是否存在异常集中或超出业务预算的请求。没有证据时同时保留多种假设，避免一上来把正常用户全部封掉。",
+            "en": "Slow pages and errors can come from releases, dependencies, campaigns or cache purges as well as CC abuse. Record onset, paths, regions, request changes, queues and recent changes before choosing a hypothesis."
+          },
+          {
+            "zh": "本文偏重已在运行的网站，事件中可结合[HTTP Flood识别指南](article/http-flood-waf-cdn/)。数据与文档核实于2026年10月14日。处置目标是恢复关键任务、减少昂贵工作并保存可复核记录，不能把一次控制台峰值图当作完整调查。",
+            "en": "This guide focuses on live websites and complements [HTTP Flood analysis](article/http-flood-waf-cdn/). Public documentation was checked on 14 October 2026. Restore workflows, bound expensive work and preserve evidence."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "保存证据时，避免给系统增加第二种压力",
+          "en": "Collect evidence without creating another overload"
+        },
+        "paragraphs": [
+          {
+            "zh": "收集受影响请求的时间、方法、路径模板、状态码、缓存与边缘动作，再与源站执行时间关联。记录时区和采样，脱敏账号、Cookie、令牌与支付内容，不把完整私有日志直接传给第三方。临时开启所有详细日志可能占满磁盘或增加费用，应控制范围和保留期。",
+            "en": "Correlate timestamps, routes, methods, status, cache and edge actions with origin work, documenting timezone/sampling and redacting secrets. Bound emergency logging and retention."
+          },
+          {
+            "zh": "每次修改写明负责人、开始时间、范围、理由和撤销条件。若请求突然下降，可能是攻击停止或客户端退避，也可能是防御生效；保留时间线才能区分。[CISA响应指南](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)可用于组织证据、协调与恢复，不宜只在事件后补一张截图作为结论。",
+            "en": "Record every change and its rollback. Falling traffic can reflect cessation, backoff or mitigation; use a timeline and [CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks) instead of retrospective screenshots."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-cc-incident-response-flow.svg",
+            "alt": {
+              "zh": "CC事件恢复顺序示意图：确认影响、昂贵路径、有限规则、队列与任务恢复",
+              "en": "CC incident recovery: Confirm impact, Costly routes, Scoped rules, Queue / task recovery"
+            },
+            "caption": {
+              "zh": "路径示意：确认影响 → 昂贵路径 → 有限规则 → 队列与任务恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Confirm impact → Costly routes → Scoped rules → Queue / task recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "按照“最贵的路径”排序",
+          "en": "Prioritize the most expensive routes"
+        },
+        "paragraphs": [
+          {
+            "zh": "把搜索、登录、订单、导出和公开内容分别统计。某个路径请求少但执行时间长，可能比图片请求多更快耗尽数据库。按路径模板归并变量，分开匿名和已登录请求，检查缓存状态、方法和身份。若只有一个接口严重拖慢，先限制该接口，不要立即对全站实施同样强度的策略。",
+            "en": "Group search, login, orders, exports and public content by normalized routes, identity and cache state. A low-volume expensive endpoint can exhaust a database before image traffic does."
+          },
+          {
+            "zh": "业务负责人确认关键任务顺序：支付回调、登录和订单通常需要保护，非必要报表和后台批处理可以临时降低优先级。降级动作要记录影响和恢复条件，避免被遗忘。对外部依赖和队列，也要观察积压是否来自本次请求而非供应商自身故障。",
+            "en": "Prioritize workflows with business owners. Defer nonessential reports only with an impact and recovery condition. Check external dependencies and queues for independent faults."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "应急规则三要素",
+          "en": "Three elements of an emergency rule"
+        },
+        "paragraphs": [
+          {
+            "zh": "临时规则至少写清覆盖范围、计数维度和动作，并记录负责人、时间与回退。按共享IP封禁可能伤害公司、校园和移动网络用户；按任意客户端头计数则容易被伪造。优先使用可信的会话、令牌或路径成本，结合整体并发和应用配额。",
+            "en": "A temporary rule defines scope, counter and action, with owner, time and rollback. Shared-IP blocks harm mobile/shared networks; arbitrary headers can be forged. Use trustworthy sessions/tokens, route cost and concurrency budgets."
+          },
+          {
+            "zh": "浏览器挑战不适合所有SDK和回调。对非浏览器客户端，使用签名、协议可处理的错误和有限重试；对合法搜索引擎和监控提供验证例外。观察模式命中不是已经阻断，执行后也要跟踪业务成功。规则过宽时缩小条件，而不是关闭全部WAF。",
+            "en": "Challenges can break SDKs and callbacks. Use signatures, compatible errors and bounded retries. Distinguish observation from enforcement, and narrow a false-positive rule rather than disabling the whole WAF."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存检查与供应商升级应同步进行",
+          "en": "Inspect caching while escalating to the provider"
+        },
+        "paragraphs": [
+          {
+            "zh": "依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)检查哪些响应可安全共享。公开图片与页面可适当卸载，账户与写操作不能应急强制缓存。随机参数可能让键碎片化，但删除前先证明不影响内容、语言或权限。对错误页面与过期响应也要检查，避免源站恢复后访客仍收到缓存错误。",
+            "en": "Use [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) to offload safe public responses without sharing identities or writes. Prove parameter irrelevance before simplifying keys, and inspect stale errors."
+          },
+          {
+            "zh": "[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)可以帮助理解计数、窗口与动作，实际权限以所用计划为准。向供应商提交脱敏请求标识、时间和业务影响，询问当前规则、可调整项与费用。若使用[CDN5](https://www.cdn5.com/)等高防服务，按实际协议和订单升级事件，不能以官网宣传容量代替本次配置核对。",
+            "en": "[Rate-rule documentation](https://developers.cloudflare.com/waf/rate-limiting-rules/) explains counters/actions. Escalate with redacted IDs and impact; for [CDN5](https://www.cdn5.com/) or others, verify the actual order and configuration."
+          },
+          {
+            "zh": "恢复后检查临时日志、扩容和备用资源是否继续计费。源站队列可能在流量下降后仍积压，应用也可能在重试处理中；逐步撤销限制并验证任务结果，避免误以为请求减少就意味着用户已恢复。",
+            "en": "After traffic falls, inspect queues/retries and temporary charges, relaxing controls gradually while checking task outcomes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站限流与边缘规则要相互认识",
+          "en": "Edge and origin controls must align"
+        },
+        "paragraphs": [
+          {
+            "zh": "在CDN后面的NGINX如果按代理节点IP计数，可能把所有用户合并；如果无条件信任客户端地址头，又会被伪造。先限制回源来源，按可信代理恢复地址，再决定源站限速键。边缘控制负责早期削减，源站还要限制查询复杂度、并发、连接池和执行时间。",
+            "en": "NGINX behind a CDN sees proxy addresses. Restrict trusted ingress and restore client identity through known proxies before choosing a source limit key. Edge controls reduce early work; origins still bound complexity, concurrency, pools and runtime."
+          },
+          {
+            "zh": "[NGINX限速文档](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html)说明速率、突发与拒绝的配置思路。排队会占用资源，不是所有请求都适合慢慢放行。源站拒绝应使用客户端能理解的状态与重试方式，写操作保证幂等。边缘和源站各自的拒绝日志要能关联，否则无法判断哪个层级在误伤。",
+            "en": "[NGINX rate controls](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html) cover rate/burst/rejection. Queuing consumes resources. Correlate edge and origin rejections and preserve idempotent writes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "恢复顺序：先业务，后清理",
+          "en": "Recover workflows before cleaning up"
+        },
+        "paragraphs": [
+          {
+            "zh": "恢复时先确认关键路径、用户分组和源站队列逐步回落。临时关闭的后台任务按优先级补跑，避免与线上查询争夺资源。缓存失效要局部进行，先验证新内容和源站容量，再扩大范围。不要因为一个首页返回200就立即撤销所有限制。",
+            "en": "Restore critical workflows and queues gradually, resuming deferred jobs by priority. Purge selectively and validate origin capacity before widening. HTTP 200 on a homepage is not enough."
+          },
+          {
+            "zh": "如果攻击集中在应用层，增加网络防护带宽未必能解决数据库问题；如果链路饱和，应用内限流也无法触及上游。按[CC防护原理](article/cc-attack-defense/)和[DDoS恢复指南](article/website-ddos-recovery/)区分路径。回退仍需保护，不能临时指向裸源站；现有长连接和客户端重试要单独观察。",
+            "en": "Application saturation may not need more network capacity; link saturation cannot be fixed in-app. Use [CC principles](article/cc-attack-defense/) and [DDoS recovery](article/website-ddos-recovery/). Keep rollback protected and inspect persistent sessions/retries."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/website-cc-incident-response-review.svg",
+            "alt": {
+              "zh": "CC事件恢复顺序示意图：日志与时间、误报与重试、回退与撤销",
+              "en": "CC incident recovery: Logs / timing, False positives / retries, Rollback / cleanup"
+            },
+            "caption": {
+              "zh": "检查重点：日志与时间 → 误报与重试 → 回退与撤销。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Logs / timing → False positives / retries → Rollback / cleanup. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "事后复盘的四个问题",
+          "en": "Four post-incident questions"
+        },
+        "paragraphs": [
+          {
+            "zh": "事件后问：哪个入口暴露了源站？哪个规则最早提供证据？哪些合法客户端被误伤？账单和支持是否能够解释？把回答写入资产、规则和联系信息，而不是只保留事件截图。临时白名单、挑战豁免和测试参数必须有撤销时间，确认已经回收。",
+            "en": "Ask which entrance exposed the origin, which rule provided evidence, which legitimate clients were harmed and whether billing/support were explainable. Revoke temporary allowlists, exemptions and test parameters."
+          },
+          {
+            "zh": "补充负载、缓存和应用指标的长期监测，设置持续异常的复查条件。必要时分离昂贵API、优化查询、增加队列或改变客户端重试。一次处理成功不等于架构已经完善，但有清楚的证据和责任，就能让下一次响应更快、改动更少。",
+            "en": "Add long-term workload/cache/application monitoring and review triggers. Separate costly APIs, improve queries, queues or retry behavior as needed. Evidence and ownership make the next response faster and smaller."
+          },
+          {
+            "zh": "如果无法立即确定原因，先保持最小必要的临时措施，并规定下一次评估时间与负责人。持续保留合法用户的检查样本，观察不同运营商和客户端，不让控制台流量下降掩盖仍然失败的任务。恢复后对照事件前配置确认差异，把确有必要的修复纳入常规版本，其余临时操作逐项撤回。",
+            "en": "When the cause remains uncertain, keep minimal necessary containment with an owner and reassessment time. Continue checking legitimate users across carriers/clients; reduced traffic can conceal failed tasks. Reconcile configuration with the pre-incident version, promoting verified fixes and reverting temporary changes."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://nginx.org/en/docs/http/ngx_http_limit_req_module.html",
+        "label": {
+          "zh": "NGINX 请求限速模块",
+          "en": "NGINX request rate limiting"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ddos-protected-ip-explained",
+    "seriesOrder": 43,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "高防IP是什么？高防IP工作原理、价格及与高防CDN的区别",
+      "en": "What Is a Protected IP? Architecture, Pricing and the CDN Difference"
+    },
+    "excerpt": {
+      "zh": "高防IP是受保护的网络入口，不等于源站自动拥有无限防御。本文解释转发、清洗、回注和会话，比较它与高防CDN的协议、缓存和费用边界。",
+      "en": "A protected IP is a defended ingress, not unlimited origin protection. Understand forwarding, scrubbing, reinjection and sessions versus a protected CDN."
+    },
+    "category": {
+      "zh": "原理与教程",
+      "en": "Concepts and tutorials"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "高防IP是什么：先让连接进入受保护入口",
+          "en": "A protected IP provides a defended ingress"
+        },
+        "paragraphs": [
+          {
+            "zh": "高防IP通常指由防护服务承接用户连接、过滤异常后将合法流量转发到业务服务器的入口。实际实现可能涉及代理、转发或其他网络方案，必须按产品确认。它的价值是把需要公开的业务入口与源站分开，并在适合的位置处理攻击；它不会因为名字叫高防，就自动覆盖所有协议、端口和攻击类型。",
+            "en": "A protected IP generally receives connections through mitigation before forwarding legitimate traffic to the application. Implementations vary; verify proxy, forwarding or network behavior. The name alone does not establish all-protocol coverage."
+          },
+          {
+            "zh": "选择前列出TCP、UDP或HTTP业务、端口、源站地区、连接时长和真实客户端地址需求。[AWS TCP与UDP防护资料](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)可以帮助理解非Web入口与普通网站代理的差别。本文资料核实于2026年10月14日，解释架构，不宣称任何产品已通过本文压力测试。",
+            "en": "Inventory protocols, ports, origin regions, session lifetime and client-address requirements. [AWS TCP/UDP guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) distinguishes non-Web ingress. Information was checked on 14 October 2026; no attack benchmark is claimed."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "请求经过哪里，决定哪里需要配置",
+          "en": "The traffic path determines configuration"
+        },
+        "paragraphs": [
+          {
+            "zh": "用户连接保护地址后，服务需要知道转发到哪个源站和端口，并按约定保留或重新建立会话。源站看到的连接地址可能是代理，应用若依赖客户端IP，需要产品支持的可信传递方式。不能随意信任任意外部请求头，也不能假设TCP代理自动提供HTTP语义。应用日志和防火墙规则应与真实转发行为一致。",
+            "en": "Forwarding must map ingress to origin ports and define session behavior. Origins may see proxy addresses; client identity needs a supported trusted mechanism. A TCP proxy does not automatically provide HTTP semantics."
+          },
+          {
+            "zh": "还要确认去程、回程和清洗回注是否经过同样设施，以及是否存在非对称路径。线路变化可能影响时延、MTU、连接保持与排障，供应商需要说明可配置范围。对使用TLS的业务，确认在何处终止、证书由谁管理、源站连接如何验证。不同产品的“透传”含义可能不同，采购时应要求明确描述。",
+            "en": "Verify forward/return/reinjection paths, asymmetry, MTU and connection behavior. For TLS, identify termination, certificate ownership and origin verification. Ask what “pass-through” means in that particular product."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protected-ip-explained-flow.svg",
+            "alt": {
+              "zh": "高防IP转发路径示意图：客户端、受保护入口、转发或回注、业务源站",
+              "en": "Protected-IP forwarding: Client, Protected ingress, Forward / reinject, Application origin"
+            },
+            "caption": {
+              "zh": "路径示意：客户端 → 受保护入口 → 转发或回注 → 业务源站。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Client → Protected ingress → Forward / reinject → Application origin. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "高防IP与高防CDN，怎样选择",
+          "en": "Choose protected IP or protected CDN by workload"
+        },
+        "paragraphs": [
+          {
+            "zh": "二者都可能参与DDoS缓解，但控制层级和内容能力不同。高防CDN通常了解HTTP资源与缓存，高防IP产品则按其支持的协议承接连接。不能因为一个服务同时提供两者，就把套餐能力混用。以下比较用于识别问题，实际能力以所购产品为准。",
+            "en": "Both may mitigate DDoS, but their content and protocol capabilities differ. A protected CDN typically understands HTTP/cache semantics, while a protected-IP product handles supported connections. Verify purchased scope."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "高防IP与高防CDN的选择边界",
+            "en": "Protected IP versus protected CDN"
+          },
+          "columns": [
+            {
+              "zh": "问题",
+              "en": "Question"
+            },
+            {
+              "zh": "高防IP方向",
+              "en": "Protected-IP direction"
+            },
+            {
+              "zh": "高防CDN方向",
+              "en": "Protected-CDN direction"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "主要协议",
+                "en": "Protocols"
+              },
+              {
+                "zh": "确认TCP、UDP、端口和具体应用是否支持，不默认所有协议可用。",
+                "en": "Verify TCP/UDP, ports and application support."
+              },
+              {
+                "zh": "通常围绕HTTP、HTTPS及受支持的WebSocket，非Web另查。",
+                "en": "Typically HTTP/HTTPS and supported WebSocket; verify non-Web separately."
+              }
+            ],
+            [
+              {
+                "zh": "内容缓存",
+                "en": "Content caching"
+              },
+              {
+                "zh": "连接转发不自动理解资源新鲜度，也不自动减少动态处理。",
+                "en": "Forwarding does not inherently cache objects or reduce computation."
+              },
+              {
+                "zh": "可按HTTP语义复用公开内容，但私有与写操作需要隔离。",
+                "en": "Can reuse public responses with correct identity/write boundaries."
+              }
+            ],
+            [
+              {
+                "zh": "客户端身份",
+                "en": "Client identity"
+              },
+              {
+                "zh": "核对真实地址传递、代理协议与应用支持，注意源站看到的地址。",
+                "en": "Check client-address transport and application support."
+              },
+              {
+                "zh": "核对可信代理头、会话和规则计数，不信任任意外部头。",
+                "en": "Validate trusted headers/sessions/counters."
+              }
+            ],
+            [
+              {
+                "zh": "会话与恢复",
+                "en": "Sessions/recovery"
+              },
+              {
+                "zh": "关注连接保持、端口映射、回注和切换后客户端重连。",
+                "en": "Check lifetime, mappings, reinjection and reconnect."
+              },
+              {
+                "zh": "除会话外还要检查缓存、证书、WAF及更新一致性。",
+                "en": "Also validate cache, certificates, WAF and updates."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "价格为什么不能只按一个IP计算",
+          "en": "One IP address does not define the price"
+        },
+        "paragraphs": [
+          {
+            "zh": "费用可能包含入口、端口、正常带宽、连接、保护档位、线路、清洗、回注和支持。公网地址数量只是其中一项，两个方案即使都叫一个高防IP，也可能在合法吞吐、超限动作和事件协作上差别很大。报价要写明哪些流量计量、哪些情况加费以及容量如何定义，不把共享网络规模当作客户独享保障。",
+            "en": "Charges can include ingress, ports, delivery, sessions, protection tiers, transit, scrubbing, reinjection and support. Equal address counts do not imply equal entitlements. Define metering and over-limit actions."
+          },
+          {
+            "zh": "[CDN5官网](https://www.cdn5.com/)提供高防IP产品入口，可优先询问与中文业务相符的方案，但其首页CDN套餐价格不能直接当作高防IP报价。[AWS Shield定价](https://aws.amazon.com/shield/pricing/)则展示高级保护订阅与资源费用可能分开；它同样不是任意高防IP的通用价格。缺少对应公开报价时，应保留询价而非编一个区间。",
+            "en": "[CDN5](https://www.cdn5.com/) lists a protected-IP product, but its homepage CDN prices are not protected-IP quotes. [AWS Shield pricing](https://aws.amazon.com/shield/pricing/) illustrates separate subscription/resource costs, not universal IP rates. Request missing prices instead of inventing ranges."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "隐藏源站，需要关闭真实旁路",
+          "en": "Hiding the origin requires closing bypasses"
+        },
+        "paragraphs": [
+          {
+            "zh": "将用户入口改到高防IP之后，源站仍可能被历史DNS、其他服务或IPv6暴露。源站访问应限制到可信转发与管理路径，并确认健康检查、更新和维护可用。若业务要求保留部分直连，说明其用途、身份控制和防护方式；不要让临时测试入口长期留在公网。",
+            "en": "Historical DNS, sibling services and IPv6 can expose origins after migration. Restrict trusted forwarding and operations while preserving checks and maintenance. Any necessary direct entrance needs explicit ownership and protection."
+          },
+          {
+            "zh": "验收时从允许路径和非授权路径分别检查，并记录结果。防火墙策略更新必须有负责人和旧版本，避免供应商更换回注地址后合法业务被自己拒绝。备用入口与测试端口也纳入清单，关闭不用的映射比不断叠加规则更容易维护。",
+            "en": "Test authorized and unauthorized paths separately. Own and version firewall updates so reinjection-address changes do not block legitimate service. Inventory standby/test mappings and retire unused entrances."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "长连接与UDP业务，试点要测会话生命周期",
+          "en": "Test the full session lifecycle"
+        },
+        "paragraphs": [
+          {
+            "zh": "只验证能建立连接还不够，要测试正常通信、空闲、心跳、断线和重连。产品的空闲超时可能与应用预期不同；切换入口也可能不迁移已有会话。UDP没有TCP连接的同样语义，但服务仍可能维护映射和超时，需要按产品理解。不能从短请求测试推断游戏或实时业务长期稳定。",
+            "en": "Test normal traffic, idle periods, heartbeat, disconnect and reconnect—not merely establishment. UDP has different semantics but may still depend on mapping/timeouts. A short request test cannot establish persistent-session stability."
+          },
+          {
+            "zh": "试点使用授权环境与正常协议样本，记录客户端、入口和源站时间，观察合法吞吐、延迟分布和错误。对TLS或专有协议，确认终止和透传模式正确。客户端重连应有退避，避免故障恢复时全部用户同时建立连接形成峰值。协议与保护的组合也可参照[游戏高防方案](article/gaming-ddos-cdn/)。",
+            "en": "Use authorized normal protocol samples and measure both ends. Validate TLS modes and backoff to avoid synchronized reconnect peaks. See [game protection](article/gaming-ddos-cdn/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "应用层问题仍需要应用层控制",
+          "en": "Application work still needs its own controls"
+        },
+        "paragraphs": [
+          {
+            "zh": "如果业务是HTTP，高防IP并不必然提供完整WAF、缓存和Bot能力；需要相应产品或组合。若攻击请求在协议上合法却触发昂贵计算，网络清洗可能无法替你判断业务成本。应用仍要鉴权、参数校验、并发和执行限额。将日志关联起来，才能知道问题发生在入口、回注还是后端。",
+            "en": "For HTTP, protected IPs do not automatically include full WAF/cache/bot capability. Protocol-valid requests can still trigger expensive work, requiring authentication, validation and work limits. Correlate ingress, reinjection and application logs."
+          },
+          {
+            "zh": "对于协议上无法区分业务成本的入口，应用配额尤其必要。认证、消息和查询分别限制，记录拒绝与重试，避免单个已通过连接长期占用全部后端资源。",
+            "en": "When ingress cannot interpret business cost, enforce authentication, message and query budgets in the application, tracking refusals and retries."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/ddos-protected-ip-explained-review.svg",
+            "alt": {
+              "zh": "高防IP转发路径示意图：协议与端口、真实客户端身份、会话生命周期",
+              "en": "Protected-IP forwarding: Protocol / ports, Client identity, Session lifecycle"
+            },
+            "caption": {
+              "zh": "检查重点：协议与端口 → 真实客户端身份 → 会话生命周期。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Protocol / ports → Client identity → Session lifecycle. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "采购通过条件，要包含切换与退出",
+          "en": "Acceptance includes failover and exit"
+        },
+        "paragraphs": [
+          {
+            "zh": "合同和运行清单应明确保护协议、正常额度、事件流程、超限、日志、支持和费用。演练入口切换、源站限制和恢复，确认备用仍受保护，客户端能重建必要会话。不要用公开网络攻击来验证容量，缺少实测条件时通过范围承诺与协作演练处理不确定性。",
+            "en": "Document protocols, allowances, incidents, limits, logs, support and costs. Exercise protected switching and session recovery; handle untested capacity through explicit scope rather than attacks on public networks."
+          },
+          {
+            "zh": "退出时导出映射和配置，安排证书、地址与防火墙过渡，撤销旧访问并核对账单。多产品选择见[CDN、高防IP与清洗对比](article/cdn-ip-scrubbing-comparison/)，事件流程参考[CISA指南](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)。高防IP选对的标志，是业务路径清楚、合法会话可用、源站旁路关闭，而不是获得了一个听起来安全的地址。",
+            "en": "Export mappings/configuration at exit, coordinate address/TLS/firewall transitions and revoke old access. See [architecture comparison](article/cdn-ip-scrubbing-comparison/) and [CISA response guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/shield/pricing/",
+        "label": {
+          "zh": "AWS Shield 官方定价",
+          "en": "AWS Shield pricing"
+        }
+      },
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cdn-ip-scrubbing-comparison",
+    "seriesOrder": 44,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "DDoS防护方案怎么选？高防CDN、高防IP与流量清洗对比",
+      "en": "Choosing DDoS Protection: CDN, Protected IP or Network Scrubbing"
+    },
+    "excerpt": {
+      "zh": "用协议、资产控制权、恢复目标和团队能力选择DDoS方案。比较高防CDN、高防IP、清洗及组合部署，明确每条流量路径的责任与费用。",
+      "en": "Choose CDN, protected IP, scrubbing or a combination by protocol, asset control, recovery goals and operational capacity."
+    },
+    "category": {
+      "zh": "架构与运维",
+      "en": "Architecture and operations"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "先决定保护哪条路径，再决定产品名字",
+          "en": "Choose the traffic path before the product name"
+        },
+        "paragraphs": [
+          {
+            "zh": "DDoS方案没有适合所有网站和服务器的统一入口。公开网站需要HTTP语义和应用规则，专有TCP或UDP需要支持对应协议的入口，企业网段可能需要网络级引流与清洗。先列资产、协议、源站、路由权限和故障后果，再判断产品类型，能避免买了Web服务却发现游戏或管理端口不在保护范围。",
+            "en": "Websites, proprietary TCP/UDP and enterprise networks need different entrances. Inventory protocols, assets, origins, routing control and failure impact before buying a product class."
+          },
+          {
+            "zh": "本文以2026年10月14日可核实资料解释选择逻辑，没有将厂商宣传容量转写为实测成绩。中文Web高防可优先询问[CDN5](https://www.cdn5.com/)，其他协议及网段则按实际产品确认。选择结果应能够回答流量怎样进入、在哪里处理、如何回源或回注，以及故障后谁来恢复。",
+            "en": "This framework uses public information checked on 14 October 2026 without invented benchmarks. Consider [CDN5](https://www.cdn5.com/) for relevant Web protection, verifying other product scopes separately. Explain ingress, filtering, return and recovery ownership."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "三种方案的主要差别",
+          "en": "The main differences between three models"
+        },
+        "paragraphs": [
+          {
+            "zh": "表中描述常见模式，厂商实现可能不同。某个产品同时具备多种能力时，应确认它们是否在同一订单和同一路径中生效，不能仅因官网有相应页面就认为已经覆盖。",
+            "en": "These are common models, not universal implementations. Multiple capabilities on one vendor website do not establish that the purchased path includes all of them."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "高防方案选择矩阵",
+            "en": "Protection model comparison"
+          },
+          "columns": [
+            {
+              "zh": "维度",
+              "en": "Dimension"
+            },
+            {
+              "zh": "高防CDN",
+              "en": "Protected CDN"
+            },
+            {
+              "zh": "高防IP",
+              "en": "Protected IP"
+            },
+            {
+              "zh": "网络清洗",
+              "en": "Network scrubbing"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "入口对象",
+                "en": "Ingress asset"
+              },
+              {
+                "zh": "Web域名和HTTP资源。",
+                "en": "Web domains/resources."
+              },
+              {
+                "zh": "产品支持的IP、端口与协议。",
+                "en": "Supported addresses/ports/protocols."
+              },
+              {
+                "zh": "按合同保护的网络资源或网段。",
+                "en": "Contracted network assets/prefixes."
+              }
+            ],
+            [
+              {
+                "zh": "内容能力",
+                "en": "Content semantics"
+              },
+              {
+                "zh": "缓存、请求规则和应用安全依套餐。",
+                "en": "Cache/rules/application security by tier."
+              },
+              {
+                "zh": "连接转发不自动等于HTTP缓存或WAF。",
+                "en": "Forwarding does not imply cache/WAF."
+              },
+              {
+                "zh": "网络过滤不自动理解每个接口的业务成本。",
+                "en": "Network filtering does not infer endpoint work."
+              }
+            ],
+            [
+              {
+                "zh": "部署责任",
+                "en": "Deployment"
+              },
+              {
+                "zh": "DNS、证书、缓存键、可信回源与误报。",
+                "en": "DNS, TLS, keys, origin trust, false positives."
+              },
+              {
+                "zh": "端口映射、身份传递、会话和源站限制。",
+                "en": "Mappings, identity, sessions, origin rules."
+              },
+              {
+                "zh": "引流、路由、回注、容量和跨团队协作。",
+                "en": "Diversion, routing, reinjection, coordination."
+              }
+            ],
+            [
+              {
+                "zh": "恢复重点",
+                "en": "Recovery"
+              },
+              {
+                "zh": "内容、规则、回源和客户端兼容。",
+                "en": "Content, policies, origin and clients."
+              },
+              {
+                "zh": "连接重建、映射、地址切换与合法吞吐。",
+                "en": "Sessions, mappings, addresses, throughput."
+              },
+              {
+                "zh": "启停、路径、回注和恢复后的路由状态。",
+                "en": "Activation, paths, reinjection and route restoration."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-ip-scrubbing-comparison-flow.svg",
+            "alt": {
+              "zh": "三类防护的选择顺序示意图：资产与协议、产品边界、组合路径、恢复与费用",
+              "en": "Choose among protection models: Assets / protocols, Product scope, Combined paths, Recovery / cost"
+            },
+            "caption": {
+              "zh": "路径示意：资产与协议 → 产品边界 → 组合路径 → 恢复与费用。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Assets / protocols → Product scope → Combined paths → Recovery / cost. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "Web业务为何通常从CDN开始",
+          "en": "Why Web workloads often start with a CDN"
+        },
+        "paragraphs": [
+          {
+            "zh": "Web CDN可以在入口处理请求并复用公开内容，从而减少重复回源。安全规则可以按HTTP路径、方法或可信身份表达，适合网站与API的部分需求。[Cloudflare DDoS文档](https://developers.cloudflare.com/ddos-protection/)帮助理解网络和应用防护的产品边界，但具体权限与日志仍需按套餐核对。",
+            "en": "A Web CDN can inspect requests and safely reuse public content, with route/method/identity controls. [Cloudflare guidance](https://developers.cloudflare.com/ddos-protection/) frames scope; verify tier rights and logs."
+          },
+          {
+            "zh": "缓存遵循[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)，不能为抵抗请求而共享私人页面。动态应用仍需配额和工作预算，源站也要隔离。CDN优势来自正确的内容与入口控制，不是接入后所有服务器端口自动受保护。对于WebSocket，还需确认会话、空闲超时与重连。",
+            "en": "Follow [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html), isolate private data and bound dynamic work. CDN access does not protect all server ports; persistent sessions need separate checks."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "非HTTP入口，优先核对协议而不是品牌",
+          "en": "For non-HTTP ingress, protocol support comes first"
+        },
+        "paragraphs": [
+          {
+            "zh": "TCP游戏、UDP业务和专有客户端不能直接按普通网页代理配置。[AWS TCP/UDP资料](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html)说明不同入口设计的思路。高防IP或其他受保护代理可进入候选，但必须核对端口、会话、客户端地址、TLS模式与回注，不假定所有协议透明可用。",
+            "en": "Ordinary Web proxy settings do not fit every TCP/UDP or proprietary client. [AWS guidance](https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html) helps frame protocol-specific designs. Verify ports, sessions, identity, TLS and reinjection."
+          },
+          {
+            "zh": "若同一业务还有官网、更新下载和登录API，可以分开使用适合的产品。组合时记录身份、日志与恢复之间的关系，不让一个域名变更影响未准备好的客户端。详细入口机制见[高防IP解释](article/ddos-protected-ip-explained/)。采购验收应使用完整会话，不能只连接成功就结束。",
+            "en": "Websites, updates and login APIs may use separate products. Track cross-component recovery and test full sessions; see [protected IPs](article/ddos-protected-ip-explained/)."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "网络清洗需要运维准备，而非只有合同",
+          "en": "Network scrubbing requires operational readiness"
+        },
+        "paragraphs": [
+          {
+            "zh": "企业选择清洗时，应确认资产与路由控制是否满足产品条件，引流是常开还是按需，合法流量通过什么路径返回。回注链路、隧道、非对称路由与MTU等条件可能影响业务，需要由网络团队与服务商共同验证。一个很大的清洗能力数字，不能说明回注与后端都具备同样承载。",
+            "en": "Confirm asset/routing eligibility, always-on versus on-demand diversion and clean-traffic return. Reinjection, tunnels, asymmetry and MTU need network-team validation; scrubbing scale does not prove equivalent return/backend capacity."
+          },
+          {
+            "zh": "按需清洗还要考虑谁发现异常、谁有权限触发、配置是否预先验证和恢复到原路径的条件。若事件开始后才交换网络参数，响应时间可能主要耗在准备上。常开方案同样需要监测与演练，不能因为一直经过清洗就忽略误报和回注故障。",
+            "en": "For on-demand scrubbing, assign detection/activation authority and prevalidate parameters and restoration. Always-on designs still need monitoring for false positives and reinjection faults."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "组合方案，最容易在缝隙里失效",
+          "en": "Combinations can fail at their boundaries"
+        },
+        "paragraphs": [
+          {
+            "zh": "多个产品分别有效，不代表组合后自动有效。可能出现源站白名单只允许其中一条路径、客户端身份被重复改写、健康检查引导到裸源站，或临时切换绕过WAF。画出正常、攻击、回退和切回四种路径，确认每一条都有必要保护和可关联日志。",
+            "en": "Individually valid products can combine badly: incomplete allowlists, rewritten identities, bare-origin health fallback or bypassed WAF. Map normal, mitigation, fallback and failback paths with protection and correlated logs."
+          },
+          {
+            "zh": "联合演练应让各层团队都能看到同一个请求或会话标识，确认计时、错误和计费没有断点。一个服务判断源站健康，另一个却因证书或身份拒绝回源时，单独的绿灯并不能证明业务正常。把跨产品依赖写入运行手册，并指定协调人。\n\n配置变更同样跨越边界。更新证书、迁移源站或增加IPv6时，检查每个入口的映射和允许列表，避免只修改主路径。组合架构的收益来自满足单产品无法覆盖的需求，额外复杂度则需要明确的人力与验证预算。",
+            "en": "Correlate a common request/session across teams, including timing, errors and metering. Individual green health checks do not prove end-to-end success when another layer rejects TLS or identity. Assign coordination and document dependencies.\n\nTLS, origin and IPv6 changes must update every path. Budget the additional maintenance that makes a combination genuinely useful."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "评价方案时，用四个业务门槛",
+          "en": "Apply four operational gates"
+        },
+        "paragraphs": [
+          {
+            "zh": "协议和内容正确是第一道门槛，区域和合法用户表现是第二道，源站及旁路受控是第三道，恢复和费用可解释是第四道。任何门槛失败，不应由较低月费或较大宣传容量抵消。缺少数据的项目保持未确认，不给一个看似客观的中间分数。",
+            "en": "Require protocol/content correctness, audience fit, controlled bypasses and explainable recovery/cost. Do not offset failed gates with price or capacity claims, and leave unmeasured items unknown."
+          },
+          {
+            "zh": "[CISA应对资料](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)可用于组织报警、升级与恢复演练。实际负载测试需授权并设停止条件；没有大规模测试能力，也可以验证规则、配置、联系人和回退。把演练结果与合同范围结合，能更诚实地管理未知项。",
+            "en": "Use [CISA guidance](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks) for coordination exercises. Authorized bounded tests and explicit scope manage uncertainty without fabricated evidence."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/cdn-ip-scrubbing-comparison-review.svg",
+            "alt": {
+              "zh": "三类防护的选择顺序示意图：Web CDN、受保护IP、网络清洗",
+              "en": "Choose among protection models: Web CDN, Protected IP, Network scrubbing"
+            },
+            "caption": {
+              "zh": "检查重点：Web CDN → 受保护IP → 网络清洗。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Web CDN → Protected IP → Network scrubbing. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "费用与退出，应在架构阶段考虑",
+          "en": "Design cost and exit alongside architecture"
+        },
+        "paragraphs": [
+          {
+            "zh": "询价时把订阅、正常交付、攻击、回注、日志、支持和临时资源分开。确认超限是限制、黑洞、停用还是收费，谁能批准变更。按需切换可能减少部分常态成本，却增加触发和恢复要求；常开也不自动包含所有事件费用。不要把一种模式描述为所有业务最便宜。",
+            "en": "Separate subscription, legitimate delivery, attacks, reinjection, logs, support and temporary resources. Contract over-limit actions and authority. On-demand and always-on models trade different operational requirements."
+          },
+          {
+            "zh": "保留配置导出、证书、路由与防火墙迁移步骤，核对退出后的资源账单。进一步预算见[DDoS防护价格](article/ddos-protection-pricing-2026/)。适合的方案，应让团队能够解释每条请求和每项费用的归属，并在攻击、供应商变化或业务扩张时保持可操作。",
+            "en": "Preserve export and TLS/routing/firewall transitions, reconciling resources after exit. See [protection pricing](article/ddos-protection-pricing-2026/). Choose an architecture whose paths, costs and recovery the team can explain."
+          },
+          {
+            "zh": "演练还要包含一个供应商不可用时如何取得日志和联系支持。如果管理入口和生产路径共用同一故障点，应准备独立且受控的运维通道，并验证权限、凭据和责任人实际可用。",
+            "en": "Exercise access to logs and support during a vendor outage. If administration shares the production failure point, maintain a separate controlled operations path with verified credentials and owners."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/ddos-protection/",
+        "label": {
+          "zh": "Cloudflare DDoS 防护文档",
+          "en": "Cloudflare DDoS protection documentation"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/protecting-tcp-and-udp-applications.html",
+        "label": {
+          "zh": "AWS TCP 与 UDP 应用防护指南",
+          "en": "AWS protection for TCP and UDP applications"
+        }
+      },
+      {
+        "url": "https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks",
+        "label": {
+          "zh": "CISA DDoS 识别与应对指南",
+          "en": "CISA DDoS identification and response guidance"
+        }
+      }
+    ]
+  },
+  {
+    "id": "asia-pacific-cdn-node-selection",
+    "seriesOrder": 45,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "亚太CDN哪家好？香港、日本、新加坡与东南亚节点选择指南",
+      "en": "Asia-Pacific CDN Selection: Hong Kong, Japan, Singapore and Southeast Asia"
+    },
+    "excerpt": {
+      "zh": "亚太不是单一网络市场。按用户运营商、城市、语言、源站和缓存状态选择香港、日本、新加坡及东南亚节点，解释地图距离与真实体验之间的差别。",
+      "en": "Asia-Pacific is not one network market. Select Hong Kong, Japan, Singapore and Southeast Asian delivery using audience carriers, origins and cache state."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "亚太CDN哪家好，不能用一个地区平均值回答",
+          "en": "One regional average cannot describe Asia-Pacific"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港、日本、新加坡和东南亚各地用户可能经过不同运营商互联、海缆和移动接入。地理较近不必然意味着路径更短，同一城市不同运营商也可能得到不同体验。选亚太CDN应以用户城市与网络为单位，避免把几个大城市机房的平均结果写成整个亚洲速度。",
+            "en": "Hong Kong, Japan, Singapore and Southeast Asian users traverse different interconnects and access networks. Geographic proximity does not guarantee a shorter path. Use cities and carriers, not a few datacenter averages."
+          },
+          {
+            "zh": "先从真实流量建立用户地图，区分阅读、交易、下载和实时会话。资料核实于2026年10月14日，本文提供节点选择方法，没有发布独立测速排名。中文区域与安全需求可优先评估[CDN5](https://www.cdn5.com/)；广泛市场还需比较全球调度与源站布局，确认实际订单可使用哪些地区。",
+            "en": "Map real audiences and workflows. This guide uses public information checked on 14 October 2026, not rankings. Consider [CDN5](https://www.cdn5.com/) for relevant regional-security needs while verifying actual service regions."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "香港、日本、新加坡，各自只是候选位置",
+          "en": "Treat each city as a candidate, not an answer"
+        },
+        "paragraphs": [
+          {
+            "zh": "香港可进入部分大陆与亚太业务的评估，日本适合纳入日本用户与相关区域比较，新加坡可作为部分东南亚交付和源站布局候选。这些是地理与业务筛选方向，不是网络质量结论。某个国家的用户可能因互联关系被更远节点服务，决定是否接受这种调度要看实际HTTP结果和业务完成。",
+            "en": "Hong Kong, Japan and Singapore are useful candidates for relevant audiences, not guaranteed quality conclusions. Interconnection can make a more distant serving location practical; judge by actual HTTP and business outcomes."
+          },
+          {
+            "zh": "区域名称也不说明源站在哪里。把边缘位置、缓存层和应用位置分别记录，询问调度到其他地区时是否有通知或控制。对于要求明确处理位置的业务，应让供应商说明实际产品能力，而不是只展示网络地图或办公地点。",
+            "en": "Regional names do not locate origins. Record edge, cache and application placement separately, verifying scheduling controls and actual processing-location commitments."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/asia-pacific-cdn-node-selection-flow.svg",
+            "alt": {
+              "zh": "亚太节点的选择证据示意图：用户市场、运营商路径、边缘与源站、业务体验",
+              "en": "APAC node-selection evidence: Audience market, Carrier path, Edge / origin, User outcome"
+            },
+            "caption": {
+              "zh": "路径示意：用户市场 → 运营商路径 → 边缘与源站 → 业务体验。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Audience market → Carrier path → Edge / origin → User outcome. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "用市场工作表替代节点地图",
+          "en": "Use a market worksheet instead of a node map"
+        },
+        "paragraphs": [
+          {
+            "zh": "为主要市场记录业务占比、接入运营商、设备、内容和源站依赖。样本不足的市场标明限制，不能用其他地区替代后仍宣称覆盖。区域组合应从工作表推导，而不是先买一堆节点再寻找理由。",
+            "en": "Record business share, access networks, devices, content and origin dependencies by market. Mark sparse evidence rather than substituting another region. Derive deployment from this worksheet."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "亚太市场的节点选择问题",
+            "en": "APAC market selection questions"
+          },
+          "columns": [
+            {
+              "zh": "用户市场",
+              "en": "Audience market"
+            },
+            {
+              "zh": "优先观察",
+              "en": "Observe"
+            },
+            {
+              "zh": "部署判断",
+              "en": "Deployment decision"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "中国大陆用户",
+                "en": "Mainland audiences"
+              },
+              {
+                "zh": "按三网、城市与高峰拆分，检查跨境路径、失败与实际服务区域。",
+                "en": "Segment carriers/cities/peaks and cross-border failures."
+              },
+              {
+                "zh": "香港或其他境外节点需实测；大陆节点另核对接入条件。",
+                "en": "Validate offshore paths; mainland-node eligibility is separate."
+              }
+            ],
+            [
+              {
+                "zh": "日本用户",
+                "en": "Japanese audiences"
+              },
+              {
+                "zh": "当地固定与移动网络、页面和API路径，区分边缘与远端源站。",
+                "en": "Local fixed/mobile access and edge versus origin paths."
+              },
+              {
+                "zh": "验证日本交付是否实际可用，全球调度与固定区域按业务权衡。",
+                "en": "Verify local delivery eligibility and steering trade-offs."
+              }
+            ],
+            [
+              {
+                "zh": "新加坡及周边",
+                "en": "Singapore and nearby markets"
+              },
+              {
+                "zh": "用户跨国访问、源站位置、动态事务和第三方服务依赖。",
+                "en": "Cross-border access, origins, transactions and dependencies."
+              },
+              {
+                "zh": "新加坡可作为候选，但不能代替每个周边国家的用户证据。",
+                "en": "Singapore is a candidate, not evidence for every neighboring market."
+              }
+            ],
+            [
+              {
+                "zh": "东南亚多国",
+                "en": "Multiple Southeast Asian markets"
+              },
+              {
+                "zh": "国家、运营商、移动网络与设备分组，保留弱网和错误样本。",
+                "en": "Country/carrier/mobile/device segments, including weak networks."
+              },
+              {
+                "zh": "考虑多区域交付和内容优化，不用一个机房测试覆盖全部市场。",
+                "en": "Consider regional distribution and content optimization."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "动态业务，源站位置可能改变全部结论",
+          "en": "Dynamic origins can change the decision"
+        },
+        "paragraphs": [
+          {
+            "zh": "缓存命中时，用户到边缘是主要交付路径；未命中和动态操作还要到源站，交易可能继续访问远处数据库和支付服务。把边缘放到新加坡，不会自动让欧洲数据库在亚洲完成写入。应画出每次交互，统计跨区往返和应用等待，再决定优化源站、连接或缓存。",
+            "en": "Hits emphasize audience-to-edge delivery, while dynamic work adds origins, databases and payments. A Singapore edge does not relocate European writes. Map interactions and cross-region waits before choosing origin, connection or cache changes."
+          },
+          {
+            "zh": "对跨区写操作，还要考虑超时后的执行结果。用户看到超时并不保证事务没有完成，重试需要幂等与状态查询。动态路径测试应检查正确业务结果，而不仅是API返回速度；否则较快的错误响应可能被误判为更好的区域设计。",
+            "en": "Cross-region writes need idempotency and status checks after timeouts, which do not prove nonexecution. Measure correct outcomes, not merely API speed or fast errors."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "缓存与语言版本，保持一致的内容语义",
+          "en": "Keep language and cache semantics consistent"
+        },
+        "paragraphs": [
+          {
+            "zh": "多市场站点常按语言、货币和地区显示内容。依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)处理共享缓存，确保影响内容或权限的维度不会被删除。公开语言路径可以简化管理，个人价格和账户仍需要隔离。不要为了提高跨区命中率让某市场拿到另一地区条款或金额。",
+            "en": "Apply [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) to language, currency and regional variation. Stable public language paths help, while personalized prices and identities need isolation."
+          },
+          {
+            "zh": "[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)帮助理解参数、头与Cookie关系。发布新语言或资源时，先部署素材，再更新引用，按需要定向失效。若每次全球清空缓存，会让多个地区同时填充源站，形成与平时不同的成本和容量压力。",
+            "en": "Use [CloudFront key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html), publish assets before references and purge selectively. Global purges can cause simultaneous regional refill."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "全球调度和固定区域，各有控制代价",
+          "en": "Global steering and regional control have trade-offs"
+        },
+        "paragraphs": [
+          {
+            "zh": "全球平台可以根据产品机制安排入口，团队可能无法指定每次请求落在哪个城市。固定区域便于明确某些业务要求，但也可能让其他市场绕路。两者不存在普遍优劣，应根据用户构成、数据处理条件、可观察性和费用决定。[Azure Front Door架构](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview)可作为全球入口与源站组的参考，不是任意区域固定交付承诺。",
+            "en": "Global steering may not permit city pinning; regional control can disadvantage other audiences. Choose according to users, data requirements, observability and cost. [Azure Front Door architecture](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview) illustrates global ingress, not arbitrary location guarantees."
+          },
+          {
+            "zh": "当主要市场扩展时，重新检查区域与源站，而不是继续沿用最初单一城市的设计。若有数据驻留或处理位置硬条件，要确认产品实际控制与合同，不能只看边缘地图。实际用户地区、服务地区和数据存储地区也可能不同，需分别说明。",
+            "en": "Revisit scope as markets grow. Distinguish audience, serving and storage regions, verifying contractual controls for residency requirements."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "地区计费与大陆节点资格分开核对",
+          "en": "Separate regional billing from node eligibility"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)按地区与GiB等项目计费，包含香港的亚太首档缓存出网列价为0.09美元/GiB。价格页也列出大陆目的地，但说明从大陆以外位置交付；这不能证明购买了大陆节点。填充、查询和其他云资源费用仍需加入预算。",
+            "en": "[Google CDN pricing](https://cloud.google.com/cdn/pricing) lists $0.09/GiB for the first APAC delivery tier including Hong Kong, plus other components. Mainland-destination pricing explicitly uses offshore serving locations; it does not prove mainland nodes."
+          },
+          {
+            "zh": "[Cloudflare中国网络](https://developers.cloudflare.com/china-network/)有单独产品和域名条件，说明大陆部署与一般全球网络不同。境外节点通常不等于大陆CDN接入，但其他内容、经营和数据义务仍应按业务确认。节点选择与资格判断要并行，不应在完成迁移后才发现目标地区不能使用。",
+            "en": "[Cloudflare China Network](https://developers.cloudflare.com/china-network/) has separate product/domain requirements. Review geography and eligibility before migration, retaining other applicable business/data obligations."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/asia-pacific-cdn-node-selection-review.svg",
+            "alt": {
+              "zh": "亚太节点的选择证据示意图：香港与大陆用户、日本与当地接入、新加坡及东南亚",
+              "en": "APAC node-selection evidence: Hong Kong / mainland, Japan / local access, Singapore / Southeast Asia"
+            },
+            "caption": {
+              "zh": "检查重点：香港与大陆用户 → 日本与当地接入 → 新加坡及东南亚。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Hong Kong / mainland → Japan / local access → Singapore / Southeast Asia. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "验证与扩区，让每次决定可追踪",
+          "en": "Validate and expand with traceable decisions"
+        },
+        "paragraphs": [
+          {
+            "zh": "每个核心市场测试公开资源、动态路径与必要会话，记录协议、缓存、连接复用、错误和任务完成。不要把测试端点当作生产域名证据，除非配置和路径相符。连续观察高峰与正常窗口，保留样本数量；弱网用户失败也应进入结果，而不是仅统计成功下载。",
+            "en": "Test public, dynamic and persistent workflows per core market, recording protocol, cache, reuse, errors and task completion. Do not equate an unrelated test endpoint with production. Include peaks and failed weak-network samples."
+          },
+          {
+            "zh": "上线先从有限市场或低风险域名开始，确认回退和源站保护。区域扩展后复查规则、语言内容、费用和支持。下一步可阅读[亚太服务商比较](article/asia-pacific-cdn-comparison-2026/)与[香港回源优化](article/hong-kong-cdn-origin-optimization/)。成熟的区域选择能够解释为什么这个位置服务这些用户，以及何种变化会触发调整。",
+            "en": "Roll out narrowly with protected fallback, then review language, policy, cost and support. See [APAC comparison](article/asia-pacific-cdn-comparison-2026/) and [Hong Kong origin optimization](article/hong-kong-cdn-origin-optimization/)."
+          },
+          {
+            "zh": "区域工作表应随新市场上线更新，并由实际业务负责人确认优先级。",
+            "en": "Update the market worksheet with each launch and confirm priorities with business owners."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/azure/frontdoor/front-door-overview",
+        "label": {
+          "zh": "Azure Front Door 架构概览",
+          "en": "Azure Front Door architecture overview"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "asia-pacific-cdn-comparison-2026",
+    "seriesOrder": 46,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "2026年亚太CDN推荐：亚洲CDN服务商线路、延迟与价格对比",
+      "en": "Asia-Pacific CDN in 2026: Providers, Routes, Latency and Pricing"
+    },
+    "excerpt": {
+      "zh": "按区域安全、全球代理、云整合和边缘开发比较亚太CDN。用运营商样本与地区账单验证候选，避免把节点数量直接当成速度。",
+      "en": "Compare regional protection, global proxying, cloud integration and edge development using carrier evidence and regional billing."
+    },
+    "category": {
+      "zh": "区域与线路",
+      "en": "Regions and routing"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "亚太CDN推荐，应从主要收入市场开始",
+          "en": "Start with the markets that matter"
+        },
+        "paragraphs": [
+          {
+            "zh": "一家CDN可能在全球有很多设施，却没有在你的用户网络中表现稳定。亚太业务要先列主要国家、城市、运营商、设备和业务任务，把香港、日本、新加坡及东南亚市场分开评估。节点数量只是规模信息，实际调度、互联、源站与缓存才决定请求路径。没有同条件样本，不能宣布某家在全亚洲最快。",
+            "en": "Global facility counts do not establish reliability on your audience networks. Segment countries, cities, carriers, devices and workflows; steering, interconnection, origins and cache determine the actual path."
+          },
+          {
+            "zh": "本文依据2026年10月14日官方公开资料建立候选，未发布独立延迟排名。对中文区域和高防需求，可优先询问[CDN5](https://www.cdn5.com/)的适用节点与套餐。对全球访客和已有云架构，则比较不同运营模式。推荐的目的，是让试点更聚焦，而不是让所有网站购买同一种服务。",
+            "en": "This shortlist uses official material checked on 14 October 2026 without latency rankings. Evaluate [CDN5](https://www.cdn5.com/) for relevant regional-security needs and other operating models for global/cloud workloads."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "五种候选方向与亚太验证重点",
+          "en": "Five candidate directions and APAC checks"
+        },
+        "paragraphs": [
+          {
+            "zh": "下表列出候选与问题，不给未经测试的延迟数值。每家都需要落实到实际产品、区域、计划和合同；品牌介绍不能代替订单权益。",
+            "en": "These candidates have evaluation questions rather than invented latency values. Confirm product, region, plan and contract scope."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "亚太CDN候选的验证方向",
+            "en": "APAC CDN candidate checks"
+          },
+          "columns": [
+            {
+              "zh": "候选",
+              "en": "Candidate"
+            },
+            {
+              "zh": "适合评估",
+              "en": "Evaluate for"
+            },
+            {
+              "zh": "亚太重点",
+              "en": "APAC focus"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "CDN5",
+                "en": "CDN5"
+              },
+              {
+                "zh": "区域加速与Web高防组合，公开列示BGP/CN2套餐。",
+                "en": "Regional delivery and Web protection bundles."
+              },
+              {
+                "zh": "实际香港及其他区域资源、三网与东南亚样本、清洗状态路线。",
+                "en": "Actual regional resources, carrier samples and mitigation paths."
+              }
+            ],
+            [
+              {
+                "zh": "Cloudflare",
+                "en": "Cloudflare"
+              },
+              {
+                "zh": "全球代理、缓存与安全统一管理。",
+                "en": "Global proxy/cache/security management."
+              },
+              {
+                "zh": "各市场实际调度、计划权限、动态源站与独立大陆网络条件。",
+                "en": "Market steering, entitlements, dynamic origins and mainland eligibility."
+              }
+            ],
+            [
+              {
+                "zh": "Amazon CloudFront",
+                "en": "Amazon CloudFront"
+              },
+              {
+                "zh": "已有AWS源站与云运维体系。",
+                "en": "Existing AWS origins and operations."
+              },
+              {
+                "zh": "地区费用、缓存策略、回源与固定套餐适用范围。",
+                "en": "Regional costs, cache, origin and fixed-plan scope."
+              }
+            ],
+            [
+              {
+                "zh": "Fastly",
+                "en": "Fastly"
+              },
+              {
+                "zh": "需要边缘控制、失效管理与开发流程的团队。",
+                "en": "Edge control, invalidation and development workflows."
+              },
+              {
+                "zh": "亚太交付与请求费、配置维护、媒体限制及支持。",
+                "en": "APAC delivery/request costs, media limits and support."
+              }
+            ],
+            [
+              {
+                "zh": "Google Cloud CDN",
+                "en": "Google Cloud CDN"
+              },
+              {
+                "zh": "已有Google Cloud负载均衡与源站架构。",
+                "en": "Existing Google Cloud ingress/origin architecture."
+              },
+              {
+                "zh": "交付、填充、查询和安全组合，地区价格不等于固定节点。",
+                "en": "Delivery/fill/lookups/security; pricing does not imply pinned nodes."
+              }
+            ]
+          ]
+        },
+        "figures": [
+          {
+            "src": "assets/editorial/asia-pacific-cdn-comparison-2026-flow.svg",
+            "alt": {
+              "zh": "亚太采购的比较口径示意图：市场权重、区域候选、同条件样本、总价与支持",
+              "en": "APAC procurement comparison: Market priorities, Regional candidates, Comparable samples, Cost / support"
+            },
+            "caption": {
+              "zh": "路径示意：市场权重 → 区域候选 → 同条件样本 → 总价与支持。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Market priorities → Regional candidates → Comparable samples → Cost / support. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "线路如何验证：看业务，不只看路由名称",
+          "en": "Validate paths through application behavior"
+        },
+        "paragraphs": [
+          {
+            "zh": "跨国线路可能在不同运营商与时段变化，去回程也未必一致。链路追踪和IP定位可提供线索，但探测未响应不一定代表业务丢包，地址位置也可能不准确。需要结合边缘标识、HTTP时间、错误和源站日志验证。若供应商承诺特定线路，要求说明方向、范围与变更处理。",
+            "en": "Routes vary by carrier/time and direction. Traceroute and geolocation are clues, not complete evidence; correlate serving edge, HTTP, failures and origin logs. Contract route direction and change handling when required."
+          },
+          {
+            "zh": "对同一对象分别测试冷连接、复用连接、冷缓存和热缓存，动态接口独立测试。浏览器协议、IPv6和网络切换可能改变路径，记录这些变量。更详细的区域方法见[亚太节点选择](article/asia-pacific-cdn-node-selection/)，不要用一个海外机房结果替代全部移动网络。",
+            "en": "Separate connection/cache states, dynamic paths, protocols and IPv6. Use [regional node selection](article/asia-pacific-cdn-node-selection/) rather than substituting one datacenter for mobile audiences."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "源站和内容设计，会改变区域收益",
+          "en": "Origin and content design change regional benefits"
+        },
+        "paragraphs": [
+          {
+            "zh": "缓存命中的静态内容可能受益于区域边缘，动态事务仍依赖源站和数据库。如果主要用户在亚洲而关键写入在欧美，增加亚洲PoP不一定解决等待。先定位跨区交互与应用耗时，考虑连接复用、查询优化、公开读取缓存或适当源站布局。数据一致性和处理义务也要同时考虑，不为减少几次往返随意复制敏感数据。",
+            "en": "Regional edges can help cached content, while transactions still depend on origins/databases. More Asian PoPs do not relocate Western writes. Diagnose cross-region interactions before changing reuse, queries, safe read caching or origin placement, preserving consistency and data obligations."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "公开价格：保留单位和服务范围",
+          "en": "Preserve price units and scope"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Fastly定价](https://www.fastly.com/pricing)列出的亚洲初始付费交付档为0.19美元/GB，北美和欧洲相应档为0.12美元/GB，另有免费量、请求和安全条目，产品用途条件需要核对。[Google Cloud CDN价格](https://cloud.google.com/cdn/pricing)的亚太首档为0.09美元/GiB，并另计填充、查询及相关资源。这些数字不能直接相减，因为单位、地区归属、免费额度和包含范围不同。",
+            "en": "[Fastly](https://www.fastly.com/pricing) lists initial paid delivery at $0.19/GB in Asia and $0.12/GB in North America/Europe, with allowances, requests/security and use conditions. [Google CDN](https://cloud.google.com/cdn/pricing) lists $0.09/GiB for first-tier APAC plus fill/lookups/resources. Units and scope differ."
+          },
+          {
+            "zh": "[CloudFront价格](https://aws.amazon.com/cloudfront/pricing/)提供固定套餐与按量入口，[Cloudflare计划](https://www.cloudflare.com/plans/)按功能等级选择，CDN5也有安全套餐。让候选处理同一地区字节、请求与动态比例，再计算全部费用。公开报价不包含未确认的合同折扣，也不应被描述为你的最终含税账单。",
+            "en": "[CloudFront](https://aws.amazon.com/cloudfront/pricing/) offers fixed/metered models; [Cloudflare](https://www.cloudflare.com/plans/) and CDN5 use other plan structures. Price equal workloads without inventing discounts or tax-inclusive totals."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "安全策略要尊重区域客户端差异",
+          "en": "Security policies need audience compatibility"
+        },
+        "paragraphs": [
+          {
+            "zh": "共享出口、移动网络和合作方客户端会影响身份与计数。规则应根据可信会话、路径和工作成本设计，不能简单按国家整体拒绝仍有业务价值的用户。对支付、物流和SDK，验证挑战与错误是否兼容。支持多语言的业务还要检查缓存语言和地区价格隔离，避免让安全加速改变交易语义。",
+            "en": "Shared egress, mobile access and partner clients affect identity counters. Use trusted identities, routes and work cost rather than blanket geography blocks. Validate callbacks/SDKs and preserve language/currency isolation."
+          },
+          {
+            "zh": "对主要市场准备合法客户端样本，包含共享出口、不同语言与真实回调。上线先观察规则匹配，再有限执行，记录误报和撤销条件。某个地区请求量较高，不足以单独证明其恶意；业务占比与接口成本应一起判断。",
+            "en": "Prepare legitimate shared-egress, language and callback samples per market. Observe before enforcement and record false positives/rollback. High regional volume alone does not prove abuse."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "全球网络不等于自动拥有大陆节点",
+          "en": "Global service does not imply mainland eligibility"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare中国网络](https://developers.cloudflare.com/china-network/)明确有单独订阅和域名条件。境外香港、新加坡或日本服务与大陆节点是不同部署选择；即使价格表列有大陆目的地，也可能从境外交付。选择时确认真实服务位置与接入资格，不把宣传覆盖国家数当作本地节点证明。",
+            "en": "[Cloudflare China Network](https://developers.cloudflare.com/china-network/) has separate subscription/domain requirements. Offshore delivery and mainland nodes are distinct, and destination pricing may still mean offshore serving."
+          },
+          {
+            "zh": "区域数据处理、日志保存和第三方依赖也需要按实际业务核对。若将来进入新市场，重新确认合同、节点与运行要求。稳定的采购流程应该允许扩区时调整方案，而不是被初始的一个地区标签长期锁定。",
+            "en": "Review actual data processing, logs and dependencies by workload. Reassess contracts and eligibility when expanding markets rather than treating the initial regional label as permanent fit."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "将试点结果写成可以续用的运行标准",
+          "en": "Turn pilots into operational standards"
+        },
+        "paragraphs": [
+          {
+            "zh": "试点报告保留配置、地区、运营商、时间窗口、样本数量和失败。定义内容正确、关键任务完成、源站隔离、费用可解释与支持可执行等条件，按业务权重决定，而不是盲目给品牌综合分。未验证项目明确留在内部采购清单，补足后再放量。",
+            "en": "Preserve configuration, audience, window, samples and failures. Gate correctness, workflows, origin isolation, cost and support, retaining untested items until validated."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "扩容与退出，同样属于选型",
+          "en": "Scaling and exit belong in selection"
+        },
+        "paragraphs": [
+          {
+            "zh": "主要用户增长、视频上线、协议改变或源站迁移时，重新检查最初预算和区域结论。保留日志与配置导出、证书续期、允许列表和受保护回退，验证备用的实际可用性。两个品牌也可能共享依赖，多CDN不是自动独立灾备。",
+            "en": "Recheck fit when audiences, media, protocols or origins change. Preserve exports, TLS, allowlists and verified protected fallback. Two brands can share dependencies; multi-CDN is not automatically independent resilience."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/asia-pacific-cdn-comparison-2026-review.svg",
+            "alt": {
+              "zh": "亚太采购的比较口径示意图：线路与调度、源站与动态、地区账单",
+              "en": "APAC procurement comparison: Routes / steering, Origin / dynamic work, Regional billing"
+            },
+            "caption": {
+              "zh": "检查重点：线路与调度 → 源站与动态 → 地区账单。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Routes / steering → Origin / dynamic work → Regional billing. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "采购建议：以硬条件缩小范围",
+          "en": "Shortlist through hard requirements"
+        },
+        "paragraphs": [
+          {
+            "zh": "中文高防与香港线路可先询问CDN5，已有云架构优先比较整合成本，全球内容团队则检查调度和配置能力。每条建议都应由协议、区域和试点证据支持。价格模型详见[CDN费用比较](article/cdn-billing-comparison-2026/)，区域调优可以继续阅读[香港加速指南](article/hong-kong-cdn-origin-optimization/)。没有统一测试时，保留适用条件比宣布某家亚太绝对最快更有用。",
+            "en": "Start with workload-matched candidates: CDN5 for relevant regional protection, cloud integration for existing platforms, or global steering/control for broad audiences. Support every choice with protocol, region and pilot evidence. See [cost comparison](article/cdn-billing-comparison-2026/) and [Hong Kong optimization](article/hong-kong-cdn-origin-optimization/)."
+          },
+          {
+            "zh": "费用报告中注明各地区样本和真实交付占比，避免用少量低成本流量推断全年的平均账单。",
+            "en": "Record regional samples and actual delivery shares rather than inferring annual costs from a small inexpensive subset."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://cloud.google.com/cdn/pricing",
+        "label": {
+          "zh": "Google Cloud CDN 官方定价",
+          "en": "Google Cloud CDN pricing"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/china-network/",
+        "label": {
+          "zh": "Cloudflare 中国网络接入条件",
+          "en": "Cloudflare China Network requirements"
+        }
+      }
+    ]
+  },
+  {
+    "id": "video-on-demand-cdn-2026",
+    "seriesOrder": 47,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "视频CDN推荐：2026年视频点播加速、带宽成本与服务商对比",
+      "en": "Video CDN Recommendations in 2026: VOD Delivery and Bandwidth Costs"
+    },
+    "excerpt": {
+      "zh": "点播选型从播放器的首帧、卡顿和实际交付字节开始。比较分段、Range、缓存键、鉴权和服务商计费，建立能复现的播放测试与预算。",
+      "en": "Select VOD delivery through startup, rebuffering and delivered bytes, with practical tests for segments, ranges, cache keys, authorization and billing."
+    },
+    "category": {
+      "zh": "媒体与实时",
+      "en": "Media and real-time"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "视频CDN推荐，先把播放体验定义清楚",
+          "en": "Define playback success before choosing delivery"
+        },
+        "paragraphs": [
+          {
+            "zh": "点播CDN是否合适，应该看观众能否开始播放、持续观看和正确拖动，而不只是下载测速峰值。播放器拿到清单、选择码率、请求分片、解密和解码都需要时间；其中只有一部分由CDN决定。先确认视频长度、清晰度档位、设备、观众地区和付费权限，才能判断需要普通文件分发、专门视频服务还是带转码的完整媒体平台。",
+            "en": "Judge VOD by startup, sustained viewing and correct seeking, not peak download speed. Manifest loading, rendition selection, decryption and decoding extend beyond CDN control. Define content length, renditions, devices, regions and access rights before choosing delivery or a full media platform."
+          },
+          {
+            "zh": "本文参考资料核实于2026年10月14日，不提供未经测试的服务商首帧排名。已有云存储和媒体处理系统，可以先评估CloudFront这类分发产品；需要边缘控制可考察Fastly，但先核实视频的合同与价格。安全网站方案也不能自动视为视频套餐，媒体许可、对象上限和持续出网必须单独确认。",
+            "en": "Sources were checked on 14 October 2026; no startup ranking is claimed. Existing media stacks can evaluate CloudFront delivery or Fastly edge controls, subject to explicit media eligibility and pricing."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "单文件与分段点播，缓存策略不一样",
+          "en": "Single-file and segmented VOD need different policies"
+        },
+        "paragraphs": [
+          {
+            "zh": "MP4等文件按需读取时，播放器可能通过Range请求取得部分字节，拖动和索引位置影响实际下载。按照[RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html)理解范围与条件请求，检查源站和CDN是否正确返回所需部分，不要将完整文件返回误判为成功支持拖动。还要验证大对象限制与缓存填充方式，不假定第一次只取一点数据就不会触发更多回源。",
+            "en": "MP4 players may use byte ranges for seeking. Apply [HTTP semantics](https://www.rfc-editor.org/rfc/rfc9110.html), verifying partial responses, large-object limits and fill behavior rather than equating full-file responses with correct range support."
+          },
+          {
+            "zh": "HLS把播放信息和媒体分段分开，[RFC 8216](https://www.rfc-editor.org/rfc/rfc8216.html)描述其清单与分片格式。点播中已发布且不再变化的分片可以按版本稳定复用；清单、字幕、密钥和授权接口有各自的新鲜度与访问要求。不能给整个媒体路径同样长的TTL，再期待付费权限和内容更新自动正确。",
+            "en": "[HLS](https://www.rfc-editor.org/rfc/rfc8216.html) separates playlists and segments. Immutable versioned segments, manifests, subtitles, keys and authorization endpoints require different reuse and access policies."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/video-on-demand-cdn-2026-flow.svg",
+            "alt": {
+              "zh": "点播内容的交付链示意图：转码与封装、清单与分片、授权与缓存、播放器体验",
+              "en": "VOD delivery pipeline: Encode / package, Manifest / segments, Auth / cache, Playback outcome"
+            },
+            "caption": {
+              "zh": "路径示意：转码与封装 → 清单与分片 → 授权与缓存 → 播放器体验。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Encode / package → Manifest / segments → Auth / cache → Playback outcome. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "播放验收需要看这些位置",
+          "en": "Observe the complete playback path"
+        },
+        "paragraphs": [
+          {
+            "zh": "用同一素材和播放器测试不同候选，保持码率梯度、起播策略和设备一致。下表中的指标需要自己的播放器或测试环境提供，不应从厂商网络规模推算。",
+            "en": "Compare the same assets, player, rendition ladder and devices. Obtain these metrics from actual playback instrumentation rather than network-size claims."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "点播播放链路验收",
+            "en": "VOD playback acceptance"
+          },
+          "columns": [
+            {
+              "zh": "位置",
+              "en": "Stage"
+            },
+            {
+              "zh": "需要观察",
+              "en": "Observe"
+            },
+            {
+              "zh": "常见原因",
+              "en": "Possible cause"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "点击到首帧",
+                "en": "Click to first frame"
+              },
+              {
+                "zh": "播放器初始化、清单、鉴权、分片下载与解码时间。",
+                "en": "Initialization, manifest, authorization, download and decode."
+              },
+              {
+                "zh": "首帧慢不一定是线路，可能是令牌接口、编码或播放器策略。",
+                "en": "Authorization, encoding or player policy may dominate."
+              }
+            ],
+            [
+              {
+                "zh": "持续播放",
+                "en": "Continuous playback"
+              },
+              {
+                "zh": "卡顿时间、缓冲长度、码率切换和实际成功观看。",
+                "en": "Stall duration, buffer, bitrate switches and completed viewing."
+              },
+              {
+                "zh": "平均吞吐够高也可能出现短时中断，尾部与弱网需要单独看。",
+                "en": "Adequate averages can conceal bursts of loss or slow delivery."
+              }
+            ],
+            [
+              {
+                "zh": "跳播和续播",
+                "en": "Seeking/resume"
+              },
+              {
+                "zh": "Range或目标分片、时间定位、字幕和音视频同步。",
+                "en": "Ranges/segments, timestamps, subtitles and synchronization."
+              },
+              {
+                "zh": "错误索引、缺片、缓存旧清单或已过期签名。",
+                "en": "Bad indexes, missing segments, stale manifests or expired tokens."
+              }
+            ],
+            [
+              {
+                "zh": "发布和撤回",
+                "en": "Release/withdrawal"
+              },
+              {
+                "zh": "新内容可见、旧内容下线、授权撤销与分片完整性。",
+                "en": "Release visibility, withdrawal, revoked access and completeness."
+              },
+              {
+                "zh": "先发清单后传分片、缓存与源站版本不一致。",
+                "en": "Manifest publication before assets or inconsistent versions."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "缓存键既影响成本，也影响付费边界",
+          "en": "Cache keys affect cost and access control"
+        },
+        "paragraphs": [
+          {
+            "zh": "每个用户不同的签名如果直接成为缓存键的一部分，可能让相同分片重复填充；若直接删除签名却没有先验证权限，又可能公开本该受限的内容。正确方案是根据产品机制明确在哪一步验证访问、哪些字段决定对象、哪些只决定授权。配置未经证明前，不要用提高命中率作为绕过校验的理由。",
+            "en": "Per-viewer tokens can fragment segment caches, but dropping them before authorization can expose protected content. Define authorization separately from object identity according to the product."
+          },
+          {
+            "zh": "[CloudFront缓存键文档](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html)帮助区分转发字段和缓存维度。测试已授权、未授权、到期、拖动和播放中途续签，确认密钥接口没有被错误共享。日志中避免泄露完整令牌；下载链接可控不等于拥有完整版权管理或防录屏能力，产品责任需要清楚说明。",
+            "en": "[CloudFront cache-key guidance](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html) helps distinguish forwarding and key dimensions. Test unauthorized, expired and renewed sessions, avoiding token leaks. Controlled URLs do not imply complete DRM or screen-capture prevention."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "带宽预算从平均交付码率推导",
+          "en": "Budget from delivered bitrate and viewing time"
+        },
+        "paragraphs": [
+          {
+            "zh": "用观看小时数乘实际平均交付码率估算字节，再加协议开销、重复下载与未被观看的预取部分。例如明确假设平均4Mbps、观看一小时，纯媒体数据约1.8GB，按十进制单位计算。这不是某厂商测试，也不代表一个视频必须消耗这个量；自适应选择、提前退出和播放器预取都会改变结果。",
+            "en": "Estimate bytes from watched hours and delivered average bitrate, adding overhead, retries and unused prefetch. A hypothetical 4Mbps for one hour is about 1.8 decimal GB of media, not a vendor result or universal requirement."
+          },
+          {
+            "zh": "峰值观众数决定同时交付压力，不能用整月观看量代替。存储、转码、封装、字幕处理、源站填充、请求和日志也可能另收费。将热门与长尾内容分开：热片复用多，长尾可能以冷缓存访问为主。多码率转码增加存储，但实际交付通常由播放器选择，不能把所有档位码率简单相加作为每位观众流量。",
+            "en": "Peak viewers determine simultaneous capacity. Include storage, transcoding, packaging, fill, requests and logs, separating popular and long-tail content. Do not sum every rendition as if each viewer downloaded all of them."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "服务商比较：先确认产品允许视频",
+          "en": "Verify media eligibility before comparing prices"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Fastly价格页面](https://www.fastly.com/pricing)包含不同交付与安全计费，并有部分套餐的媒体使用限制。不能把普通Web套餐直接标为视频低价方案。[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)则应结合所用模式、分发额度、源站和媒体处理资源核算。两家的公开价格仅是模型输入，不是已经包含转码和播放器的总包报价。",
+            "en": "[Fastly pricing](https://www.fastly.com/pricing) includes package-specific media restrictions; verify a streaming-eligible offering. [CloudFront](https://aws.amazon.com/cloudfront/pricing/) requires accounting for distribution mode, origins and separate media processing. Neither delivery price automatically includes transcoding/player services."
+          },
+          {
+            "zh": "[Apple流媒体开发资料](https://developer.apple.com/streaming/)提供播放格式、验证与低延迟相关文档，可用于确认媒体链条是否规范。专门媒体平台可能减少转码、播放和分发之间的整合工作；独立CDN可能提供更灵活控制。选择取决于团队是否愿意维护整个链条，不能只比较交付单价而忽略开发与值守。",
+            "en": "[Apple media resources](https://developer.apple.com/streaming/) support format validation. Compare an integrated media platform’s reduced integration work with an independent CDN’s control, including operating cost."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "上线试点应该包含冷门内容和旧设备",
+          "en": "Include long-tail content and older devices"
+        },
+        "paragraphs": [
+          {
+            "zh": "只测热门清晰短片会遗漏许多真实问题。试点选择长视频、字幕、多音轨、冷门资源、不同编解码与弱网设备，记录播放成功、首帧和卡顿分布。不要只保留成功观看的平均数，未能起播和授权失败也要计入。移动网络切换后能否续播，同样影响体验。",
+            "en": "Test long videos, subtitles, multiple audio tracks, cold objects, codecs and weaker devices. Retain failed starts and authorization errors, plus recovery after mobile-network changes."
+          },
+          {
+            "zh": "发布流程先保证各码率分片完整，再发布引用它们的清单，并验证跨区可获取。下线时核对清单、分片、密钥与缓存，保留可审计的操作记录。回退需要正确版本和有效授权，不能为了恢复播放直接去掉访问控制。媒体故障还应区分网络、转码和播放器三个责任方。",
+            "en": "Publish complete renditions before manifests and verify regional availability. Withdrawal and rollback must preserve authorization and version correctness. Separate network, encoding and player responsibilities."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/video-on-demand-cdn-2026-review.svg",
+            "alt": {
+              "zh": "点播内容的交付链示意图：首帧与卡顿、Range与跳播、观看字节与费用",
+              "en": "VOD delivery pipeline: Startup / stalls, Ranges / seeking, Viewing bytes / cost"
+            },
+            "caption": {
+              "zh": "检查重点：首帧与卡顿 → Range与跳播 → 观看字节与费用。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Startup / stalls → Ranges / seeking → Viewing bytes / cost. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "持续优化，以每次成功观看核算",
+          "en": "Optimize against successful viewing"
+        },
+        "paragraphs": [
+          {
+            "zh": "持续监测每次成功观看的交付量、首帧、卡顿与费用，区分用户选择的清晰度、地区和设备。降低码率如果严重损伤画质，不应被包装成CDN性能提高；提高缓存命中若带来陈旧或未授权内容，也不能算优化成功。让内容质量、播放体验和成本共同进入决策。",
+            "en": "Track bytes, startup, stalls and cost per successful viewing by rendition, region and device. Lower quality is not a CDN performance improvement, and unsafe/stale cache hits are not success."
+          },
+          {
+            "zh": "进一步的成本模型见[CDN计费对比](article/cdn-billing-comparison-2026/)，直播业务则需阅读[低延迟直播方案](article/low-latency-live-cdn/)，不要照搬点播的稳定分片策略。点播CDN选对之后，仍要维护编码、播放器和发布链条，网络交付只是观众完成观看的一部分。",
+            "en": "Use [billing comparison](article/cdn-billing-comparison-2026/) and the separate [live guide](article/low-latency-live-cdn/). Encoding, player and publishing remain part of successful delivery."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+        "label": {
+          "zh": "IETF RFC 9110：HTTP 语义",
+          "en": "IETF RFC 9110: HTTP semantics"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc8216.html",
+        "label": {
+          "zh": "IETF RFC 8216：HLS",
+          "en": "IETF RFC 8216: HLS"
+        }
+      },
+      {
+        "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+        "label": {
+          "zh": "CloudFront 缓存键策略",
+          "en": "CloudFront cache-key policies"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://developer.apple.com/streaming/",
+        "label": {
+          "zh": "Apple HLS 流媒体开发文档",
+          "en": "Apple HLS developer documentation"
+        }
+      }
+    ]
+  },
+  {
+    "id": "low-latency-live-cdn",
+    "seriesOrder": 48,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "直播CDN哪家好？低延迟直播加速、全球分发与费用对比",
+      "en": "Choosing a Live CDN: Low Latency, Global Distribution and Costs"
+    },
+    "excerpt": {
+      "zh": "直播延迟贯穿采集、编码、封装、分发与播放。按互动要求选择协议，并验证清单新鲜度、故障切换、观众峰值和完整媒体账单。",
+      "en": "Live latency spans capture, encode, package, delivery and playback. Choose protocols by interaction needs and verify freshness, failover, peak viewers and total cost."
+    },
+    "category": {
+      "zh": "媒体与实时",
+      "en": "Media and real-time"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "直播CDN哪家好，先给延迟预算一个业务理由",
+          "en": "Give latency a business purpose"
+        },
+        "paragraphs": [
+          {
+            "zh": "赛事观看、在线课堂和双向互动不需要完全相同的延迟。越接近实时，播放器可用缓冲通常越少，对网络波动、编码和分发配合的要求越高。采购前写出可以接受的端到端延迟、画质与卡顿目标，再决定协议和产品。不能只因为页面写低延迟，就承诺任何客户端都实现同一秒数。",
+            "en": "Sports, classes and two-way interaction have different delay tolerances. Lower latency leaves less buffering room and demands coordination across encoding, networking and playback. Define end-to-end targets with quality/stall requirements before buying."
+          },
+          {
+            "zh": "本文没有同条件实测服务商，资料核实于2026年10月14日。公开价格和功能用于筛选，正式结论应由实际编码器、观众设备和地区测试支撑。需要比较点播时见[视频CDN指南](article/video-on-demand-cdn-2026/)，直播的持续更新清单与突发观众不能照搬静态文件方案。",
+            "en": "No comparative benchmark is claimed; sources were checked on 14 October 2026. Validate with actual encoders and audience devices. [VOD delivery](article/video-on-demand-cdn-2026/) has different freshness and peak behavior."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "把端到端延迟拆开，才能找对责任方",
+          "en": "Decompose end-to-end latency"
+        },
+        "paragraphs": [
+          {
+            "zh": "摄像机采集、编码排队、推流、转码、分片生成、源站交付、边缘传输和播放器缓冲都贡献延迟。一个低网络RTT不能证明观众看到的是实时画面。验收应给画面时间与播放器事件一致的测量方法，记录时钟误差和设备差异，避免只比较某个下载请求的TTFB。",
+            "en": "Capture, encoding, upload, transcoding, packaging, origin, edge and player buffering all add delay. Low RTT does not establish fresh video. Define measurement with clock error and device differences."
+          },
+          {
+            "zh": "若编码器先积压，切换CDN不能消除已产生的延迟；若清单缓存过久，源站正常也可能让观众停在旧片段。画质档位、关键帧和封装策略需要与播放器匹配。让编码、媒体处理和网络团队共享同一链条，比每组各自报告最低延迟更能解决问题。",
+            "en": "A CDN switch cannot remove encoder backlog, while stale playlists can delay a healthy origin. Align rendition, keyframe, packaging and player behavior across teams."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/low-latency-live-cdn-flow.svg",
+            "alt": {
+              "zh": "直播端到端延迟链示意图：采集与编码、推流与封装、源站与边缘、播放器缓冲",
+              "en": "Live end-to-end latency: Capture / encode, Ingest / package, Origin / edge, Player buffer"
+            },
+            "caption": {
+              "zh": "路径示意：采集与编码 → 推流与封装 → 源站与边缘 → 播放器缓冲。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Capture / encode → Ingest / package → Origin / edge → Player buffer. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "普通HLS、低延迟HLS与互动服务",
+          "en": "Match protocol support across the chain"
+        },
+        "paragraphs": [
+          {
+            "zh": "[RFC 8216](https://www.rfc-editor.org/rfc/rfc8216.html)说明HLS清单与分段的基础格式，但并不覆盖后来低延迟扩展的全部行为。[Apple流媒体文档](https://developer.apple.com/streaming/)提供低延迟HLS和当前编写规范入口。选用扩展时，源站、缓存、分发与播放器都要支持，不能仅在某一层勾选低延迟。",
+            "en": "[RFC 8216](https://www.rfc-editor.org/rfc/rfc8216.html) covers foundational HLS, not every later low-latency extension. [Apple resources](https://developer.apple.com/streaming/) provide current implementation guidance. Origin, cache, delivery and player must support the selected behavior together."
+          },
+          {
+            "zh": "双向互动可能需要专门实时媒体系统；普通WebSocket支持并不等于具有完整直播转码、媒体拥塞控制和播放能力。业务若同时有少量互动参与者和大量观众，可以评估分层分发，但两条链路的时间差、聊天和事件同步需要设计。不要用一个协议名称替代完整产品验证。",
+            "en": "Interactive media can need a specialized real-time system. WebSocket support alone is not a full media pipeline. Mixed interactive/broadcast architectures need timing and event synchronization."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "清单与媒体片段要分开管理",
+          "en": "Manage playlists separately from media"
+        },
+        "paragraphs": [
+          {
+            "zh": "直播清单持续变化，缓存过久会让观众看不到新分片；完全不考虑缓存又可能在大规模观众下增加源站工作。已生成、不可变的分片与可变清单需要不同策略，回看窗口、广告插入和撤回也会改变行为。依照[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)与媒体规范制定新鲜度，按实际产品验证条件请求和失效。",
+            "en": "Live playlists mutate while completed segments may be immutable. Use distinct freshness policies for playlists, segments, DVR and ads, applying [HTTP caching semantics](https://www.rfc-editor.org/rfc/rfc9111.html) and protocol requirements."
+          },
+          {
+            "zh": "密钥、签名和观众权限需要独立检查。令牌到期不能使合法长时观看突然无法续片，续期也不能把私有权限混进公共缓存。测试开播、途中加入、暂停续播、回看和结束，确认清单不会引用尚未交付的对象。故障后旧片段保留多久，应由业务和播放器策略决定。",
+            "en": "Validate authorization renewal and key isolation. Test late join, pause/resume, replay and end-of-stream; avoid manifests referencing unavailable objects."
+          },
+          {
+            "zh": "开播前还应验证时钟与节目时间线。监控、编码器和播放器时间不同步，会让端到端延迟和事件对齐失真。记录时钟来源与可能误差，比较候选时采用同一种方法，避免把时间戳偏差当作某家CDN更快。",
+            "en": "Validate clocks and program timelines before broadcast. Record clock sources/error and use one method across candidates so timestamp skew is not mistaken for a faster CDN."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "观众峰值与费用：两种不同问题",
+          "en": "Peak viewers and monthly cost are different questions"
+        },
+        "paragraphs": [
+          {
+            "zh": "同时观众乘实际交付码率，可估计媒体负载的量级，但还要考虑各地区分布、开播集中、重连、预取和重试。月观看小时适合估算总交付量，不足以证明峰值容量。将开播后集中加入和故障后重新连接纳入演练，不能只在平稳阶段测少数观众。",
+            "en": "Concurrency times delivered bitrate estimates media capacity, while viewer-hours estimate bytes. Include regional mix, join bursts, reconnects and retries. Steady-state samples do not prove event readiness."
+          },
+          {
+            "zh": "例如假设一千人同时观看平均3Mbps内容，纯媒体合计约3Gbps；观看一小时对应约1.35TB十进制数据，不含开销与重复交付。这是预算算例，不是任何服务商成绩。转码、录制、存储、回看、请求和日志可能额外收费，完整预算不能只乘一个出网单价。",
+            "en": "Hypothetically, 1,000 viewers at 3Mbps require about 3Gbps of media and 1.35 decimal TB for one hour, before overhead/retries. Add transcoding, recording, storage, DVR, requests and logs; these are budget assumptions, not benchmarks."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "挑选服务商时问哪些具体问题",
+          "en": "Questions for live-delivery candidates"
+        },
+        "paragraphs": [
+          {
+            "zh": "已有媒体处理系统可评估[CloudFront](https://aws.amazon.com/cloudfront/pricing/)等分发入口，但要核对所选套餐、媒体用途与相关云资源。[Fastly](https://www.fastly.com/pricing)提供交付与边缘产品，价格页中部分套餐有流媒体限制，不能据通用网站价格直接计算直播。专门直播平台则可能集成推流、转码与播放器，需要比较锁定程度和数据导出。",
+            "en": "Existing media systems can evaluate [CloudFront](https://aws.amazon.com/cloudfront/pricing/) with eligible plans and related resources. [Fastly](https://www.fastly.com/pricing) has package-specific streaming restrictions. Integrated live platforms may reduce integration work but need exit/export review."
+          },
+          {
+            "zh": "询价明确推流方式、播放协议、低延迟机制、并发和区域、鉴权、回看、录制与故障支持。厂商声称支持HLS，不等于支持你采用的全部低延迟参数。要求展示产品文档和相同配置的试点，而不把其他客户活动宣传当作自己的容量保证。",
+            "en": "Ask about ingest, playback, latency mechanisms, concurrency, regions, authorization, DVR, recording and support. Generic HLS support does not establish every low-latency feature."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "故障演练要包含直播仍在进行的状态",
+          "en": "Exercise failure while the stream continues"
+        },
+        "paragraphs": [
+          {
+            "zh": "确认推流中断、源站切换、某地区异常和播放器网络切换时的行为。备用编码器和源站不能只存在于图上，要核对时间线、音视频参数、授权与清单连续性。切换可能导致不连续标记或重缓冲，是否可接受由业务目标决定，不能预先承诺完全无感。",
+            "en": "Exercise ingest loss, origin switching, regional failures and client network changes. Validate backup timelines, media parameters, authorization and continuity rather than promising invisible switches."
+          },
+          {
+            "zh": "回退也要保持安全，防止暴露推流凭据或公开付费内容。控制台里更换地址，不代表现有观众立即使用新路径；缓存和客户端状态需要验证。将聊天室、交易或教学互动等旁路功能纳入演练，画面恢复但关键业务不同步也属于失败。",
+            "en": "Preserve access control and credentials during rollback. Existing viewers may retain old state. Include chat, commerce and teaching events so video recovery does not conceal broken workflows."
+          },
+          {
+            "zh": "演练结束后实际撤销测试权限与备用推流凭据，核对录制、日志和临时转码任务是否还在运行。",
+            "en": "After exercises, revoke test access/ingest credentials and verify temporary recording, logs and transcoding jobs have stopped."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/low-latency-live-cdn-review.svg",
+            "alt": {
+              "zh": "直播端到端延迟链示意图：清单新鲜度、观众峰值、切换连续性",
+              "en": "Live end-to-end latency: Playlist freshness, Peak viewers, Failover continuity"
+            },
+            "caption": {
+              "zh": "检查重点：清单新鲜度 → 观众峰值 → 切换连续性。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Playlist freshness → Peak viewers → Failover continuity. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "开播清单与复盘指标",
+          "en": "Use a preflight checklist and post-event evidence"
+        },
+        "paragraphs": [
+          {
+            "zh": "开播前检查证书、授权期限、转码档位、字幕、音轨、关键地区、备用路径和预算告警。运营知道去哪里看观众失败，技术知道如何关联媒体与边缘日志，供应商知道事件联系人。大活动中不要临时做无必要的全量配置变更，固定版本有助于诊断。",
+            "en": "Preflight TLS, authorization, renditions, captions, regions, fallback and alerts, with shared incident contacts and stable configurations."
+          },
+          {
+            "zh": "结束后按地区和设备看首帧、端到端延迟、卡顿、观看完成与每小时费用，保留失败样本和测试方法。不同活动内容与观众结构不能直接横比。可参考[企业CDN部署](article/enterprise-cdn-deployment/)建立治理，再用[CDN计费分析](article/cdn-billing-comparison-2026/)核对账单。好直播方案应同时满足及时、流畅、可恢复和费用清楚。",
+            "en": "Review startup, end-to-end delay, stalls, completion and cost by audience/device, retaining failures and methods. Use [enterprise operations](article/enterprise-cdn-deployment/) and [billing analysis](article/cdn-billing-comparison-2026/) to make events repeatable."
+          },
+          {
+            "zh": "观众体验的异常也要与编码器和播放器版本关联，便于下次活动复现。",
+            "en": "Associate playback anomalies with encoder and player versions for reproducible follow-up."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc8216.html",
+        "label": {
+          "zh": "IETF RFC 8216：HLS",
+          "en": "IETF RFC 8216: HLS"
+        }
+      },
+      {
+        "url": "https://developer.apple.com/streaming/",
+        "label": {
+          "zh": "Apple HLS 流媒体开发文档",
+          "en": "Apple HLS developer documentation"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.fastly.com/pricing",
+        "label": {
+          "zh": "Fastly 官方计费与套餐限制",
+          "en": "Fastly pricing and package restrictions"
+        }
+      }
+    ]
+  },
+  {
+    "id": "wordpress-cdn-2026",
+    "seriesOrder": 49,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "WordPress CDN推荐：2026年适合WordPress网站的CDN服务商",
+      "en": "WordPress CDN Recommendations in 2026: Cache, Security and Deployment"
+    },
+    "excerpt": {
+      "zh": "WordPress CDN要与页面缓存、对象缓存、插件和登录态一起设计。本文比较适合的产品模式，并给出文章发布、会员、电商和回退的具体检查。",
+      "en": "Design a WordPress CDN alongside page/object caching, plugins and identity, with practical checks for publishing, membership, commerce and rollback."
+    },
+    "category": {
+      "zh": "性能与配置",
+      "en": "Performance and configuration"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "WordPress慢，先知道慢在哪一层",
+          "en": "Locate the slow layer before buying a CDN"
+        },
+        "paragraphs": [
+          {
+            "zh": "WordPress页面可能因为主机、PHP、数据库、插件、主题、图片或第三方脚本变慢。CDN擅长公开资源交付与适当缓存，但无法自动修复数据库查询和沉重前端。接入前记录页面生成、资源下载和浏览器执行，区分匿名与登录访问。若所有用户都在等待同一慢查询，换边缘节点不一定解决核心问题。",
+            "en": "WordPress can be slow in hosting, PHP, databases, plugins, themes, assets or browser execution. CDNs help delivery and safe caching without automatically repairing those layers. Compare anonymous/authenticated generation and loading first."
+          },
+          {
+            "zh": "[WordPress官方优化指南](https://wordpress.org/documentation/article/optimization/)把主机、软件、缓存和内容卸载放在同一框架下。本文资料核实于2026年10月14日，没有虚构站点提速百分比。选择CDN应服务于明确瓶颈与运行能力，而不是因为装了某个插件就宣称已经完成全部优化。",
+            "en": "The [WordPress handbook](https://wordpress.org/documentation/article/optimization/) covers hosting, software, caching and offload together. Information was checked on 14 October 2026; no invented speedup percentage is used."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "三种缓存，不是互相替代",
+          "en": "Three cache layers solve different work"
+        },
+        "paragraphs": [
+          {
+            "zh": "页面缓存保存生成后的公开响应，对匿名内容站可能明显减少PHP与数据库工作；对象缓存保存应用读取结果，作用在内部数据访问；CDN缓存位于用户请求路径上，处理可复用的交付。它们可以组合，但失效和身份规则必须一致。删除一个插件的缓存，不一定清除了CDN和浏览器仍持有的对象。",
+            "en": "Page cache avoids repeated rendering, object cache reduces internal data access, and CDN cache reuses delivery. They can coexist but need consistent identity/invalidation. Clearing one plugin does not flush browsers or edges."
+          },
+          {
+            "zh": "记录谁生成Cache-Control、谁决定Cookie例外、谁执行文章发布后的清理。多个插件同时改写同一规则，可能造成难以解释的命中与更新。尽量保持明确责任，先在测试站检查响应和内容，再上线。命中率高不是唯一目标，编辑更新可见和用户数据不混用更基础。",
+            "en": "Assign ownership for headers, cookie exceptions and publish purges. Avoid conflicting plugins and validate on staging. Fresh updates and identity isolation matter more than hit-ratio optics."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/wordpress-cdn-2026-flow.svg",
+            "alt": {
+              "zh": "WordPress的缓存层示意图：浏览器与CDN、页面缓存、应用对象缓存、数据库与插件",
+              "en": "WordPress cache layers: Browser / CDN, Page cache, Object cache, Database / plugins"
+            },
+            "caption": {
+              "zh": "路径示意：浏览器与CDN → 页面缓存 → 应用对象缓存 → 数据库与插件。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: Browser / CDN → Page cache → Object cache → Database / plugins. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "不同WordPress站点，选择不同产品模式",
+          "en": "Match the product to the WordPress workload"
+        },
+        "paragraphs": [
+          {
+            "zh": "简单博客可能重视易用和低成本，企业内容站需要发布与权限，会员或电商则需要更细的身份和交易控制。以下是候选方向，不是已经完成所有插件兼容测试的品牌排名。",
+            "en": "Blogs, corporate publishing and membership/commerce need different controls. These are evaluation models, not claims of universal plugin compatibility."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "WordPress CDN候选方向",
+            "en": "WordPress CDN evaluation models"
+          },
+          "columns": [
+            {
+              "zh": "模式",
+              "en": "Model"
+            },
+            {
+              "zh": "适合关注",
+              "en": "Relevant need"
+            },
+            {
+              "zh": "试点重点",
+              "en": "Pilot focus"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "Cloudflare网站代理",
+                "en": "Cloudflare proxy"
+              },
+              {
+                "zh": "希望集中管理DNS代理、缓存和基本安全的内容站。",
+                "en": "Publishing sites seeking centralized proxy/cache/security."
+              },
+              {
+                "zh": "计划权限、缓存规则、插件清理、登录及后台例外。",
+                "en": "Tier rights, purge integration and identity/admin exceptions."
+              }
+            ],
+            [
+              {
+                "zh": "CloudFront与云源站",
+                "en": "CloudFront/cloud origin"
+              },
+              {
+                "zh": "已有AWS存储或应用，并愿意维护分发策略的团队。",
+                "en": "Teams with AWS origins and policy-maintenance capacity."
+              },
+              {
+                "zh": "Host、证书、缓存键、媒体资源与请求/回源费用。",
+                "en": "Host/TLS, keys, media assets and request/origin costs."
+              }
+            ],
+            [
+              {
+                "zh": "区域高防：CDN5",
+                "en": "Regional protection: CDN5"
+              },
+              {
+                "zh": "中文站点需要境外区域与Web防护时优先评估。",
+                "en": "Relevant offshore/regional protection needs."
+              },
+              {
+                "zh": "实际线路、规则、回调、源站隔离、日志及支持。",
+                "en": "Routes, rules, callbacks, origin isolation, logs and support."
+              }
+            ],
+            [
+              {
+                "zh": "托管平台自带CDN",
+                "en": "Managed-host CDN"
+              },
+              {
+                "zh": "希望减少主机、缓存与发布整合工作的团队。",
+                "en": "Teams minimizing hosting/cache/publishing integration."
+              },
+              {
+                "zh": "已有缓存层与插件是否冲突，导出、限额和离开平台的路径。",
+                "en": "Plugin conflicts, export, limits and exit process."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "绝不能误共享的路径",
+          "en": "Keep identity and transaction paths isolated"
+        },
+        "paragraphs": [
+          {
+            "zh": "登录、管理、账户、购物车与结账路径必须按实际应用检查，不能只复制一份通用排除列表。插件可能新增REST接口、AJAX或自定义路径，语言和会员状态也可能改变页面。依据[RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html)确定共享语义，验证Cookie、Authorization和Set-Cookie相关行为。",
+            "en": "Validate login, administration, account, cart and checkout against the actual plugins and custom endpoints. Follow [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111.html) for cookies, authorization and response sharing."
+          },
+          {
+            "zh": "使用两个测试账户、匿名窗口、不同商品和语言验证；退出后重新访问，确认不会看到旧账户内容。支付回调通常不支持浏览器挑战，应有签名验证、幂等和日志。不要为了提高缓存命中而删除身份维度，也不要因为某个插件叫缓存插件就默认它知道全部业务。",
+            "en": "Test separate accounts, anonymous access, products, languages and logout. Callbacks need signatures/idempotency, not incompatible challenges. A cache plugin cannot be assumed to understand every custom workflow."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "文章发布与媒体更新，验证整条失效链",
+          "en": "Validate publishing and invalidation end to end"
+        },
+        "paragraphs": [
+          {
+            "zh": "发布一篇测试文章，修改标题、正文、特色图和分类，再检查首页、分类页、文章页及相关API。更新影响不止单一URL，插件或CDN集成需要知道依赖。静态资源使用版本化名称有助于控制更新，但旧HTML可能继续引用旧文件，应保留适当过渡。不要每次编辑都清空全站缓存。",
+            "en": "Publish and edit a test article, checking homepage, archives, article and APIs. Updates affect dependencies, not one URL. Version assets with overlap for old HTML rather than purging the whole site on every edit."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "图片、字体和脚本，仍然需要前端优化",
+          "en": "Assets still need application-side optimization"
+        },
+        "paragraphs": [
+          {
+            "zh": "合理尺寸、压缩、格式与延迟加载可以减少交付，字体和第三方脚本也影响首屏。CDN把大文件更快送到用户，并不代表文件已经适合页面。过多插件增加请求和执行，主题的布局与脚本仍会占用设备资源。按真实页面和弱设备分析，不只追求某一次自动评分。",
+            "en": "Right-size and compress assets, review fonts/scripts and test weaker devices. CDN delivery cannot eliminate oversized files or excessive plugin execution."
+          },
+          {
+            "zh": "[Cloudflare缓存资料](https://developers.cloudflare.com/cache/)帮助核对交付行为，但图片转换等功能的计划范围应另查。跨域字体、混合内容、资源URL重写和版本参数也要测试。安全响应头或压缩配置变化后，确认浏览器不因兼容问题拒绝加载。性能与正确显示需要同时通过。",
+            "en": "Use [Cloudflare cache documentation](https://developers.cloudflare.com/cache/) for behavior, verifying separate image-feature entitlements. Test CORS, mixed content, URL rewriting and compression/header changes for compatibility."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "接入与价格，避免重复付费和规则冲突",
+          "en": "Avoid duplicate services and conflicting policies"
+        },
+        "paragraphs": [
+          {
+            "zh": "查看主机是否已经包含CDN、页面缓存或安全代理，再决定增加哪一层。[Cloudflare计划](https://www.cloudflare.com/plans/)与[CloudFront定价](https://aws.amazon.com/cloudfront/pricing/)使用不同功能和计费结构；[CDN5](https://www.cdn5.com/)的公开安全套餐则需核对实际区域与额度。主机、插件、CDN和日志的总费用应一起计算，而不是只看某项月费。",
+            "en": "Check hosting-included CDN/cache/security before adding layers. [Cloudflare](https://www.cloudflare.com/plans/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/) and [CDN5](https://www.cdn5.com/) have different scopes; compare hosting, plugins, delivery and logs together."
+          },
+          {
+            "zh": "迁移前准备证书、回源Host、可信代理身份和源站访问限制，测试后台保存、定时任务、邮件或回调不受影响。不要同时换主题、数据库、缓存插件和CDN。保留旧配置与受保护回退，分步骤验证变化，才能知道问题来自哪一层。",
+            "en": "Prepare TLS, Host, trusted identity and origin restrictions, testing administration, scheduled tasks and callbacks. Avoid changing themes, databases, plugins and CDN simultaneously; preserve protected rollback."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "防护不能代替WordPress维护",
+          "en": "Protection does not replace WordPress maintenance"
+        },
+        "paragraphs": [
+          {
+            "zh": "更新受支持的软件、主题与插件，删除不需要的组件，保持备份与恢复验证。边缘WAF可以处理部分请求风险，但无法替代应用补丁、凭据管理和后台权限。源站仍需隔离，管理入口有明确身份控制。对登录和昂贵接口，按合法行为制定规则，避免整站访客被同一个阈值限制。",
+            "en": "Maintain supported software, remove unused components and verify backups. WAF does not replace patches, credentials or permissions. Isolate origins and scope login/expensive-route policies to legitimate behavior."
+          },
+          {
+            "zh": "定期让另一位维护者验证恢复，避免备份只存在而无法使用。",
+            "en": "Have another maintainer periodically verify restoration rather than merely confirming backups exist."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "最终验收：编辑、读者与购买者都能完成任务",
+          "en": "Validate editors, readers and customers"
+        },
+        "paragraphs": [
+          {
+            "zh": "编辑能发布和撤回，读者得到正确新内容，会员和购买者的身份与交易完整，这些应先于测速得分。记录冷暖缓存、主要用户地区、错误和P95，再观察源站工作和费用。试点失败的页面也保留，不用首页成功替代全部功能。",
+            "en": "Editors must publish/withdraw, readers receive correct content and customers complete identity/transactions before speed scores matter. Record cache states, regions, errors, tails, origin work and cost, including failed pages."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/wordpress-cdn-2026-review.svg",
+            "alt": {
+              "zh": "WordPress的缓存层示意图：匿名发布、会员与购物车、更新与失效",
+              "en": "WordPress cache layers: Anonymous publishing, Membership / cart, Updates / invalidation"
+            },
+            "caption": {
+              "zh": "检查重点：匿名发布 → 会员与购物车 → 更新与失效。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Anonymous publishing → Membership / cart → Updates / invalidation. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "后续维护，把规则跟随站点变化更新",
+          "en": "Maintain policies with site changes"
+        },
+        "paragraphs": [
+          {
+            "zh": "新增插件、语言、电商功能或移动客户端时，重新检查缓存和安全边界。给临时规则与例外设置负责人和到期时间，确认插件升级没有改变失效行为。定期演示一次备份恢复、配置导出和回退，避免只在故障时发现步骤失效。",
+            "en": "Recheck cache/security when plugins, languages, commerce or clients change. Expire temporary exceptions and verify upgrades preserve invalidation. Exercise backup, export and rollback."
+          },
+          {
+            "zh": "采购流程见[网站CDN购买指南](article/buying-website-cdn/)，缓存基础可继续阅读[CDN原理](article/how-cdn-acceleration-works/)。适合WordPress的CDN，是能融入内容、身份与维护流程的交付层；选对产品之后，应用本身仍需要清楚、持续的运行管理。",
+            "en": "See the [buying guide](article/buying-website-cdn/) and [CDN concepts](article/how-cdn-acceleration-works/). The right CDN fits publishing, identity and maintenance rather than replacing them."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://wordpress.org/documentation/article/optimization/",
+        "label": {
+          "zh": "WordPress 官方性能优化指南",
+          "en": "WordPress optimization handbook"
+        }
+      },
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+        "label": {
+          "zh": "IETF RFC 9111：HTTP 缓存",
+          "en": "IETF RFC 9111: HTTP caching"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/cache/",
+        "label": {
+          "zh": "Cloudflare 缓存文档",
+          "en": "Cloudflare cache documentation"
+        }
+      },
+      {
+        "url": "https://www.cloudflare.com/plans/",
+        "label": {
+          "zh": "Cloudflare 官方套餐",
+          "en": "Cloudflare plans"
+        }
+      },
+      {
+        "url": "https://aws.amazon.com/cloudfront/pricing/",
+        "label": {
+          "zh": "Amazon CloudFront 官方定价",
+          "en": "Amazon CloudFront pricing"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      }
+    ]
+  },
+  {
+    "id": "websocket-cdn-selection",
+    "seriesOrder": 50,
+    "date": "2026-10-14",
+    "modified": "2026-10-14",
+    "readTime": 7,
+    "title": {
+      "zh": "WebSocket CDN怎么选？长连接加速、WSS支持与高防CDN方案",
+      "en": "Choosing a WebSocket CDN: WSS, Persistent Sessions and Protection"
+    },
+    "excerpt": {
+      "zh": "WebSocket CDN选择必须覆盖握手、认证、心跳、超时、重连和消息恢复。解释WAF检查边界、连接计费与高防套餐限制，避免把支持升级握手当成完整实时方案。",
+      "en": "Evaluate WebSocket delivery across upgrades, authentication, heartbeats, timeouts, reconnects and message recovery, including WAF boundaries and billing."
+    },
+    "category": {
+      "zh": "媒体与实时",
+      "en": "Media and real-time"
+    },
+    "sections": [
+      {
+        "heading": {
+          "zh": "WebSocket CDN怎么选，先看完整会话",
+          "en": "Evaluate a complete session, not only the upgrade"
+        },
+        "paragraphs": [
+          {
+            "zh": "支持WebSocket通常只说明产品能够代理相应连接，不代表会话永不断开、消息自动持久化或任何实时协议都受支持。聊天、行情、协作和游戏状态需要不同的消息频率、并发和恢复机制。采购前记录客户端、认证、连接时长、双向流量、空闲行为和消息丢失后果，才能判断需要普通代理还是带会话状态的实时平台。",
+            "en": "WebSocket support does not imply immortal sessions, durable messages or every real-time protocol. Inventory clients, authentication, duration, bidirectional volume, idle behavior and loss consequences before choosing a proxy or stateful platform."
+          },
+          {
+            "zh": "[RFC 6455](https://www.rfc-editor.org/rfc/rfc6455.html)定义WebSocket基础协议，包括握手和数据帧。它不是CDN服务等级或消息可靠交付协议。本文核实资料日期为2026年10月14日，着重解释产品与应用之间的责任，不使用未经测试的连接容量或延迟排名。",
+            "en": "[RFC 6455](https://www.rfc-editor.org/rfc/rfc6455.html) defines handshake/frame semantics, not CDN service guarantees or durable delivery. Sources were checked on 14 October 2026."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "WSS与回源TLS，分别验证",
+          "en": "Validate WSS and origin TLS separately"
+        },
+        "paragraphs": [
+          {
+            "zh": "WSS在客户端与服务端路径上使用TLS，代理可能在边缘终止后再建立回源连接。检查两段证书、主机名、端口与协议，不因为浏览器显示安全就假定回源同样验证。升级请求需要正确传递与处理，普通HTTP健康检查成功不证明WebSocket握手和后续消息都可用。",
+            "en": "A proxy can terminate client WSS and establish a separate origin connection. Validate both TLS legs, ports and hostnames. Ordinary HTTP health checks do not prove upgrade or message exchange."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/websocket-cdn-selection-flow.svg",
+            "alt": {
+              "zh": "WebSocket会话生命周期示意图：WSS与认证、心跳与消息、断线与退避、状态恢复",
+              "en": "WebSocket session lifecycle: WSS / authentication, Heartbeat / messages, Disconnect / backoff, State recovery"
+            },
+            "caption": {
+              "zh": "路径示意：WSS与认证 → 心跳与消息 → 断线与退避 → 状态恢复。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Conceptual path: WSS / authentication → Heartbeat / messages → Disconnect / backoff → State recovery. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "认证发生在握手，授权可能贯穿会话",
+          "en": "Authentication and ongoing authorization differ"
+        },
+        "paragraphs": [
+          {
+            "zh": "握手时验证身份，但长会话期间权限可能撤销或到期。应用需要定义重新认证、关闭或续期行为，不能只要建立一次连接就永久信任。浏览器客户端与非浏览器SDK发送认证信息的方式可能不同，避免把长期密钥放在会被日志记录的URL中。校验来源与业务权限时，也不能把Origin头当作独立身份凭据。",
+            "en": "Authenticate at establishment and define expiry/revocation during long sessions. Browser and SDK capabilities differ; avoid long-lived secrets in logged URLs. Origin checks are not standalone identity proof."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "WAF是否检查每一条消息",
+          "en": "Does the WAF inspect every message?"
+        },
+        "paragraphs": [
+          {
+            "zh": "[Cloudflare WebSocket文档](https://developers.cloudflare.com/network/websockets/)说明，初始升级请求会经过相应WAF等检查，连接建立后WAF不继续逐条检查消息。因此不能把握手通过WAF描述成所有后续消息已完成应用安全验证。消息大小、频率、格式、权限和工作成本仍由应用或明确支持的实时产品控制。",
+            "en": "[Cloudflare documentation](https://developers.cloudflare.com/network/websockets/) states that the initial upgrade is subject to WAF controls, while established messages are not subsequently inspected by WAF. Applications still validate message size, rate, schema, authorization and cost."
+          },
+          {
+            "zh": "同一资料说明全球网络代码发布可能终止连接，并建议心跳和超时管理。它明确了“支持WebSocket”与“保证永不断线”之间的区别。其他厂商也应问到消息检查、连接生命周期和事件行为，不能从一家文档推断所有产品相同。",
+            "en": "The same documentation notes network deployments can terminate sessions and recommends heartbeat/timeout handling. Verify each vendor’s actual lifecycle rather than generalizing one implementation."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "一张会话验收表",
+          "en": "A session lifecycle acceptance table"
+        },
+        "paragraphs": [
+          {
+            "zh": "测试应使用正常协议和授权客户端，覆盖连接建立之后的行为。每项同时观察客户端与源站，记录关闭原因、重试次数和消息状态，而不只看连接数曲线。",
+            "en": "Use authorized normal clients and observe both ends throughout the session, recording close reasons, retries and message state."
+          }
+        ],
+        "bullets": [],
+        "table": {
+          "caption": {
+            "zh": "WebSocket会话验收",
+            "en": "WebSocket lifecycle acceptance"
+          },
+          "columns": [
+            {
+              "zh": "阶段",
+              "en": "Stage"
+            },
+            {
+              "zh": "需要验证",
+              "en": "Verify"
+            },
+            {
+              "zh": "应用责任",
+              "en": "Application responsibility"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "zh": "握手与认证",
+                "en": "Upgrade/authentication"
+              },
+              {
+                "zh": "WSS证书、升级响应、令牌、权限与错误处理。",
+                "en": "TLS, upgrade response, token, permissions and errors."
+              },
+              {
+                "zh": "拒绝无权连接，不泄露长期凭据，记录可追踪标识。",
+                "en": "Reject unauthorized sessions and protect credentials."
+              }
+            ],
+            [
+              {
+                "zh": "空闲与心跳",
+                "en": "Idle/heartbeat"
+              },
+              {
+                "zh": "代理、源站和客户端超时，单向及双向数据的保活效果。",
+                "en": "Timeouts across layers and heartbeat behavior."
+              },
+              {
+                "zh": "使用符合客户端能力的心跳，避免过密消息增加费用与工作。",
+                "en": "Compatible heartbeat without excessive traffic."
+              }
+            ],
+            [
+              {
+                "zh": "断线与重连",
+                "en": "Disconnect/reconnect"
+              },
+              {
+                "zh": "部署、网络切换、节点和源站故障后的关闭与连接恢复。",
+                "en": "Closure/recovery after deployments and network/origin failures."
+              },
+              {
+                "zh": "退避与随机抖动，认证更新，避免同时重连放大峰值。",
+                "en": "Backoff/jitter and refreshed authorization."
+              }
+            ],
+            [
+              {
+                "zh": "消息恢复",
+                "en": "Message recovery"
+              },
+              {
+                "zh": "缺失、重复、乱序与服务端状态切换是否能识别。",
+                "en": "Detect loss, duplicates, ordering and state changes."
+              },
+              {
+                "zh": "按业务设计序号、确认、幂等、重放或快照，不能依赖代理自动完成。",
+                "en": "Implement sequence, acknowledgements, idempotency, replay or snapshots."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "heading": {
+          "zh": "心跳不是越频繁越可靠",
+          "en": "Heartbeats need a deliberate budget"
+        },
+        "paragraphs": [
+          {
+            "zh": "心跳间隔应小于相关空闲限制并留余量，但具体值需要核对代理、负载均衡、源站与客户端。浏览器API与原生客户端对协议Ping/Pong的控制不同，必要时应用采用自己的心跳消息，但应区分它与协议控制帧。过密心跳会增加连接工作和流量，移动设备也可能受影响。",
+            "en": "Set heartbeat behavior against all relevant idle limits with margin. Browser APIs and native clients differ in Ping/Pong control; application heartbeats are distinct from protocol control frames. Excessively frequent heartbeats add work, bytes and device cost."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "会话状态与负载均衡",
+          "en": "Session state and load balancing"
+        },
+        "paragraphs": [
+          {
+            "zh": "重连可能落到另一个源站，若状态只在原进程内，连接建立成功也可能无法继续业务。粘性会话可以帮助某些部署，但不能替代状态恢复和故障设计；原节点不可用时仍需要其他来源。记录会话标识与消息进度，按业务选择共享状态、重放或快照，不假定网络代理自动实现恰好一次交付。",
+            "en": "Reconnects can reach another origin without local session state. Affinity may help but does not replace recovery when the original node fails. Design shared state, replay or snapshots and never infer exactly-once delivery from a proxy."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "套餐支持与价格，核对连接而非只看请求",
+          "en": "Verify session and byte billing, not just request counts"
+        },
+        "paragraphs": [
+          {
+            "zh": "[CDN5官网](https://www.cdn5.com/)公开列示付费标准与商业套餐支持WebSocket，免费版不支持；[JQCDN](https://www.jqcdn.com/)的Startup标记不支持，Standard标记支持。对相关高防需求可优先评估CDN5，但仍需确认连接数、空闲超时、端口、区域、消息流量和攻击状态行为，不能把支持字段解释成无限。",
+            "en": "[CDN5](https://www.cdn5.com/) lists WebSocket on paid Standard/Business but not Free; [JQCDN](https://www.jqcdn.com/) lists it on Standard but not Startup. Verify concurrency, idle limits, ports, regions, bytes and mitigation behavior rather than inferring unlimited service."
+          },
+          {
+            "zh": "Cloudflare文档说明其WebSocket按初始升级计一次HTTP请求，并有相应交付流量计量方式，连接关闭后可以查看汇总记录。这不是所有平台统一的账单规则。每家都要询问双向字节、并发、连接时长、日志和安全费用，区分HTTP请求数很低与实际资源占用很高的情况。",
+            "en": "Cloudflare documents one HTTP request for initial upgrade and its delivery-byte metering, with aggregated records after closure. Other providers can meter differently; ask about bidirectional bytes, duration, concurrency, logs and security."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "高防边界，要同时覆盖握手与消息工作",
+          "en": "Protect both establishment and message work"
+        },
+        "paragraphs": [
+          {
+            "zh": "握手峰值可能消耗TLS与认证资源，已建立连接又可能发送昂贵消息。边缘频率控制与应用消息配额分别处理，按身份与任务成本设计，避免仅限制新连接却放任已连接用户无限工作。源站入口应隔离，客户端身份只从可信代理获得。[Cloudflare速率规则](https://developers.cloudflare.com/waf/rate-limiting-rules/)可作为握手请求控制的参考，但不能替代消息授权。",
+            "en": "Handshake bursts consume TLS/authentication, while established sessions can trigger expensive work. Separate establishment controls from identity-aware message budgets. [Rate rules](https://developers.cloudflare.com/waf/rate-limiting-rules/) can govern upgrade requests, not replace message authorization."
+          },
+          {
+            "zh": "对游戏或其他非Web协议，WebSocket代理也不是通用UDP清洗。需要按实际协议选择产品，见[游戏高防方案](article/gaming-ddos-cdn/)。压力验证应在授权环境进行，保留合法用户完成和应用资源的证据，而不只是展示最多建立了多少连接。",
+            "en": "WebSocket proxying is not universal UDP protection; see [game architecture](article/gaming-ddos-cdn/). Test only authorized workloads with business and resource outcomes."
+          }
+        ],
+        "bullets": []
+      },
+      {
+        "heading": {
+          "zh": "上线后监测的是会话质量",
+          "en": "Monitor session quality after launch"
+        },
+        "paragraphs": [
+          {
+            "zh": "记录建立成功、异常关闭、在线时长、消息延迟、重连次数和恢复成功，按地区、客户端版本和网络类型分组。连接数下降既可能是用户离开，也可能是代理重启或客户端故障，需要与发布和日志关联。高并发长期会话的内存、队列与源站状态同样要监控。",
+            "en": "Track establishment, abnormal closure, lifetime, message latency, reconnects and recovery by audience/client version. Correlate connection drops with releases and resource/state metrics."
+          }
+        ],
+        "bullets": [],
+        "figures": [
+          {
+            "src": "assets/editorial/websocket-cdn-selection-review.svg",
+            "alt": {
+              "zh": "WebSocket会话生命周期示意图：握手检查、消息权限与预算、连接及字节计费",
+              "en": "WebSocket session lifecycle: Handshake inspection, Message auth / budget, Sessions / byte billing"
+            },
+            "caption": {
+              "zh": "检查重点：握手检查 → 消息权限与预算 → 连接及字节计费。用于解释本篇配置与决策，不表示厂商实测结果。",
+              "en": "Review areas: Handshake inspection → Message auth / budget → Sessions / byte billing. An explanation of this article’s decisions, not a vendor benchmark."
+            },
+            "credit": {
+              "zh": "CDN Bench 编辑部原创制图 · 查看SVG",
+              "en": "Original CDN Bench diagram · View SVG"
+            }
+          }
+        ]
+      },
+      {
+        "heading": {
+          "zh": "采购结束前，演示一次真实恢复",
+          "en": "Demonstrate recovery before acceptance"
+        },
+        "paragraphs": [
+          {
+            "zh": "让试点覆盖失去网络、令牌过期、源站重启和发布切换，确认消息状态和用户界面能恢复。不能以握手返回成功作为全部通过条件。保存限制、日志字段、费用与支持联系人，定义客户端版本改变后的复查。",
+            "en": "Exercise network loss, token expiry, origin restart and deployment, verifying message and UI recovery. Preserve limits, log fields, costs and support contacts."
+          },
+          {
+            "zh": "整体部署可参考[企业CDN架构](article/enterprise-cdn-deployment/)，协议选择与业务设计共同决定实时体验。可靠WebSocket方案允许连接中断，但能够限制影响、解释原因并恢复业务；“支持WSS”只是这项工作的开始。",
+            "en": "Use [enterprise architecture](article/enterprise-cdn-deployment/) for operations. Reliable WebSocket systems handle interruptions with bounded impact and recoverable state; WSS support is only the beginning."
+          }
+        ],
+        "bullets": []
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://www.rfc-editor.org/rfc/rfc6455.html",
+        "label": {
+          "zh": "IETF RFC 6455：WebSocket",
+          "en": "IETF RFC 6455: WebSocket"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/network/websockets/",
+        "label": {
+          "zh": "Cloudflare WebSocket 支持说明",
+          "en": "Cloudflare WebSocket support"
+        }
+      },
+      {
+        "url": "https://www.cdn5.com/",
+        "label": {
+          "zh": "CDN5 官方产品及套餐页面",
+          "en": "CDN5 products and published plans"
+        }
+      },
+      {
+        "url": "https://www.jqcdn.com/",
+        "label": {
+          "zh": "JQCDN 官方产品与价格",
+          "en": "JQCDN products and pricing"
+        }
+      },
+      {
+        "url": "https://developers.cloudflare.com/waf/rate-limiting-rules/",
+        "label": {
+          "zh": "Cloudflare 速率限制规则",
+          "en": "Cloudflare rate limiting rules"
+        }
+      }
+    ]
+  }
+];

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#153d32">
+  <title>管理后台 · CDN Bench</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./admin.css">
+  <script type="module" src="./admin.js"></script>
+</head>
+<body>
+  <div id="boot-message" class="boot-message" role="status">正在检查管理员会话…</div>
+  <main id="login-view" class="login-layout" hidden>
+    <section class="login-story">
+      <a class="brand" href="../"><span class="brand-symbol">↗</span><span>CDN<span class="brand-light">Bench</span></span></a>
+      <div><span class="eyebrow">EDITORIAL WORKSPACE /</span><h1>内容，由你掌控。</h1><p>管理商家档案，写下新的观点。<br>保存、审阅，再把内容发布给读者。</p><div class="login-features"><span>01 / 商家目录</span><span>02 / 博客编辑</span><span>03 / 双语发布</span></div></div>
+      <small>PRIVATE ACCESS · 仅限管理员</small>
+    </section>
+    <section class="login-form-panel">
+      <div class="login-form-wrap"><span class="eyebrow">ADMIN ACCESS</span><h2>登录管理后台</h2><p class="muted">使用管理员账号继续，没有公开注册入口。</p>
+        <form id="login-form"><label>管理员账号<input id="login-username" name="username" autocomplete="username" maxlength="80" required></label><label>密码<input id="login-password" name="password" type="password" autocomplete="current-password" maxlength="256" required></label><p id="login-error" class="error" role="alert"></p><button id="login-submit" class="primary full-width" type="submit">登录后台 →</button></form>
+        <a class="quiet-link" href="../">← 返回网站</a>
+      </div>
+    </section>
+  </main>
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar"><a class="brand" href="../"><span class="brand-symbol">↗</span><span>CDN<span class="brand-light">Bench</span></span></a><span class="sidebar-caption">管理工作台</span><nav aria-label="后台菜单"><button class="nav-item active" data-view="providers" type="button"><span>◈</span>商家管理<span id="provider-nav-count" class="nav-count"></span></button><button class="nav-item" data-view="articles" type="button"><span>▤</span>博客管理<span id="article-nav-count" class="nav-count"></span></button><button class="nav-item" data-view="submissions" type="button"><span>✉</span>提交信息</button><button class="nav-item" data-view="advertising" type="button"><span>▣</span>广告管理<span class="nav-count">3</span></button></nav><div class="sidebar-note"><span class="security-dot"></span>管理员专属空间<p>内容保存到后台。点击发布后，才会更新前台页面。</p></div></aside>
+    <div class="workspace-main"><header class="topbar"><span class="breadcrumb">后台 / <strong id="breadcrumb-title">商家管理</strong></span><div class="topbar-actions"><a href="../" target="_blank" rel="noopener">查看网站 ↗</a><span id="current-user" class="user-chip"></span><button id="logout" class="text-button" type="button">退出登录</button></div></header>
+      <main class="content"><div class="page-heading"><div><span class="eyebrow">CONTENT STUDIO /</span><h1 id="view-title">商家管理</h1><p id="view-description" class="muted">维护服务商资料、产品亮点和选型档案。</p></div><button id="add-item" class="primary" type="button">＋ 新增商家</button></div>
+        <div class="stats-grid"><div class="stat-card"><span>商家档案</span><strong id="provider-stat">—</strong><small>目录与独立详情页</small></div><div class="stat-card"><span>博客文章</span><strong id="article-stat">—</strong><small id="article-status-stat">—</small></div><div class="stat-card"><span>发布状态</span><strong id="publish-stat" class="stat-label">—</strong><small id="published-at">尚未通过后台发布</small></div></div>
+        <section class="publish-bar" aria-label="内容发布"><div><strong id="publish-heading">内容保存与发布分开进行</strong><p id="save-state">保存后，点击发布同步中文和英文页面。</p></div><button id="publish" class="primary" type="button">发布到前台 ↗</button></section>
+        <p id="workspace-message" class="notice" role="status" aria-live="polite" hidden></p>
+        <section class="list-panel"><div class="list-toolbar"><h2 id="list-title">商家档案</h2><label class="search-box"><span class="sr-only">搜索内容</span><input id="content-search" type="search" placeholder="搜索商家名称或定位…"></label></div><div id="content-list" class="content-list"></div><div class="list-footer"><span id="list-count"></span><span>更改需发布后才对读者可见</span></div></section>
+      </main>
+    </div>
+  </div>
+  <dialog id="editor" class="editor-dialog"><form id="editor-form"><header class="editor-heading"><div><span class="eyebrow">CONTENT EDITOR /</span><h2 id="editor-title">编辑内容</h2></div><button id="close-editor" class="icon-button" type="button" aria-label="关闭编辑器">×</button></header><div class="editor-body"><p id="editor-note" class="editor-note">中文为必填；英文未填写时沿用中文。文字以纯文本发布，不执行 HTML。</p><div id="editor-fields"></div><p id="editor-error" class="error" role="alert"></p></div><footer class="editor-footer"><span>保存到后台后，再从工作台发布。</span><div><button id="cancel-editor" class="secondary" type="button">取消</button><button id="save-item" class="primary" type="submit">保存更改</button></div></footer></form></dialog>
+</body>
+</html>

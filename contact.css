@@ -1,0 +1,29 @@
+.contact-page{background:#f6f7f2;color:#1b3d2d}
+.contact-page-content{padding:30px 0 64px}
+.submission-layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:84px;background:#fffffc;border:1px solid #dfe6d7;border-radius:18px;padding:52px}
+.submission-intro{padding:8px 0}
+.contact-eyebrow{margin:0;color:#7a8e6d;font-size:10px;letter-spacing:2px;font-weight:500}
+.submission-intro h1{font-size:clamp(28px,3.1vw,43px);line-height:1.45;font-weight:550;letter-spacing:-1.4px;margin:24px 0 20px;max-width:390px}
+.contact-lede{font-size:14px;line-height:2;color:#7b8873;white-space:pre-line;max-width:365px;margin:0}
+.contact-submission-form{min-width:0;display:flex;flex-direction:column;gap:24px}
+.submission-field{display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:550;color:#294a34}
+.submission-field input,.submission-field textarea{appearance:none;box-sizing:border-box;width:100%;min-width:0;border:1px solid #dce5d5;border-radius:8px;background:#fafbf7;color:#24452f;font:400 14px/1.7 "Segoe UI","Microsoft YaHei",sans-serif;padding:13px 15px;transition:border-color .15s,box-shadow .15s}
+.submission-field textarea{resize:vertical;min-height:165px;max-height:600px}
+.submission-field input::placeholder,.submission-field textarea::placeholder{color:#9aa58f;font-weight:400}
+.submission-field input:focus,.submission-field textarea:focus{outline:none;border-color:#699464;background:#fff;box-shadow:0 0 0 3px #69946416}
+.submission-form-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:4px}
+.submission-response{flex:1;margin:0;font-size:13px;line-height:1.7;color:#497342;overflow-wrap:anywhere}
+.submission-response.submission-error{color:#a74638}
+.submission-submit{flex:none;display:flex;align-items:center;justify-content:space-between;gap:30px;min-height:48px;border:0;border-radius:8px;background:#1d432f;color:#f7faef;font:500 14px/1.5 "Segoe UI","Microsoft YaHei",sans-serif;padding:13px 23px;cursor:pointer}
+.submission-submit span{font-size:18px;color:#cce0b0}.submission-submit:hover{background:#30573a}.submission-submit:disabled{opacity:.6;cursor:wait}.submission-submit:focus-visible{outline:3px solid #8da97c;outline-offset:3px}
+.submission-dialog{box-sizing:border-box;width:400px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:34px 28px 28px;border:1px solid #dfe6d7;border-radius:18px;background:#fffffc;color:#1b3d2d;text-align:center;box-shadow:0 24px 80px #142b2833;overflow:auto}
+.submission-dialog::backdrop{background:#152e285c;backdrop-filter:blur(4px)}
+.contact-page:has(.submission-dialog[open]){overflow:hidden}
+.submission-dialog-icon{display:flex;align-items:center;justify-content:center;width:60px;height:60px;margin:0 auto 22px;border-radius:50%;background:#edf4e7;color:#3c7148}
+.submission-dialog-icon svg{width:28px;height:28px}
+.submission-dialog h2{margin:0 0 12px;font-size:24px;font-weight:600;line-height:1.4;letter-spacing:-.5px}
+.submission-dialog p{margin:0 0 26px;color:#7b8873;font-size:14px;line-height:1.8}
+.submission-dialog-confirm{display:block;width:100%;min-height:46px;padding:12px 20px;border:0;border-radius:8px;background:#1d432f;color:#f7faef;font:500 14px/1.5 "Segoe UI","Microsoft YaHei",sans-serif;cursor:pointer}
+.submission-dialog-confirm:hover{background:#30573a}.submission-dialog-confirm:focus-visible{outline:3px solid #8da97c;outline-offset:3px}
+@media(max-width:1000px){.submission-layout{padding:34px;gap:40px;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}.submission-intro h1{font-size:32px}.contact-lede{font-size:13px}}
+@media(max-width:650px){.contact-page-content{padding:8px 0 38px}.submission-layout{grid-template-columns:1fr;gap:28px;padding:24px 20px;border-radius:13px}.submission-intro{padding:0}.submission-intro h1{font-size:28px;margin:16px 0 12px;letter-spacing:-.7px;max-width:none}.contact-lede{max-width:none}.contact-submission-form{gap:20px}.submission-field input,.submission-field textarea{font-size:16px}.submission-field textarea{min-height:155px}.submission-form-footer{flex-direction:column;align-items:stretch;gap:12px}.submission-response:empty{display:none}.submission-submit{justify-content:center;gap:16px}}

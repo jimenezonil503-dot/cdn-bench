@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="CDN 厂商产品定位与选型档案目录。">
+  <title>CDN 厂商目录 · CDN Bench</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../platform.css">
+  <link rel="stylesheet" href="../platform-overrides.css">
+  <link rel="stylesheet" href="../navigation.css">
+  <link rel="stylesheet" href="../advertising.css">
+  <script src="../advertising.js" defer></script>
+  <script src="../site-shell.js" defer></script>
+  <script type="module" src="../app.js"></script>
+
+
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">跳到主要内容</a>
+  <header class="site-header premium-header">
+    <a class="brand" href="../" aria-label="CDN Bench"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><ellipse cx="16" cy="16" rx="5" ry="11"/><path d="M5 16h22M7 10h18M7 22h18"/></svg></span><span class="brand-wordmark"><span>CDN<span class="brand-light">Bench</span><span class="brand-tag">LAB</span></span><small>INDEPENDENT EDGE RESEARCH</small></span></a>
+    <nav id="site-navigation" class="header-nav" aria-label="主导航"><a href="../" data-i18n="navHome">首页</a><a href="../providers/" data-i18n="navProviders" aria-current="page">CDN 厂商</a><a href="../blog/" data-i18n="navBlog">博客</a><a href="../lab/" data-i18n="navBench">实测工具</a><a href="../methodology/" data-i18n="navMethod">测量说明</a><span class="mobile-nav-note">CDN BENCH / 让选择更清晰。</span></nav>
+    <div class="header-actions"><a id="language-toggle" class="language-button" href="../en/providers/" aria-label="Switch to English">EN ↗</a><button class="menu-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="打开菜单"><span></span><span></span></button></div>
+  </header>
+  <!--SITE_ADS_START--><aside class="site-ad-slot" data-ad-slot="sitewide-top" data-ad-type="image" data-ad-expires="0" style="--ad-height:110px" role="complementary" aria-label="顶部横幅广告"><span class="site-ad-label">广告位 / ADVERTISEMENT</span><div class="site-ad-creative"><template data-ad-creative><a class="site-ad-link" href="https://www.cdn5.com/" target="_blank" rel="sponsored noopener noreferrer"><picture class="site-ad-picture"><source media="(max-width: 600px)" srcset="../assets/ads/9b4d987216c402978edf5d2cddb2ac28557fdb0bd167d14604a98f4d24946a37.png"><img class="site-ad-image" src="../assets/ads/4d5d2e009143a1b6946780fecc5282b824eff7b5d93c373e3fc006b44fa853b3.png" alt="CDN5：亚太最佳的高防CDN服务商，提供企业级加速服务" decoding="async"></picture></a></template></div></aside>
+<aside class="site-ad-rail site-ad-left" data-ad-slot="sitewide-left" data-ad-type="placeholder" data-ad-expires="0" style="--ad-height:600px" role="complementary" aria-label="左侧悬浮广告"><span class="site-ad-label">广告位 / ADVERTISEMENT</span><button class="site-ad-close" type="button" aria-label="关闭广告">×</button><div class="site-ad-creative"><div class="site-ad-placeholder"><span class="site-ad-placeholder-mark" aria-hidden="true">↗</span><span>广告合作位</span><small>128 × 600 · ADVERTISEMENT</small></div></div></aside>
+<aside class="site-ad-rail site-ad-right" data-ad-slot="sitewide-right" data-ad-type="placeholder" data-ad-expires="0" style="--ad-height:600px" role="complementary" aria-label="右侧悬浮广告"><span class="site-ad-label">广告位 / ADVERTISEMENT</span><button class="site-ad-close" type="button" aria-label="关闭广告">×</button><div class="site-ad-creative"><div class="site-ad-placeholder"><span class="site-ad-placeholder-mark" aria-hidden="true">↗</span><span>广告合作位</span><small>128 × 600 · ADVERTISEMENT</small></div></div></aside><!--SITE_ADS_END-->
+  <main id="main"><section id="providers" class="platform-section">
+  <div class="section-heading"><div><span class="eyebrow">THE DIRECTORY /</span><h1 data-i18n="providersTitle">先看懂厂商，再做选择。</h1><p data-i18n="providersIntro">了解公开产品定位，找到适合真实业务的服务商。</p></div></div>
+  <div class="directory-tools"><label class="search-field"><span data-i18n="searchProviders">搜索厂商</span><input id="provider-search" type="search" placeholder="搜索名称、能力或场景"></label><label class="filter-field"><span data-i18n="filterProviders">按分类筛选</span><select id="provider-filter"><option value="all" data-i18n="filterAll">全部</option><option value="security" data-i18n="filterSecurity">安全防护</option><option value="cloud" data-i18n="filterCloud">云平台</option><option value="programmable" data-i18n="filterProgrammable">可编程边缘</option><option value="delivery" data-i18n="filterDelivery">内容交付</option></select></label><p id="provider-count">63 家 CDN 服务商</p></div>
+  <p id="compare-notice" role="status"></p><div id="provider-grid" class="provider-grid">
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cloudflare.svg" alt="Cloudflare logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudflare</h3><p class="provider-tagline">反向代理、缓存与安全平台</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">Cloudflare CDN 以 DNS 切换接入的反向代理模式为主，覆盖静态资产、匿名 API 响应与动态内容优化，并提供缓存规则、分层缓存和快速清缓存等控制。</p>
+          <p class="provider-best"><strong>适合 · </strong>网站、API、SaaS 与希望快速接入安全能力的团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cloudflare/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Cloudflare" data-provider-action="compare" data-provider-id="cloudflare">加入对比</button><a class="provider-source-link" href="https://www.cloudflare.com/products/cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/yewsafe.svg" alt="YewSafe logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>YewSafe</h3><p class="provider-tagline">企业 CDN、Anycast 与 DDoS 防护</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">YewSafe 官网介绍 SCDN 静态内容交付、Anycast CDN、DDoS 缓解、应用防护与 Edge AI 产品，并面向游戏、金融、直播和 AI 场景提供方案。</p>
+          <p class="provider-best"><strong>适合 · </strong>需要同时评估内容交付与业务防护的企业项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/yewsafe/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 YewSafe" data-provider-action="compare" data-provider-id="yewsafe">加入对比</button><a class="provider-source-link" href="https://www.yewsafe.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/akamai.svg" alt="Akamai logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Akamai</h3><p class="provider-tagline">企业级内容、应用与媒体交付</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">Akamai 面向大型企业的内容交付、应用性能和媒体分发场景，配置体系强调缓存规则、回源控制、流量治理与企业运营。</p>
+          <p class="provider-best"><strong>适合 · </strong>大型网站、媒体平台、跨区域企业应用</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/akamai/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Akamai" data-provider-action="compare" data-provider-id="akamai">加入对比</button><a class="provider-source-link" href="https://www.akamai.com/content-delivery-network" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-red">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/fastly.svg" alt="Fastly logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Fastly</h3><p class="provider-tagline">可编程边缘与实时可观测</p></div></div>
+          <div class="provider-tags"><span>可编程边缘</span><span>内容交付</span></div>
+          <p class="provider-intro">Fastly 的官方 CDN 产品强调可编程控制、实时可观测、快速清缓存与内置安全，适合希望把发布、路由和内容策略放到边缘处理的工程团队。</p>
+          <p class="provider-best"><strong>适合 · </strong>动态站点、API、发布频繁的工程团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/fastly/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Fastly" data-provider-action="compare" data-provider-id="fastly">加入对比</button><a class="provider-source-link" href="https://www.fastly.com/products/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cdn5.png" alt="CDN5 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN5</h3><p class="provider-tagline">高防加速与业务防护导向</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">CDN5 官网将高防 CDN、DDoS / CC 防护、WAF 与游戏 SDK 盾放在核心产品位置，适合把安全防护和内容加速一起评估的业务。</p>
+          <p class="provider-best"><strong>适合 · </strong>游戏、媒体、API 与需要高防接入的项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdn5/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDN5" data-provider-action="compare" data-provider-id="cdn5">加入对比</button><a class="provider-source-link" href="https://www.cdn5.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cloudfront.svg" alt="Amazon CloudFront logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Amazon CloudFront</h3><p class="provider-tagline">AWS 原生的内容交付与边缘计算</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">CloudFront 与 S3、ALB、Lambda@Edge 等 AWS 服务衔接紧密，官方产品页覆盖低延迟交付、压缩、边缘计算和安全控制。</p>
+          <p class="provider-best"><strong>适合 · </strong>已经运行在 AWS 上的团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cloudfront/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Amazon CloudFront" data-provider-action="compare" data-provider-id="cloudfront">加入对比</button><a class="provider-source-link" href="https://www.aws.amazon.com/cloudfront/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-yellow">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/google-cloud-cdn.png" alt="Google Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Google Cloud CDN</h3><p class="provider-tagline">Google 全球边缘网络与精细缓存控制</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">Google Cloud CDN 依托 Google 全球边缘网络，支持来自任意 HTTP 源站的内容，并提供缓存键、TTL、Cloud Armor、日志与指标等控制。</p>
+          <p class="provider-best"><strong>适合 · </strong>Google Cloud、跨云或自有源站项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/google-cloud-cdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Google Cloud CDN" data-provider-action="compare" data-provider-id="google-cloud-cdn">加入对比</button><a class="provider-source-link" href="https://www.cloud.google.com/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/azure-front-door.svg" alt="Azure Front Door logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Azure Front Door</h3><p class="provider-tagline">Azure 原生的全球应用入口</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">Azure Front Door 将全球内容交付、动态与静态内容加速、WAF、机器人防护和 DDoS 防护放在同一套 Azure 边缘入口中。</p>
+          <p class="provider-best"><strong>适合 · </strong>Azure 应用、混合源站与全球 API</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/azure-front-door/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Azure Front Door" data-provider-action="compare" data-provider-id="azure-front-door">加入对比</button><a class="provider-source-link" href="https://www.microsoft.com/azure" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/alibaba-cloud-cdn.svg" alt="Alibaba Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Alibaba Cloud CDN</h3><p class="provider-tagline">面向中国与全球业务的云 CDN</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">Alibaba Cloud CDN 提供静态内容、下载与视频等内容加速，并与阿里云源站、日志、监控和安全产品形成云上组合。</p>
+          <p class="provider-best"><strong>适合 · </strong>中国内地、亚太与阿里云生态项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/alibaba-cloud-cdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Alibaba Cloud CDN" data-provider-action="compare" data-provider-id="alibaba-cloud-cdn">加入对比</button><a class="provider-source-link" href="https://www.alibabacloud.com/product/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-red">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/tencent-edgeone.svg" alt="Tencent Cloud EdgeOne logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Tencent Cloud EdgeOne</h3><p class="provider-tagline">全球 CDN、边缘安全与函数能力</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">EdgeOne 官方定位是 CDN、安全与边缘服务的一体化产品，覆盖 DDoS、Web 应用、Bot 防护、访问控制与边缘函数等能力。</p>
+          <p class="provider-best"><strong>适合 · </strong>游戏、SaaS、跨境站点与腾讯云生态</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/tencent-edgeone/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Tencent Cloud EdgeOne" data-provider-action="compare" data-provider-id="tencent-edgeone">加入对比</button><a class="provider-source-link" href="https://www.tencentcloud.com/products/teo" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/bunny.svg" alt="Bunny.net logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Bunny.net</h3><p class="provider-tagline">面向开发者的轻量内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Bunny.net 以易用的 CDN、存储和视频产品组合面向开发者，适合希望快速上线静态资源、下载或媒体分发的项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>独立开发者、静态站点与中小型媒体项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/bunny/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Bunny.net" data-provider-action="compare" data-provider-id="bunny">加入对比</button><a class="provider-source-link" href="https://www.bunny.net/cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cdn77.png" alt="CDN77 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN77</h3><p class="provider-tagline">视频与大规模内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">CDN77 提供内容交付服务，官方产品资料重点介绍直播、点播及高流量媒体分发，也列出安全服务。适合把视频交付与技术支持一起评估的团队。</p>
+          <p class="provider-best"><strong>适合 · </strong>视频平台、下载与大流量媒体</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdn77/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDN77" data-provider-action="compare" data-provider-id="cdn77">加入对比</button><a class="provider-source-link" href="https://www.cdn77.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/gcore.png" alt="Gcore logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Gcore</h3><p class="provider-tagline">CDN、边缘开发与云服务组合</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Gcore 官网将 CDN、动态加速、流媒体及 FastEdge 放在边缘产品体系中，并提供安全和云服务。不同产品的套餐与交付范围需要分别确认。</p>
+          <p class="provider-best"><strong>适合 · </strong>同时评估分发、边缘逻辑与云服务的项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/gcore/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Gcore" data-provider-action="compare" data-provider-id="gcore">加入对比</button><a class="provider-source-link" href="https://gcore.com/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cachefly.png" alt="CacheFly logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CacheFly</h3><p class="provider-tagline">媒体、游戏与专用 CDN 交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">CacheFly 官方定位侧重直播、游戏发布和媒体分发，并列出源站屏蔽、日志流和专用 CDN 等服务。适合对交付控制和技术协作有明确需求的项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>媒体平台、游戏发行与专用分发</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cachefly/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CacheFly" data-provider-action="compare" data-provider-id="cachefly">加入对比</button><a class="provider-source-link" href="https://www.cachefly.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/imperva.png" alt="Imperva Secure CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Imperva Secure CDN</h3><p class="provider-tagline">与应用防护结合的安全 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">Imperva 的 Secure CDN 官方资料将缓存、负载均衡和内容交付与 Web 应用及 API 防护结合。评估应同时覆盖访问性能、规则兼容与合法请求的处理。</p>
+          <p class="provider-best"><strong>适合 · </strong>需要统一评估应用安全和网站交付的企业</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/imperva/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Imperva Secure CDN" data-provider-action="compare" data-provider-id="imperva">加入对比</button><a class="provider-source-link" href="https://www.imperva.com/products/content-delivery-network-cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/edgenext.png" alt="EdgeNext logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>EdgeNext</h3><p class="provider-tagline">全球内容交付与边缘基础设施</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>云生态集成</span></div>
+          <p class="provider-intro">EdgeNext 官网介绍全球 CDN、动态与静态加速、直播以及云安全和计算服务。可按业务区域与源站架构分别验证这些产品的组合方式。</p>
+          <p class="provider-best"><strong>适合 · </strong>跨地区网站、媒体及边缘基础设施项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/edgenext/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 EdgeNext" data-provider-action="compare" data-provider-id="edgenext">加入对比</button><a class="provider-source-link" href="https://www.edgenext.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/keycdn.svg" alt="KeyCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>KeyCDN</h3><p class="provider-tagline">静态资源与图片交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">KeyCDN 官方资料介绍 CDN Zone 管理、缓存刷新、图片处理和 API。适合从静态资源交付出发、希望通过控制台或接口管理缓存的开发团队。</p>
+          <p class="provider-best"><strong>适合 · </strong>静态网站、图片资源与开发者项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/keycdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 KeyCDN" data-provider-action="compare" data-provider-id="keycdn">加入对比</button><a class="provider-source-link" href="https://www.keycdn.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/huawei-cloud.png" alt="Huawei Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Huawei Cloud CDN</h3><p class="provider-tagline">网站、下载与音视频加速</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>云生态集成</span></div>
+          <p class="provider-intro">华为云 CDN 产品页列出网站、文件下载、点播和全站加速场景，并介绍缓存与回源相关控制。区域条件和云产品组合应按具体业务确认。</p>
+          <p class="provider-best"><strong>适合 · </strong>华为云源站、文件下载与区域内容交付</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/huawei-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Huawei Cloud CDN" data-provider-action="compare" data-provider-id="huawei-cloud">加入对比</button><a class="provider-source-link" href="https://www.huaweicloud.com/intl/en-us/product/cdn.html" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/byteplus.png" alt="BytePlus CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BytePlus CDN</h3><p class="provider-tagline">全球分发、动态加速与边缘能力</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>可编程边缘</span></div>
+          <p class="provider-intro">BytePlus CDN 官方页面介绍分布式内容缓存、动态加速、安全能力和边缘函数。实际使用时应区分基础分发与额外产品，并验证目标市场体验。</p>
+          <p class="provider-best"><strong>适合 · </strong>全球应用、媒体及动态内容交付</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/byteplus/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 BytePlus CDN" data-provider-action="compare" data-provider-id="byteplus">加入对比</button><a class="provider-source-link" href="https://www.byteplus.com/en/product/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/baidu-cloud.png" alt="Baidu AI Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Baidu AI Cloud CDN</h3><p class="provider-tagline">缓存、预热与云上内容分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>云生态集成</span></div>
+          <p class="provider-intro">百度智能云 CDN 官方页面介绍资源缓存、刷新预热、访问控制和统计分析，也列出主备源站与回源配置。适合需要与云上源站一同评估的交付项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>中文网站、下载与百度云生态</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/baidu-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Baidu AI Cloud CDN" data-provider-action="compare" data-provider-id="baidu-cloud">加入对比</button><a class="provider-source-link" href="https://cloud.baidu.com/product/cdn.html" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/upyun.png" alt="UPYUN 又拍云 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>UPYUN 又拍云</h3><p class="provider-tagline">云分发、图片处理与访问防护</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>云生态集成</span></div>
+          <p class="provider-intro">又拍云 CDN 官方资料覆盖网站、点播、下载和移动应用，并介绍缓存管理、图片处理、访问控制与安全服务。海外加速需按对应服务配置确认。</p>
+          <p class="provider-best"><strong>适合 · </strong>图片密集型网站与中文内容项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/upyun/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 UPYUN 又拍云" data-provider-action="compare" data-provider-id="upyun">加入对比</button><a class="provider-source-link" href="https://www.upyun.com/products/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/kingsoft-cloud.png" alt="Kingsoft Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Kingsoft Cloud CDN</h3><p class="provider-tagline">静态文件、下载与直播分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>云生态集成</span></div>
+          <p class="provider-intro">金山云 CDN 页面分别介绍静态加速和直播加速，列出内容管理、日志、统计与调度能力。视频、下载和图片业务应依据对应产品单独验证。</p>
+          <p class="provider-best"><strong>适合 · </strong>音视频、游戏下载与云上内容分发</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/kingsoft-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Kingsoft Cloud CDN" data-provider-action="compare" data-provider-id="kingsoft-cloud">加入对比</button><a class="provider-source-link" href="https://www.ksyun.com/nv/product/CDN.html" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/medianova.svg" alt="Medianova logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Medianova</h3><p class="provider-tagline">内容分发、流媒体与网站安全</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">Medianova 官方资料介绍静态、动态及大文件交付，强调欧洲、中东和非洲方向的网络，并提供媒体和应用安全服务。覆盖与性能需要按真实用户位置验证。</p>
+          <p class="provider-best"><strong>适合 · </strong>欧洲、中东和非洲方向的网站与媒体</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/medianova/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Medianova" data-provider-action="compare" data-provider-id="medianova">加入对比</button><a class="provider-source-link" href="https://www.medianova.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/blazingcdn.png" alt="BlazingCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BlazingCDN</h3><p class="provider-tagline">视频、软件与大文件交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">BlazingCDN 官网将视频、软件和媒体分发作为主要使用方向，并介绍其交付网络。适合把下载完成情况和实际流量模型放在一起评估的项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>软件分发、下载与视频资源</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/blazingcdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 BlazingCDN" data-provider-action="compare" data-provider-id="blazingcdn">加入对比</button><a class="provider-source-link" href="https://blazingcdn.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cdnsun.png" alt="CDNsun logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNsun</h3><p class="provider-tagline">网站与媒体内容分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">CDNsun 官网提供内容分发服务与试用入口。可作为网站和媒体交付的候选，使用自己的资源核对节点区域、缓存更新、HTTPS 与费用。</p>
+          <p class="provider-best"><strong>适合 · </strong>网站静态资源与媒体分发</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdnsun/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDNsun" data-provider-action="compare" data-provider-id="cdnsun">加入对比</button><a class="provider-source-link" href="https://cdnsun.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/belugacdn.png" alt="BelugaCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BelugaCDN</h3><p class="provider-tagline">按使用量评估的内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">BelugaCDN 官方页面介绍内容分发、缓存刷新、分析和 API，以及自定义域名和内容访问控制。其宣传中的价格或性能比较不作为本站独立结论。</p>
+          <p class="provider-best"><strong>适合 · </strong>静态资源与按用量核算的交付项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/belugacdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 BelugaCDN" data-provider-action="compare" data-provider-id="belugacdn">加入对比</button><a class="provider-source-link" href="https://www.belugacdn.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/sucuri.png" alt="Sucuri CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Sucuri CDN</h3><p class="provider-tagline">与网站安全结合的 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">Sucuri 的网站性能资料将 CDN 与网站防火墙和安全服务组合呈现。适合希望将网站防护与缓存交付一并评估的团队，需确认动态页面兼容。</p>
+          <p class="provider-best"><strong>适合 · </strong>网站与 CMS 的交付及安全需求</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/sucuri/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Sucuri CDN" data-provider-action="compare" data-provider-id="sucuri">加入对比</button><a class="provider-source-link" href="https://sucuri.net/website-performance/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/jqcdn.png" alt="JQCDN / JetQuest CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>JQCDN / JetQuest CDN</h3><p class="provider-tagline">香港线路与安全加速接入</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">JQCDN 官网面向中文开发者介绍免备案接入、香港线路和安全加速产品。接入条件、业务适用范围和访问表现应分别确认，不将营销描述当作实测数据。</p>
+          <p class="provider-best"><strong>适合 · </strong>评估境外接入和中文支持的项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/jqcdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 JQCDN / JetQuest CDN" data-provider-action="compare" data-provider-id="jqcdn">加入对比</button><a class="provider-source-link" href="https://www.jqcdn.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/naver-cloud.png" alt="NAVER Cloud Global Edge logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>NAVER Cloud Global Edge</h3><p class="provider-tagline">NAVER 云上的全球内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>云生态集成</span></div>
+          <p class="provider-intro">NAVER Cloud Global Edge 官方页面将其定位为全球 CDN 服务，并介绍内容交付、指标和管理 API。适合需要结合 NAVER Cloud 业务和目标区域验证的项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>NAVER Cloud 项目与跨地区内容交付</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/naver-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 NAVER Cloud Global Edge" data-provider-action="compare" data-provider-id="naver-cloud">加入对比</button><a class="provider-source-link" href="https://www.ncloud.com/product/networking/globalEdge" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/scaleway.svg" alt="Scaleway Edge Services logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Scaleway Edge Services</h3><p class="provider-tagline">HTTP 缓存、WAF 与云资源入口</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>云生态集成</span></div>
+          <p class="provider-intro">Scaleway Edge Services 官方资料介绍缓存、WAF、SSL 证书和自定义域名，并展示与对象存储网站及媒体资源的使用方式。它属于云平台集成式边缘服务。</p>
+          <p class="provider-best"><strong>适合 · </strong>Scaleway 云资源与对象存储网站</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/scaleway/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Scaleway Edge Services" data-provider-action="compare" data-provider-id="scaleway">加入对比</button><a class="provider-source-link" href="https://www.scaleway.com/en/edge-services/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/vercel.png" alt="Vercel CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Vercel CDN</h3><p class="provider-tagline">应用部署平台内建的内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span><span>云生态集成</span></div>
+          <p class="provider-intro">Vercel 官方文档介绍与应用部署集成的 CDN。它应作为应用平台内建交付能力评估，而不是默认等同于任意源站都可直接接入的传统 CDN 套餐。</p>
+          <p class="provider-best"><strong>适合 · </strong>部署在 Vercel 的网站和 Web 应用</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/vercel/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Vercel CDN" data-provider-action="compare" data-provider-id="vercel">加入对比</button><a class="provider-source-link" href="https://vercel.com/docs/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/netlify.svg" alt="Netlify Edge Network logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Netlify Edge Network</h3><p class="provider-tagline">Web 部署、缓存与边缘网络</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Netlify 官方平台资料介绍全球边缘交付、缓存控制、图片 CDN 和部署能力，并列出安全及函数服务。这里将其标为应用平台集成式交付产品。</p>
+          <p class="provider-best"><strong>适合 · </strong>Netlify 网站、预览部署与 Web 应用</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/netlify/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Netlify Edge Network" data-provider-action="compare" data-provider-id="netlify">加入对比</button><a class="provider-source-link" href="https://www.netlify.com/platform/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/cdn07.png" alt="CDN07 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN07</h3><p class="provider-tagline">高防 CDN 与亚太业务加速</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">官网提供高防 CDN、APP 防护与游戏 SDK 方案，支持网站内容交付和应用流量防护；本目录不把官网防御容量宣传当作独立测量结果。</p>
+          <p class="provider-best"><strong>适合 · </strong>亚太网站、游戏与需要中文支持的应用团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdn07/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDN07" data-provider-action="compare" data-provider-id="cdn07">加入对比</button><a class="provider-source-link" href="https://cdn07.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/stonecdn.png" alt="StoneCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>StoneCDN</h3><p class="provider-tagline">游戏盾 SDK 与应用安全交付</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">StoneCDN 官网将其定位为 YewSafe 旗下品牌，重点是 Windows、Android、iOS 游戏盾 SDK、加密调度与流量防护。选型时应区分 SDK 接入和普通网站 CDN 接入。</p>
+          <p class="provider-best"><strong>适合 · </strong>需要客户端集成的游戏、移动应用与实时服务</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/stonecdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 StoneCDN" data-provider-action="compare" data-provider-id="stonecdn">加入对比</button><a class="provider-source-link" href="https://www.stonecdn.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cdnetworks.svg" alt="CDNetworks logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNetworks</h3><p class="provider-tagline">CDN Pro 与可配置内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span><span>安全与防护</span></div>
+          <p class="provider-intro">CDNetworks 的 CDN Pro 文档介绍了通过配置、测试和发布流程交付 Web 资源的方式，并提供 API、缓存控制和源站相关设置，适合把 CDN 纳入开发发布流程。</p>
+          <p class="provider-best"><strong>适合 · </strong>需要细粒度配置、API 管理和多地区交付的团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdnetworks/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDNetworks" data-provider-action="compare" data-provider-id="cdnetworks">加入对比</button><a class="provider-source-link" href="https://www.cdnetworks.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/qiniu.jpg" alt="七牛云 Qiniu logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>七牛云 Qiniu</h3><p class="provider-tagline">融合 CDN 与对象存储协同</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">七牛云 CDN 文档覆盖域名接入、回源与缓存配置、HTTPS、访问控制、刷新预取和日志分析。适合已有 Kodo 存储或媒体处理流程的团队统一管理内容分发。</p>
+          <p class="provider-best"><strong>适合 · </strong>中文业务、音视频平台及 Kodo 存储用户</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/qiniu/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 七牛云 Qiniu" data-provider-action="compare" data-provider-id="qiniu">加入对比</button><a class="provider-source-link" href="https://www.qiniu.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/azion.svg" alt="Azion logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Azion</h3><p class="provider-tagline">面向开发者的边缘应用平台</p></div></div>
+          <div class="provider-tags"><span>可编程边缘</span><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">Azion 将应用部署、内容交付和应用安全放在同一平台，适合需要在边缘处理请求、配置缓存并保护 Web 服务的开发团队。</p>
+          <p class="provider-best"><strong>适合 · </strong>可编程 Web 应用、API 与边缘部署项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/azion/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Azion" data-provider-action="compare" data-provider-id="azion">加入对比</button><a class="provider-source-link" href="https://www.azion.com/en/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/ovhcloud.svg" alt="OVHcloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>OVHcloud</h3><p class="provider-tagline">Web Hosting 集成式 CDN</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">OVHcloud 的 Shared CDN 是 Web Hosting 的加速选项，提供不同等级的缓存及优化功能。它适合站点托管用户，不能直接等同于可接入任意源站的通用 CDN 套餐。</p>
+          <p class="provider-best"><strong>适合 · </strong>使用 OVHcloud Web Hosting 的网站</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/ovhcloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 OVHcloud" data-provider-action="compare" data-provider-id="ovhcloud">加入对比</button><a class="provider-source-link" href="https://www.ovhcloud.com/en/web-hosting/options/cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/tata.svg" alt="Tata Communications logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Tata Communications</h3><p class="provider-tagline">面向媒体的内容与视频分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Tata Communications 的媒体服务组合涵盖视频 CDN、直播与点播交付，以及专业媒体传输。适合需要把内容制作、传输和终端分发衔接起来的媒体业务。</p>
+          <p class="provider-best"><strong>适合 · </strong>广播机构、OTT 平台和大型直播项目</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/tata/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Tata Communications" data-provider-action="compare" data-provider-id="tata">加入对比</button><a class="provider-source-link" href="https://www.tatacommunications.com/media-entertainment" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/selectel.svg" alt="Selectel logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Selectel</h3><p class="provider-tagline">云平台 CDN 与静态资源分发</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">Selectel 的 CDN 产品面向网站、游戏更新和静态内容分发，官方资料列出 HTTPS、CORS、压缩、源站屏蔽和日志等控制项，可与云端工作负载结合。</p>
+          <p class="provider-best"><strong>适合 · </strong>关注俄罗斯及周边访问地区的云端业务</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/selectel/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Selectel" data-provider-action="compare" data-provider-id="selectel">加入对比</button><a class="provider-source-link" href="https://selectel.ru/services/additional/cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/cdnvideo.svg" alt="CDNvideo logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNvideo</h3><p class="provider-tagline">直播、点播与区域内容交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">CDNvideo 提供直播、视频点播、Web 加速和源站保护等服务，并按亚洲、俄罗斯及独联体等市场提供方案。直播与普通下载应使用不同测试负载评估。</p>
+          <p class="provider-best"><strong>适合 · </strong>视频平台、直播活动、游戏分发与区域网站</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cdnvideo/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 CDNvideo" data-provider-action="compare" data-provider-id="cdnvideo">加入对比</button><a class="provider-source-link" href="https://www.cdnvideo.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/5centscdn.svg" alt="5centsCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>5centsCDN</h3><p class="provider-tagline">CDN、直播转码与多平台推流</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">5centsCDN 把直播、点播、转码、多平台推流和内容交付放在同一产品组合中，也提供网站加速。适合希望减少视频业务集成环节的团队。</p>
+          <p class="provider-best"><strong>适合 · </strong>直播团队、教育视频和中小型媒体服务</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/5centscdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 5centsCDN" data-provider-action="compare" data-provider-id="5centscdn">加入对比</button><a class="provider-source-link" href="https://www.5centscdn.net/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/quic-cloud.png" alt="QUIC.cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>QUIC.cloud</h3><p class="provider-tagline">WordPress 整页缓存与优化</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">QUIC.cloud 与 LiteSpeed Cache 配合，提供 WordPress 静态与动态页面缓存、智能清理及页面优化。它围绕 WordPress 工作流设计，不宜照搬到任意应用。</p>
+          <p class="provider-best"><strong>适合 · </strong>WordPress 内容站、电商及 LiteSpeed Cache 用户</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/quic-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 QUIC.cloud" data-provider-action="compare" data-provider-id="quic-cloud">加入对比</button><a class="provider-source-link" href="https://www.quic.cloud/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cloudinary.png" alt="Cloudinary logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudinary</h3><p class="provider-tagline">图片视频处理与媒体 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Cloudinary 提供图片与视频的上传、管理、转换和优化交付。其媒体管线和多 CDN 方向适合素材量大、衍生格式多的产品，而非单纯替换所有网站流量。</p>
+          <p class="provider-best"><strong>适合 · </strong>电商素材、用户上传图片及媒体工作流</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cloudinary/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Cloudinary" data-provider-action="compare" data-provider-id="cloudinary">加入对比</button><a class="provider-source-link" href="https://cloudinary.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/imagekit.svg" alt="ImageKit logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>ImageKit</h3><p class="provider-tagline">现有存储上的媒体优化交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">ImageKit 提供图片处理、视频交付和素材管理，可连接自有 S3、Google Cloud Storage 或 Azure Blob 等源。适合保留现有存储、统一生成媒体变体的业务。</p>
+          <p class="provider-best"><strong>适合 · </strong>产品图片、多端素材与已有对象存储的团队</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/imagekit/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 ImageKit" data-provider-action="compare" data-provider-id="imagekit">加入对比</button><a class="provider-source-link" href="https://imagekit.io/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/imgix.webp" alt="Imgix logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Imgix</h3><p class="provider-tagline">图片变换 API 与全球交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Imgix 围绕图像数据源、变换 API 和内容交付构建产品，帮助应用按终端尺寸生成媒体版本，并提供视频优化相关功能。</p>
+          <p class="provider-best"><strong>适合 · </strong>图片密集型应用、电商和内容管理平台</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/imgix/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Imgix" data-provider-action="compare" data-provider-id="imgix">加入对比</button><a class="provider-source-link" href="https://www.imgix.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/uploadcare.svg" alt="Uploadcare logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Uploadcare</h3><p class="provider-tagline">文件上传、媒体处理与交付</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Uploadcare 提供上传组件、图片和视频 CDN、处理 API 与自适应交付，将用户文件从接收、处理到展示连接起来。</p>
+          <p class="provider-best"><strong>适合 · </strong>用户生成内容、商品素材和应用文件上传</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/uploadcare/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Uploadcare" data-provider-action="compare" data-provider-id="uploadcare">加入对比</button><a class="provider-source-link" href="https://uploadcare.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/gumlet.svg" alt="Gumlet logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Gumlet</h3><p class="provider-tagline">视频托管、处理与 CDN 分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Gumlet 以视频托管和流媒体交付为核心，提供播放器、分析和内容保护相关能力。应按视频平台评估编码、观看体验与交付成本。</p>
+          <p class="provider-best"><strong>适合 · </strong>课程视频、营销视频和付费内容平台</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/gumlet/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Gumlet" data-provider-action="compare" data-provider-id="gumlet">加入对比</button><a class="provider-source-link" href="https://www.gumlet.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/digitalocean.svg" alt="DigitalOcean logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>DigitalOcean</h3><p class="provider-tagline">Spaces 对象存储内置 CDN</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">DigitalOcean Spaces 是兼容 S3 的对象存储，带有内置 CDN 用于公开对象分发。它适合应用静态资源和媒体文件，并非任意动态源站的代理服务。</p>
+          <p class="provider-best"><strong>适合 · </strong>使用 Spaces 的开发团队和静态资源分发</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/digitalocean/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 DigitalOcean" data-provider-action="compare" data-provider-id="digitalocean">加入对比</button><a class="provider-source-link" href="https://www.digitalocean.com/products/spaces" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/ibm-cloud.png" alt="IBM Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>IBM Cloud</h3><p class="provider-tagline">Cloud Internet Services 安全加速</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">IBM Cloud Internet Services 将 CDN、DNS 和应用安全能力组合在云服务中。对于已有 IBM Cloud 业务，选型重点是域名迁移、边缘策略和服务等级。</p>
+          <p class="provider-best"><strong>适合 · </strong>IBM Cloud 企业业务、网站及互联网应用</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/ibm-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 IBM Cloud" data-provider-action="compare" data-provider-id="ibm-cloud">加入对比</button><a class="provider-source-link" href="https://www.ibm.com/products/cloud-internet-services" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/bizflycloud.png" alt="Bizfly Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Bizfly Cloud</h3><p class="provider-tagline">越南市场内容分发服务</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">Bizfly Cloud CDN 提供图片、CSS、JavaScript、视频和下载文件的交付，官网重点介绍越南访问场景及按数据传输计费的方式。</p>
+          <p class="provider-best"><strong>适合 · </strong>越南网站、电商和当地内容平台</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/bizflycloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Bizfly Cloud" data-provider-action="compare" data-provider-id="bizflycloud">加入对比</button><a class="provider-source-link" href="https://bizflycloud.vn/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/sirv.png" alt="Sirv logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Sirv</h3><p class="provider-tagline">图片 CDN 与商品 360° 展示</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Sirv 提供图片管理、实时变换和图片 CDN，并结合商品 360° 展示工具。适合希望把商品展示体验与媒体交付统一管理的电商。</p>
+          <p class="provider-best"><strong>适合 · </strong>商品目录、360° 展示与电商图片</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/sirv/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Sirv" data-provider-action="compare" data-provider-id="sirv">加入对比</button><a class="provider-source-link" href="https://sirv.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/nhn-cloud.svg" alt="NHN Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>NHN Cloud</h3><p class="provider-tagline">云平台 CDN 与媒体分发</p></div></div>
+          <div class="provider-tags"><span>云生态集成</span><span>内容交付</span></div>
+          <p class="provider-intro">NHN Cloud 在内容交付产品线中提供 CDN，通过边缘网络分发网站与媒体内容，可结合其对象存储和 Image Manager 工作流使用。</p>
+          <p class="provider-best"><strong>适合 · </strong>韩国及亚洲业务、NHN Cloud 用户</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/nhn-cloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 NHN Cloud" data-provider-action="compare" data-provider-id="nhn-cloud">加入对比</button><a class="provider-source-link" href="https://www.nhncloud.com/kr/service/content-delivery/cdn" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/qwilt.png" alt="Qwilt logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Qwilt</h3><p class="provider-tagline">运营商边缘网络与 Open Caching</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Qwilt 通过与运营商协作的 Open Edge 网络提供内容交付，产品面向 OTT、软件分发和游戏等工作负载。采购与接入通常需要结合内容商的实际规模讨论。</p>
+          <p class="provider-best"><strong>适合 · </strong>OTT、游戏发行商与大型内容提供方</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/qwilt/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Qwilt" data-provider-action="compare" data-provider-id="qwilt">加入对比</button><a class="provider-source-link" href="https://qwilt.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/rocketcdn.svg" alt="RocketCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>RocketCDN</h3><p class="provider-tagline">面向 WordPress 的托管 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">RocketCDN 提供自动配置与 WordPress 插件接入，官网说明分发网络采用 Bunny.net。它是独立的服务品牌，选型应关注集成体验、支持与套餐条款。</p>
+          <p class="provider-best"><strong>适合 · </strong>希望简化配置的 WordPress 与 CMS 站点</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/rocketcdn/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 RocketCDN" data-provider-action="compare" data-provider-id="rocketcdn">加入对比</button><a class="provider-source-link" href="https://rocketcdn.me/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../assets/logos/myra-security.svg" alt="Myra Security logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Myra Security</h3><p class="provider-tagline">德国安全平台与高性能 CDN</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">Myra Security 提供 CDN、DDoS 防护和 Web 应用安全产品，官方 CDN 页面重点介绍缓存、可用性和数据处理要求。适合重视安全治理的企业网站。</p>
+          <p class="provider-best"><strong>适合 · </strong>企业网站、电商与注重数据处理约束的业务</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/myra-security/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Myra Security" data-provider-action="compare" data-provider-id="myra-security">加入对比</button><a class="provider-source-link" href="https://www.myrasecurity.com/en/saasp/application-security/high-performance-cdn/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/ddos-guard.svg" alt="DDoS-Guard logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>DDoS-Guard</h3><p class="provider-tagline">DDoS 防护附带 CDN 与 DNS</p></div></div>
+          <div class="provider-tags"><span>安全与防护</span><span>内容交付</span></div>
+          <p class="provider-intro">DDoS-Guard 官方将 CDN 与 DNS 列入具有 L7 防护的产品组合，涵盖网站代理防护及受保护的托管资源。适合把流量防护作为首要需求的项目。</p>
+          <p class="provider-best"><strong>适合 · </strong>遭受应用层攻击的网站与受保护托管业务</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/ddos-guard/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 DDoS-Guard" data-provider-action="compare" data-provider-id="ddos-guard">加入对比</button><a class="provider-source-link" href="https://ddos-guard.net/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/baishancloud.png" alt="白山云 Baishan Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>白山云 Baishan Cloud</h3><p class="provider-tagline">下载、全站与流媒体加速</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>安全与防护</span></div>
+          <p class="provider-intro">白山云官网列出下载加速、全站加速、直播点播分发和 SCDN 安全加速等产品。其海外品牌与国内服务需要按具体合同和产品范围区分。</p>
+          <p class="provider-best"><strong>适合 · </strong>中文互联网业务、下载分发与流媒体平台</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/baishancloud/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 白山云 Baishan Cloud" data-provider-action="compare" data-provider-id="baishancloud">加入对比</button><a class="provider-source-link" href="https://www.baishan.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/advancedhosting.svg" alt="Advanced Hosting logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Advanced Hosting</h3><p class="provider-tagline">视频与静态资源 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Advanced Hosting 的 CDN 产品组合包含视频分发和面向小文件的 Anycast CDN，并提供基础设施服务。适合把源站容量和边缘交付一起规划的业务。</p>
+          <p class="provider-best"><strong>适合 · </strong>视频站点、游戏资源与静态文件交付</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/advancedhosting/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Advanced Hosting" data-provider-action="compare" data-provider-id="advancedhosting">加入对比</button><a class="provider-source-link" href="https://advancedhosting.com/cdn-2026/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/cloudimage.png" alt="Cloudimage logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudimage</h3><p class="provider-tagline">Scaleflex 图片优化与 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Cloudimage 是 Scaleflex 的媒体优化产品，通过 URL 参数实时调整图片、压缩和生成格式，并通过 CDN 分发。它适合已有素材源站的图片密集型网站。</p>
+          <p class="provider-best"><strong>适合 · </strong>电商图片、响应式网站与素材管理集成</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/cloudimage/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Cloudimage" data-provider-action="compare" data-provider-id="cloudimage">加入对比</button><a class="provider-source-link" href="https://www.cloudimage.io/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/optimole.svg" alt="Optimole logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Optimole</h3><p class="provider-tagline">WordPress 图片处理与 CDN</p></div></div>
+          <div class="provider-tags"><span>内容交付</span></div>
+          <p class="provider-intro">Optimole 提供实时图片处理、自适应尺寸、格式优化和 CDN 交付，并提供 WordPress 集成及媒体管理。适合希望自动完成响应式图片处理的站点。</p>
+          <p class="provider-best"><strong>适合 · </strong>WordPress 图片优化、内容站与在线商店</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/optimole/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Optimole" data-provider-action="compare" data-provider-id="optimole">加入对比</button><a class="provider-source-link" href="https://optimole.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/mux.svg" alt="Mux logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Mux</h3><p class="provider-tagline">面向开发者的视频基础设施</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">Mux 提供视频上传、编码、流式播放及观看分析 API，让应用接入视频管线和播放交付。这里将其归为视频交付平台，而非通用网站代理 CDN。</p>
+          <p class="provider-best"><strong>适合 · </strong>应用内视频、点播内容与开发者视频产品</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/mux/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 Mux" data-provider-action="compare" data-provider-id="mux">加入对比</button><a class="provider-source-link" href="https://www.mux.com/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../assets/logos/api-video.svg" alt="api.video logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>api.video</h3><p class="provider-tagline">OVHcloud 体系的视频 API 与分发</p></div></div>
+          <div class="provider-tags"><span>内容交付</span><span>可编程边缘</span></div>
+          <p class="provider-intro">api.video 提供视频上传、管理、播放器和 CDN 分发能力，官网使用 OVHcloud 联合品牌。适合通过 API 将视频功能嵌入现有应用。</p>
+          <p class="provider-best"><strong>适合 · </strong>应用视频、教育内容与嵌入式播放</p>
+          <span class="provider-source-date">资料查阅: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../providers/api-video/">查看选型档案 ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="对比 api.video" data-provider-action="compare" data-provider-id="api-video">加入对比</button><a class="provider-source-link" href="https://api.video/" target="_blank" rel="noreferrer noopener">官方资料 ↗</a></div>
+        </article></div>
+  <p class="source-disclaimer" data-i18n="directoryDisclaimer">资料来自公开产品信息，并非独立性能排名。</p>
+  
+</section>
+  </main>
+  
+  <footer><a class="footer-brand" href="../">CDN Bench<span> / </span>LAB</a><span data-i18n="footer">为真实体验而测 · Built for your network.</span><a href="#main" data-i18n="backTop">回到顶部 ↑</a></footer>
+</body>
+</html>

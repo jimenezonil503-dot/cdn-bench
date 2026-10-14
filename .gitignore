@@ -1,0 +1,12 @@
+node_modules/
+*.log
+.DS_Store
+.admin/
+_site/
+.pages-build-*/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+coverage/

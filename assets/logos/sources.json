@@ -1,0 +1,632 @@
+[
+  {
+    "id": "cloudflare",
+    "name": "Cloudflare",
+    "file": "assets/logos/cloudflare.svg",
+    "sourceUrl": "https://www.cloudflare.com/products/cdn/",
+    "pageUrl": "https://www.cloudflare.com/products/cdn/",
+    "collected": "2026-10-13",
+    "sha256": "c9ec1d5d5e4b0924666756a70179395c26b010372f8d7eec3539575281cebf1b",
+    "transformation": null
+  },
+  {
+    "id": "yewsafe",
+    "name": "YewSafe",
+    "file": "assets/logos/yewsafe.svg",
+    "sourceUrl": "https://www.yewsafe.com/",
+    "pageUrl": "https://www.yewsafe.com/",
+    "collected": "2026-10-13",
+    "sha256": "6b88db797f2de3de756937bc93012291b005d1efc91eeab0ec4f25e346550082",
+    "transformation": null
+  },
+  {
+    "id": "akamai",
+    "name": "Akamai",
+    "file": "assets/logos/akamai.svg",
+    "sourceUrl": "https://www.akamai.com/content-delivery-network",
+    "pageUrl": "https://www.akamai.com/content-delivery-network",
+    "collected": "2026-10-13",
+    "sha256": "01912de1cd17c3bf7dd0046ff996565ef56a9a79bcddcd000704d4629b1661c0",
+    "transformation": null
+  },
+  {
+    "id": "fastly",
+    "name": "Fastly",
+    "file": "assets/logos/fastly.svg",
+    "sourceUrl": "https://www.fastly.com/products/cdn",
+    "pageUrl": "https://www.fastly.com/products/cdn",
+    "collected": "2026-10-13",
+    "sha256": "7da092d7a494c1277607c0f541ad111f24d45f61bee074ceab9d7d1e8e0ceba7",
+    "transformation": null
+  },
+  {
+    "id": "cdn5",
+    "name": "CDN5",
+    "file": "assets/logos/cdn5.png",
+    "sourceUrl": "https://www.cdn5.com/",
+    "pageUrl": "https://www.cdn5.com/",
+    "collected": "2026-10-13",
+    "sha256": "652aa236214ff2b7aa4f94cfa903b1df248b7072d62593504f3fba2dd3195e81",
+    "transformation": null
+  },
+  {
+    "id": "cloudfront",
+    "name": "Amazon CloudFront",
+    "file": "assets/logos/cloudfront.svg",
+    "sourceUrl": "https://www.aws.amazon.com/cloudfront/",
+    "pageUrl": "https://www.aws.amazon.com/cloudfront/",
+    "collected": "2026-10-13",
+    "sha256": "e7812549d61e90ba1ce7cd7e2a6e45f9702b07a0a36dcc62fa9403c05413c308",
+    "transformation": null
+  },
+  {
+    "id": "google-cloud-cdn",
+    "name": "Google Cloud CDN",
+    "file": "assets/logos/google-cloud-cdn.png",
+    "sourceUrl": "https://www.gstatic.com/cgc/super_cloud_gradient.png",
+    "pageUrl": "https://cloud.google.com/",
+    "collected": "2026-10-14",
+    "sha256": "a332b54b620a2fa04413561c01c925cd40f936581c7bed52df424ecccc9c08b4",
+    "transformation": null
+  },
+  {
+    "id": "azure-front-door",
+    "name": "Azure Front Door",
+    "file": "assets/logos/azure-front-door.svg",
+    "sourceUrl": "https://www.microsoft.com/azure",
+    "pageUrl": "https://www.microsoft.com/azure",
+    "collected": "2026-10-13",
+    "sha256": "52efb7be976e0a4b617c597927120cbb6c58e8e7ed4c866a947d879d17433d69",
+    "transformation": null
+  },
+  {
+    "id": "alibaba-cloud-cdn",
+    "name": "Alibaba Cloud CDN",
+    "file": "assets/logos/alibaba-cloud-cdn.svg",
+    "sourceUrl": "https://www.alibabacloud.com/product/cdn",
+    "pageUrl": "https://www.alibabacloud.com/product/cdn",
+    "collected": "2026-10-13",
+    "sha256": "f8744bedbc783bd97f0c6c76a4825d3b8e404ca805aaadf52f0996eb49280c91",
+    "transformation": null
+  },
+  {
+    "id": "tencent-edgeone",
+    "name": "Tencent Cloud EdgeOne",
+    "file": "assets/logos/tencent-edgeone.svg",
+    "sourceUrl": "https://www.tencentcloud.com/products/teo",
+    "pageUrl": "https://www.tencentcloud.com/products/teo",
+    "collected": "2026-10-13",
+    "sha256": "aae67d645455482682e7dfb5e74151ebef7766dca2bb18a5bcc19a3d348604af",
+    "transformation": null
+  },
+  {
+    "id": "bunny",
+    "name": "Bunny.net",
+    "file": "assets/logos/bunny.svg",
+    "sourceUrl": "https://www.bunny.net/cdn/",
+    "pageUrl": "https://www.bunny.net/cdn/",
+    "collected": "2026-10-13",
+    "sha256": "d3b6c26c84f8c6cd4225d5639a710a21fd4c3e2392abc4c73eafa3cb99c92452",
+    "transformation": null
+  },
+  {
+    "id": "cdn77",
+    "name": "CDN77",
+    "file": "assets/logos/cdn77.png",
+    "sourceUrl": "https://www.cdn77.com/apple-touch-icon.png",
+    "pageUrl": "https://www.cdn77.com/",
+    "collected": "2026-10-14",
+    "sha256": "f68bf109d7b974ba919b7001be59cff318f3646b877a92862174476c95c67f2f",
+    "transformation": null
+  },
+  {
+    "id": "gcore",
+    "name": "Gcore",
+    "file": "assets/logos/gcore.png",
+    "sourceUrl": "https://gcore.com/assets/favicon/mobile/apple-icon-180x180.png",
+    "pageUrl": "https://gcore.com/cdn",
+    "collected": "2026-10-14",
+    "sha256": "2f7c4c0901435e189f1872693bb91c77a6a9f78603a5ae261dabc6c1ce2dd7cd",
+    "transformation": null
+  },
+  {
+    "id": "cachefly",
+    "name": "CacheFly",
+    "file": "assets/logos/cachefly.png",
+    "sourceUrl": "https://www.cachefly.com/wp-content/uploads/2025/10/cachefly-logo-new.png",
+    "pageUrl": "https://www.cachefly.com/",
+    "collected": "2026-10-14",
+    "sha256": "5d381458796b3e8a60d98334925659ca2c2efecb967ff7ef4925469a2b8f1289",
+    "transformation": null
+  },
+  {
+    "id": "imperva",
+    "name": "Imperva Secure CDN",
+    "file": "assets/logos/imperva.png",
+    "sourceUrl": "https://www.imperva.com/wp-content/themes/impv/icons/favicon-180.png",
+    "pageUrl": "https://www.imperva.com/products/content-delivery-network-cdn/",
+    "collected": "2026-10-14",
+    "sha256": "895e711a36a095c1fa2dfb182cfc89697ae3528bbfb53bdea8fd6833be889138",
+    "transformation": null
+  },
+  {
+    "id": "edgenext",
+    "name": "EdgeNext",
+    "file": "assets/logos/edgenext.png",
+    "sourceUrl": "https://www.edgenext.com/logo.png",
+    "pageUrl": "https://www.edgenext.com/",
+    "collected": "2026-10-14",
+    "sha256": "15c77e74b2f430b850e6cdd82b3cb117d705a2fc3e79a439a9ac5c94533f48c5",
+    "transformation": null
+  },
+  {
+    "id": "keycdn",
+    "name": "KeyCDN",
+    "file": "assets/logos/keycdn.svg",
+    "sourceUrl": "https://www.keycdn.com/#logo",
+    "pageUrl": "https://www.keycdn.com/",
+    "collected": "2026-10-14",
+    "sha256": "845cd3c0800512f64b46e0e159be03a9ebb5f0ec875c2f37bddee17760d912d9",
+    "transformation": "Official inline SVG extracted; presentation-only CSS class removed."
+  },
+  {
+    "id": "huawei-cloud",
+    "name": "Huawei Cloud CDN",
+    "file": "assets/logos/huawei-cloud.png",
+    "sourceUrl": "https://res-static.hc-cdn.cn/cloudbu-site/intl/en-us/yunying/new-header/logo.png",
+    "pageUrl": "https://www.huaweicloud.com/intl/en-us/product/cdn.html",
+    "collected": "2026-10-14",
+    "sha256": "78301ab145698ccce97fcd9133e969fc15111d8620ee5d0db03cd90d5c53c03c",
+    "transformation": null
+  },
+  {
+    "id": "byteplus",
+    "name": "BytePlus CDN",
+    "file": "assets/logos/byteplus.png",
+    "sourceUrl": "https://sf-bpcms.bytepluscdn.com/obj/byteplus-public-aiso/portal/assets/apple-touch-icon.png",
+    "pageUrl": "https://www.byteplus.com/en/product/cdn",
+    "collected": "2026-10-14",
+    "sha256": "779010c4dc54e4c06773139c662632e77b3d19473e16d5c8b5b8c1787d862862",
+    "transformation": null
+  },
+  {
+    "id": "baidu-cloud",
+    "name": "Baidu AI Cloud CDN",
+    "file": "assets/logos/baidu-cloud.png",
+    "sourceUrl": "https://bce.bdstatic.com/img/newfavicon.ico",
+    "pageUrl": "https://cloud.baidu.com/product/cdn.html",
+    "collected": "2026-10-14",
+    "sha256": "ef2f3142acaf020ce5dd115995f88d88ffa808a25831f85b316fe1b2c71db768",
+    "transformation": "Largest official ICO frame losslessly decoded as PNG."
+  },
+  {
+    "id": "upyun",
+    "name": "UPYUN 又拍云",
+    "file": "assets/logos/upyun.png",
+    "sourceUrl": "https://www.upyun.com/static/favicon-64x64.png",
+    "pageUrl": "https://www.upyun.com/products/cdn",
+    "collected": "2026-10-14",
+    "sha256": "43d75d1b9b2b6febf055871c8d9670839717a1573767c31307a49f3bbc399f51",
+    "transformation": null
+  },
+  {
+    "id": "kingsoft-cloud",
+    "name": "Kingsoft Cloud CDN",
+    "file": "assets/logos/kingsoft-cloud.png",
+    "sourceUrl": "https://resource.ksyun.com/project/resource/img/favicon.ico",
+    "pageUrl": "https://www.ksyun.com/nv/product/CDN.html",
+    "collected": "2026-10-14",
+    "sha256": "918b355ddab8b96f625697c5d85ff326648f7d03d66f55e16225b0e8df44e041",
+    "transformation": "Largest official ICO frame losslessly decoded as PNG."
+  },
+  {
+    "id": "medianova",
+    "name": "Medianova",
+    "file": "assets/logos/medianova.svg",
+    "sourceUrl": "https://www.medianova.com/wp-content/uploads/2023/02/medianova-logo.svg",
+    "pageUrl": "https://www.medianova.com/",
+    "collected": "2026-10-14",
+    "sha256": "c844ae95028880212e8792266a4f10262c2a54e1fdae3f6bcc36985c23a90f8f",
+    "transformation": null
+  },
+  {
+    "id": "blazingcdn",
+    "name": "BlazingCDN",
+    "file": "assets/logos/blazingcdn.png",
+    "sourceUrl": "https://cdn59455242.blazingcdn.net/wp-content/uploads/2023/06/logo-b.png",
+    "pageUrl": "https://blazingcdn.com/",
+    "collected": "2026-10-14",
+    "sha256": "dd48d216654e1016aa7d5010ebed9a4315346b17ea19e87f8f58644094bd2b57",
+    "transformation": null
+  },
+  {
+    "id": "cdnsun",
+    "name": "CDNsun",
+    "file": "assets/logos/cdnsun.png",
+    "sourceUrl": "https://wcdn.cdnsun.com/icons/apple-icon-180x180.png",
+    "pageUrl": "https://cdnsun.com/",
+    "collected": "2026-10-14",
+    "sha256": "36fa1ae1b2b139ca5d0014befeeb2b5e55953876b0f547d1099bdfbc8a77d126",
+    "transformation": null
+  },
+  {
+    "id": "belugacdn",
+    "name": "BelugaCDN",
+    "file": "assets/logos/belugacdn.png",
+    "sourceUrl": "https://www.belugacdn.com/images/logo.png",
+    "pageUrl": "https://www.belugacdn.com/",
+    "collected": "2026-10-14",
+    "sha256": "affb417730ccf1c787eda2b78cbf80f5c0148aee12b53d6f5365c8594dc14de3",
+    "transformation": null
+  },
+  {
+    "id": "sucuri",
+    "name": "Sucuri CDN",
+    "file": "assets/logos/sucuri.png",
+    "sourceUrl": "https://sucuri.net/wp-content/uploads/elementor/thumbs/Sucuri-Logo-qio221wlg9vvaaewra0jqjt8rf04jyn1vtdestgfmi.png",
+    "pageUrl": "https://sucuri.net/website-performance/",
+    "collected": "2026-10-14",
+    "sha256": "40e2d6b19ddd3dd0cd0b97aa949d9c51719a85887c894ddb5374b672c1b5db2e",
+    "transformation": null
+  },
+  {
+    "id": "jqcdn",
+    "name": "JQCDN / JetQuest CDN",
+    "file": "assets/logos/jqcdn.png",
+    "sourceUrl": "https://www.jqcdn.com/wp-content/uploads/2025/09/11.png",
+    "pageUrl": "https://www.jqcdn.com/",
+    "collected": "2026-10-14",
+    "sha256": "546ecab64460c6a7615fa614682ab17985853f45e43ffab9519a9d36ff7eae89",
+    "transformation": null
+  },
+  {
+    "id": "naver-cloud",
+    "name": "NAVER Cloud Global Edge",
+    "file": "assets/logos/naver-cloud.png",
+    "sourceUrl": "https://www.ncloud.com/img/favicon.png",
+    "pageUrl": "https://www.ncloud.com/product/networking/globalEdge",
+    "collected": "2026-10-14",
+    "sha256": "811403bc956b1a7e3d0d87233eccd9b4c890cbbe6f9f3d6df5ea210d50bbdcc2",
+    "transformation": null
+  },
+  {
+    "id": "scaleway",
+    "name": "Scaleway Edge Services",
+    "file": "assets/logos/scaleway.svg",
+    "sourceUrl": "https://www.scaleway.com/_next/static/media/logo.364z9575fph9v.svg",
+    "pageUrl": "https://www.scaleway.com/en/edge-services/",
+    "collected": "2026-10-14",
+    "sha256": "383c2d029a072e000f36f404c29f08924f6c58e161068d9cf115843b3c7af5bc",
+    "transformation": null
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel CDN",
+    "file": "assets/logos/vercel.png",
+    "sourceUrl": "https://assets.vercel.com/image/upload/q_auto/front/favicon/vercel/apple-touch-icon-180x180.png",
+    "pageUrl": "https://vercel.com/docs/cdn",
+    "collected": "2026-10-14",
+    "sha256": "527984385aaadb1ee0cebafc3d2c3873fbea854bb41817982d24f0e31b0f931e",
+    "transformation": null
+  },
+  {
+    "id": "netlify",
+    "name": "Netlify Edge Network",
+    "file": "assets/logos/netlify.svg",
+    "sourceUrl": "https://www.netlify.com/favicon/icon.svg",
+    "pageUrl": "https://www.netlify.com/platform/",
+    "collected": "2026-10-14",
+    "sha256": "74373229623eef16a6c0b2aa14ac7abf1a93116ca5d449f1d030eca536c9c842",
+    "transformation": null
+  },
+  {
+    "id": "cdn07",
+    "name": "CDN07",
+    "file": "assets/logos/cdn07.png",
+    "sourceUrl": "https://www.cdn07.com/storage/29b01900244106b56685a3662cbb4583.png",
+    "pageUrl": "https://cdn07.com/",
+    "collected": "2026-10-14",
+    "sha256": "a005fd725955036e27688b29c9219680af0aa33d9c26a959ba5b5bab57e7a84c",
+    "transformation": null
+  },
+  {
+    "id": "stonecdn",
+    "name": "StoneCDN",
+    "file": "assets/logos/stonecdn.png",
+    "sourceUrl": "https://www.stonecdn.com/wp-content/uploads/2025/04/F8D2D20DE2E6AB8D55586CDC8E278594.png",
+    "pageUrl": "https://www.stonecdn.com/",
+    "collected": "2026-10-14",
+    "sha256": "9715a4addba503a014189f8662a951243c3b66d22043713d52bff8ec862ea9ac",
+    "transformation": null
+  },
+  {
+    "id": "cdnetworks",
+    "name": "CDNetworks",
+    "file": "assets/logos/cdnetworks.svg",
+    "sourceUrl": "https://docs.cdnetworks.com/cdnw-logo.svg",
+    "pageUrl": "https://docs.cdnetworks.com/en/cdn/docs/intro",
+    "collected": "2026-10-14",
+    "sha256": "6622a16956d48cf23c83f19c6b892c5377bda0a2a86ab793c4d959bd983a270a",
+    "transformation": null
+  },
+  {
+    "id": "qiniu",
+    "name": "七牛云 Qiniu",
+    "file": "assets/logos/qiniu.jpg",
+    "sourceUrl": "https://www-static.qbox.me/_next/static/media/logo.0fc18feaa621d2068a7180631f742256.jpg",
+    "pageUrl": "https://developer.qiniu.com/fusion",
+    "collected": "2026-10-14",
+    "sha256": "42f6f110bfb6040a8ce1a87a6f23a33a365129c148ff456f63af5e4789dda85e",
+    "transformation": null
+  },
+  {
+    "id": "azion",
+    "name": "Azion",
+    "file": "assets/logos/azion.svg",
+    "sourceUrl": "https://www.azion.com/en/",
+    "pageUrl": "https://www.azion.com/en/",
+    "collected": "2026-10-14",
+    "sha256": "3fc9e749330c9ada8107b085e5ca01193bf9f6113f58ac9cc2c20b201d0a4e1f",
+    "transformation": "Official navigation SVG extracted; standalone viewBox attribute and presentation classes normalized."
+  },
+  {
+    "id": "ovhcloud",
+    "name": "OVHcloud",
+    "file": "assets/logos/ovhcloud.svg",
+    "sourceUrl": "https://www.ovhcloud.com/icon.svg",
+    "pageUrl": "https://www.ovhcloud.com/en/web-hosting/options/cdn/",
+    "collected": "2026-10-14",
+    "sha256": "902908101d7548a4444ba267a457239e730aedc6edd0251a01aaeddfb25329df",
+    "transformation": null
+  },
+  {
+    "id": "tata",
+    "name": "Tata Communications",
+    "file": "assets/logos/tata.svg",
+    "sourceUrl": "https://www.tatacommunications.com/hubfs/Tata-Communications/Logos/Tata%20Communications%20Logo%20White.svg",
+    "pageUrl": "https://www.tatacommunications.com/media-entertainment",
+    "collected": "2026-10-14",
+    "sha256": "363a19ca3286e5623a1005f3a4a3315da66bc39343e2dfddeae41a893804d8bc",
+    "transformation": null
+  },
+  {
+    "id": "selectel",
+    "name": "Selectel",
+    "file": "assets/logos/selectel.svg",
+    "sourceUrl": "https://selectel.ru/favicon.svg",
+    "pageUrl": "https://selectel.ru/services/additional/cdn/",
+    "collected": "2026-10-14",
+    "sha256": "ca62d3cfcad4464df9fb06294fa240c5a649a6fb8064f03b9f4d24c0957472bc",
+    "transformation": null
+  },
+  {
+    "id": "cdnvideo",
+    "name": "CDNvideo",
+    "file": "assets/logos/cdnvideo.svg",
+    "sourceUrl": "https://www.cdnvideo.com/wp-content/uploads/2025/09/logo-CDNvideo.svg",
+    "pageUrl": "https://www.cdnvideo.com/",
+    "collected": "2026-10-14",
+    "sha256": "c23d34e376377bd009824479f6835b9a99fe92d619daaf16171e49a63d8910dd",
+    "transformation": null
+  },
+  {
+    "id": "5centscdn",
+    "name": "5centsCDN",
+    "file": "assets/logos/5centscdn.svg",
+    "sourceUrl": "https://www.5centscdn.net/images/global/company-details/5centscdn-logo.svg",
+    "pageUrl": "https://www.5centscdn.net/",
+    "collected": "2026-10-14",
+    "sha256": "6a806f570d497b23ba49e142a8c83e09af916e5b332cbba850f14da67a207b5f",
+    "transformation": null
+  },
+  {
+    "id": "quic-cloud",
+    "name": "QUIC.cloud",
+    "file": "assets/logos/quic-cloud.png",
+    "sourceUrl": "https://www.quic.cloud/wp-content/uploads/2024/05/quic-cloud-icon_167px.png",
+    "pageUrl": "https://www.quic.cloud/",
+    "collected": "2026-10-14",
+    "sha256": "1a5c1e71943cfcd7dfc2d3817143a23257ce2dc5d917543ac1dec85af849abff",
+    "transformation": null
+  },
+  {
+    "id": "cloudinary",
+    "name": "Cloudinary",
+    "file": "assets/logos/cloudinary.png",
+    "sourceUrl": "https://cloudinary-res.cloudinary.com/image/upload/f_auto,q_auto/c_scale,w_192/v1597183771/website/cloudinary_web_favicon.png",
+    "pageUrl": "https://cloudinary.com/",
+    "collected": "2026-10-14",
+    "sha256": "6583baafbaeea9443aa2c5ccb1d4eba5fe8ff801739cbbd850ac390b329ce366",
+    "transformation": null
+  },
+  {
+    "id": "imagekit",
+    "name": "ImageKit",
+    "file": "assets/logos/imagekit.svg",
+    "sourceUrl": "https://ik.imgkit.net/ikmedia/logo/light_T4buIzohVH.svg",
+    "pageUrl": "https://imagekit.io/",
+    "collected": "2026-10-14",
+    "sha256": "1794d3af8a0ad461f3df787fde201d0a6584f220e5ba511465a2307141481c32",
+    "transformation": null
+  },
+  {
+    "id": "imgix",
+    "name": "Imgix",
+    "file": "assets/logos/imgix.webp",
+    "sourceUrl": "https://cdn.prod.website-files.com/6705f4b15aee7ca914fff083/6781be1c1332a17b6b17a18a_favicon-256.webp",
+    "pageUrl": "https://www.imgix.com/",
+    "collected": "2026-10-14",
+    "sha256": "06fd16f223bf06d943bb37ea1de374fc0714ec6c14a2f40f39501a4509080918",
+    "transformation": null
+  },
+  {
+    "id": "uploadcare",
+    "name": "Uploadcare",
+    "file": "assets/logos/uploadcare.svg",
+    "sourceUrl": "https://uploadcare.com/favicon.svg",
+    "pageUrl": "https://uploadcare.com/",
+    "collected": "2026-10-14",
+    "sha256": "3b67b7048dfff1006e409101969256ccd403354673aecb693028f5bc0d3b9bfe",
+    "transformation": null
+  },
+  {
+    "id": "gumlet",
+    "name": "Gumlet",
+    "file": "assets/logos/gumlet.svg",
+    "sourceUrl": "https://assets.gumlet.io/assets/logo.svg?w=640",
+    "pageUrl": "https://www.gumlet.com/",
+    "collected": "2026-10-14",
+    "sha256": "553b057b8d9ff28f1c106e3b101a7a93a8c937e351c1c80d9c3c291e16a48fd0",
+    "transformation": null
+  },
+  {
+    "id": "digitalocean",
+    "name": "DigitalOcean",
+    "file": "assets/logos/digitalocean.svg",
+    "sourceUrl": "https://www.digitalocean.com/_do-www-marketing/ac6a48c1/_next/static/media/favicon.91372345.svg",
+    "pageUrl": "https://www.digitalocean.com/products/spaces",
+    "collected": "2026-10-14",
+    "sha256": "3c70e37aff2456ab3976163ac49b2ec0db36b95ea0f919413b5bab51ee69ac9e",
+    "transformation": null
+  },
+  {
+    "id": "ibm-cloud",
+    "name": "IBM Cloud",
+    "file": "assets/logos/ibm-cloud.png",
+    "sourceUrl": "https://www.ibm.com/content/dam/adobe-cms/default-images/icon-192x192.png",
+    "pageUrl": "https://www.ibm.com/products/cloud-internet-services",
+    "collected": "2026-10-14",
+    "sha256": "9f48c5b9877d2badf2ec7b3ad2167bed9936ebde67dbd2e1755b51429e8f7a87",
+    "transformation": null
+  },
+  {
+    "id": "bizflycloud",
+    "name": "Bizfly Cloud",
+    "file": "assets/logos/bizflycloud.png",
+    "sourceUrl": "https://bizflycloud.vn/_nuxt/icons/icon_512x512.53af2d.png",
+    "pageUrl": "https://bizflycloud.vn/cdn",
+    "collected": "2026-10-14",
+    "sha256": "f6ee7c7a1b6cd5c5276450d4eb3b4b4b40d261b611eee5e647debf08296391f0",
+    "transformation": null
+  },
+  {
+    "id": "sirv",
+    "name": "Sirv",
+    "file": "assets/logos/sirv.png",
+    "sourceUrl": "https://sirv.sirv.com/apple-touch-icon.png",
+    "pageUrl": "https://sirv.com/",
+    "collected": "2026-10-14",
+    "sha256": "9cb1ddad1a36f14744e36bda0c75cff45c86ca1109de54a9dada89738d6088af",
+    "transformation": null
+  },
+  {
+    "id": "nhn-cloud",
+    "name": "NHN Cloud",
+    "file": "assets/logos/nhn-cloud.svg",
+    "sourceUrl": "https://static.toastoven.net/portal/public/images/logo_nhncloud_black.svg",
+    "pageUrl": "https://www.nhncloud.com/kr/service/content-delivery/cdn",
+    "collected": "2026-10-14",
+    "sha256": "8cd849c7a67e5309e6e8f43baffa2897b979729e30772d5df6235e2766aec73f",
+    "transformation": null
+  },
+  {
+    "id": "qwilt",
+    "name": "Qwilt",
+    "file": "assets/logos/qwilt.png",
+    "sourceUrl": "https://qwilt.com/wp-content/themes/qwilt/resources/img/favicons/favicon-196x196.png",
+    "pageUrl": "https://qwilt.com/",
+    "collected": "2026-10-14",
+    "sha256": "b8dd092708be78763279a33d643615b1349dd02aa685b0a91baec6a8a464d2eb",
+    "transformation": null
+  },
+  {
+    "id": "rocketcdn",
+    "name": "RocketCDN",
+    "file": "assets/logos/rocketcdn.svg",
+    "sourceUrl": "https://rocketcdn.me/wp-content/themes/v1/assets/images/logo/dark-background.svg",
+    "pageUrl": "https://rocketcdn.me/",
+    "collected": "2026-10-14",
+    "sha256": "fcd345db9fdaa6eaf14dcf9ea17511114d7b2df41105a357f079159a19e7e66d",
+    "transformation": null
+  },
+  {
+    "id": "myra-security",
+    "name": "Myra Security",
+    "file": "assets/logos/myra-security.svg",
+    "sourceUrl": "https://www.myrasecurity.com/en/saasp/application-security/high-performance-cdn/",
+    "pageUrl": "https://www.myrasecurity.com/en/saasp/application-security/high-performance-cdn/",
+    "collected": "2026-10-14",
+    "sha256": "859bf24e7d9b96fceed4b6b9ae5c411d864b39f3480633b29bffda1fd4c6177e",
+    "transformation": "Official navigation SVG extracted; standalone viewBox attribute and presentation classes normalized."
+  },
+  {
+    "id": "ddos-guard",
+    "name": "DDoS-Guard",
+    "file": "assets/logos/ddos-guard.svg",
+    "sourceUrl": "https://ddos-guard.net/",
+    "pageUrl": "https://ddos-guard.net/",
+    "collected": "2026-10-14",
+    "sha256": "76fdbcfc7734e35d31c9db84b6eead4a0196ca752b6721b3c082516658ff6613",
+    "transformation": "Official header SVG decoded from its embedded data URI."
+  },
+  {
+    "id": "baishancloud",
+    "name": "白山云 Baishan Cloud",
+    "file": "assets/logos/baishancloud.png",
+    "sourceUrl": "https://www.baishan.com/favicon.ico",
+    "pageUrl": "https://www.baishan.com/",
+    "collected": "2026-10-14",
+    "sha256": "abd9970c7fe31831f738abc104d40ecb733fe8e121afd7e63416bdc640d7eeb5",
+    "transformation": null
+  },
+  {
+    "id": "advancedhosting",
+    "name": "Advanced Hosting",
+    "file": "assets/logos/advancedhosting.svg",
+    "sourceUrl": "https://advancedhosting.com/wp-content/uploads/2025/04/logo-mark.svg",
+    "pageUrl": "https://advancedhosting.com/cdn-2026/",
+    "collected": "2026-10-14",
+    "sha256": "291f6c4643e618e96dde51ed16802dae5375d318f13cf5f957503fe374d04612",
+    "transformation": null
+  },
+  {
+    "id": "cloudimage",
+    "name": "Cloudimage",
+    "file": "assets/logos/cloudimage.png",
+    "sourceUrl": "https://cdn.prod.website-files.com/666bfc82fb3c79ce3178dd20/67619ca539232e18144d78c8_logo-cloudimage-symbol-blue_webclip.png",
+    "pageUrl": "https://www.cloudimage.io/",
+    "collected": "2026-10-14",
+    "sha256": "53a4e1cc143d0e099992848699e893e7b3ba544527cef564f964f2180e77f318",
+    "transformation": null
+  },
+  {
+    "id": "optimole",
+    "name": "Optimole",
+    "file": "assets/logos/optimole.svg",
+    "sourceUrl": "https://optimole.com/uploads/2024/06/logo_mole.svg",
+    "pageUrl": "https://optimole.com/",
+    "collected": "2026-10-14",
+    "sha256": "bda7a8702d163090e6331cac8d3d0325a80544e07c780890cb0b8e856b897571",
+    "transformation": null
+  },
+  {
+    "id": "mux",
+    "name": "Mux",
+    "file": "assets/logos/mux.svg",
+    "sourceUrl": "https://www.mux.com/icon-pwu6ef.svg?icon.302p-5ql3kvw_.svg",
+    "pageUrl": "https://www.mux.com/",
+    "collected": "2026-10-14",
+    "sha256": "908db7ced862195d506e408987e66602043255d65093b862f4089fecdba5e58d",
+    "transformation": null
+  },
+  {
+    "id": "api-video",
+    "name": "api.video",
+    "file": "assets/logos/api-video.svg",
+    "sourceUrl": "https://img.api.video/api_video_OV_Hcloud_cb0460159e.svg",
+    "pageUrl": "https://api.video/",
+    "collected": "2026-10-14",
+    "sha256": "6e1da3c5f5200f859618ed1509b42af6d503b98b4c204add118c390ca20ae570",
+    "transformation": null
+  }
+]

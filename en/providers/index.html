@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="A directory of CDN provider positioning and selection profiles.">
+  <title>CDN provider directory · CDN Bench</title>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../platform.css">
+  <link rel="stylesheet" href="../../platform-overrides.css">
+  <link rel="stylesheet" href="../../navigation.css">
+  <link rel="stylesheet" href="../../advertising.css">
+  <script src="../../advertising.js" defer></script>
+  <script src="../../site-shell.js" defer></script>
+  <script type="module" src="../../app.js"></script>
+
+
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+  <header class="site-header premium-header">
+    <a class="brand" href="../../en/" aria-label="CDN Bench"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><ellipse cx="16" cy="16" rx="5" ry="11"/><path d="M5 16h22M7 10h18M7 22h18"/></svg></span><span class="brand-wordmark"><span>CDN<span class="brand-light">Bench</span><span class="brand-tag">LAB</span></span><small>INDEPENDENT EDGE RESEARCH</small></span></a>
+    <nav id="site-navigation" class="header-nav" aria-label="Main navigation"><a href="../../en/" data-i18n="navHome">Home</a><a href="../../en/providers/" data-i18n="navProviders" aria-current="page">Providers</a><a href="../../en/blog/" data-i18n="navBlog">Journal</a><a href="../../en/lab/" data-i18n="navBench">Benchmark</a><a href="../../en/methodology/" data-i18n="navMethod">Methodology</a><span class="mobile-nav-note">CDN BENCH / A clearer choice.</span></nav>
+    <div class="header-actions"><a id="language-toggle" class="language-button" href="../../providers/" aria-label="Switch to Chinese">中文 ↗</a><button class="menu-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button></div>
+  </header>
+  <!--SITE_ADS_START--><aside class="site-ad-slot" data-ad-slot="sitewide-top" data-ad-type="image" data-ad-expires="0" style="--ad-height:110px" role="complementary" aria-label="Banner advertising"><span class="site-ad-label">ADVERTISEMENT</span><div class="site-ad-creative"><template data-ad-creative><a class="site-ad-link" href="https://www.cdn5.com/" target="_blank" rel="sponsored noopener noreferrer"><picture class="site-ad-picture"><source media="(max-width: 600px)" srcset="../../assets/ads/1a36c05fe712e9555408c51739e18d322ee80417edfddb73c731034da97e4df0.png"><img class="site-ad-image" src="../../assets/ads/106e337622e1bd3803d51d39a7f554f5cd8437385558593d78ef8cd08f6cfb0c.png" alt="CDN5: Asia Pacific’s Best DDoS-Protected CDN Provider. Enterprise-grade acceleration services." decoding="async"></picture></a></template></div></aside>
+<aside class="site-ad-rail site-ad-left" data-ad-slot="sitewide-left" data-ad-type="placeholder" data-ad-expires="0" style="--ad-height:600px" role="complementary" aria-label="Left floating advertising"><span class="site-ad-label">ADVERTISEMENT</span><button class="site-ad-close" type="button" aria-label="Close advertisement">×</button><div class="site-ad-creative"><div class="site-ad-placeholder"><span class="site-ad-placeholder-mark" aria-hidden="true">↗</span><span>Advertising space</span><small>128 × 600 · ADVERTISEMENT</small></div></div></aside>
+<aside class="site-ad-rail site-ad-right" data-ad-slot="sitewide-right" data-ad-type="placeholder" data-ad-expires="0" style="--ad-height:600px" role="complementary" aria-label="Right floating advertising"><span class="site-ad-label">ADVERTISEMENT</span><button class="site-ad-close" type="button" aria-label="Close advertisement">×</button><div class="site-ad-creative"><div class="site-ad-placeholder"><span class="site-ad-placeholder-mark" aria-hidden="true">↗</span><span>Advertising space</span><small>128 × 600 · ADVERTISEMENT</small></div></div></aside><!--SITE_ADS_END-->
+  <main id="main"><section id="providers" class="platform-section">
+  <div class="section-heading"><div><span class="eyebrow">THE DIRECTORY /</span><h1 data-i18n="providersTitle">Find your fit at the edge.</h1><p data-i18n="providersIntro">Explore global CDNs, cloud platforms, security and media delivery. Entries represent service brands; compare workload fit before testing performance.</p></div></div>
+  <div class="directory-tools"><label class="search-field"><span data-i18n="searchProviders">Search providers or keywords</span><input id="provider-search" type="search" placeholder="搜索名称、能力或场景"></label><label class="filter-field"><span data-i18n="filterProviders">Selection focus</span><select id="provider-filter"><option value="all" data-i18n="filterAll">All providers</option><option value="security" data-i18n="filterSecurity">Security &amp; protection</option><option value="cloud" data-i18n="filterCloud">Cloud integration</option><option value="programmable" data-i18n="filterProgrammable">Programmable edge</option><option value="delivery" data-i18n="filterDelivery">Content delivery</option></select></label><p id="provider-count">63 家 CDN 服务商</p></div>
+  <p id="compare-notice" role="status"></p><div id="provider-grid" class="provider-grid">
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cloudflare.svg" alt="Cloudflare logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudflare</h3><p class="provider-tagline">Reverse proxy, caching, and security</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">Cloudflare CDN uses a reverse-proxy model configured through DNS, covering static assets, anonymous API responses, and dynamic-content optimization with cache rules, tiered caching, and purge controls.</p>
+          <p class="provider-best"><strong>Best for · </strong>Websites, APIs, SaaS, and teams wanting fast security integration</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cloudflare/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Cloudflare" data-provider-action="compare" data-provider-id="cloudflare">Add to compare</button><a class="provider-source-link" href="https://www.cloudflare.com/products/cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/yewsafe.svg" alt="YewSafe logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>YewSafe</h3><p class="provider-tagline">Enterprise CDN, Anycast, and DDoS protection</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">YewSafe presents SCDN static delivery, Anycast CDN, DDoS mitigation, application protection, and Edge AI products, with solutions for gaming, finance, streaming, and AI workloads.</p>
+          <p class="provider-best"><strong>Best for · </strong>Enterprise projects evaluating delivery and workload protection together</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/yewsafe/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare YewSafe" data-provider-action="compare" data-provider-id="yewsafe">Add to compare</button><a class="provider-source-link" href="https://www.yewsafe.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/akamai.svg" alt="Akamai logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Akamai</h3><p class="provider-tagline">Enterprise content, app, and media delivery</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">Akamai serves enterprise content delivery, application performance, and media distribution workloads with detailed controls for caching, origins, traffic governance, and operations.</p>
+          <p class="provider-best"><strong>Best for · </strong>Large sites, media platforms, and multi-region enterprise apps</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/akamai/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Akamai" data-provider-action="compare" data-provider-id="akamai">Add to compare</button><a class="provider-source-link" href="https://www.akamai.com/content-delivery-network" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-red">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/fastly.svg" alt="Fastly logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Fastly</h3><p class="provider-tagline">Programmable edge with real-time visibility</p></div></div>
+          <div class="provider-tags"><span>Programmable edge</span><span>Content delivery</span></div>
+          <p class="provider-intro">Fastly emphasizes programmable control, real-time visibility, fast purging, and built-in security for engineering teams that want delivery, routing, and content policy at the edge.</p>
+          <p class="provider-best"><strong>Best for · </strong>Dynamic sites, APIs, and fast-moving engineering teams</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/fastly/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Fastly" data-provider-action="compare" data-provider-id="fastly">Add to compare</button><a class="provider-source-link" href="https://www.fastly.com/products/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cdn5.png" alt="CDN5 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN5</h3><p class="provider-tagline">Security-first acceleration</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">CDN5 positions high-defense CDN, DDoS / CC protection, WAF, and a game SDK shield as core products for teams evaluating security and delivery together.</p>
+          <p class="provider-best"><strong>Best for · </strong>Games, media, APIs, and security-sensitive projects</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdn5/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDN5" data-provider-action="compare" data-provider-id="cdn5">Add to compare</button><a class="provider-source-link" href="https://www.cdn5.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cloudfront.svg" alt="Amazon CloudFront logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Amazon CloudFront</h3><p class="provider-tagline">AWS-native delivery and edge compute</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">CloudFront connects closely with S3, ALB, Lambda@Edge, and other AWS services, covering low-latency delivery, compression, edge compute, and security controls.</p>
+          <p class="provider-best"><strong>Best for · </strong>Teams already operating on AWS</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cloudfront/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Amazon CloudFront" data-provider-action="compare" data-provider-id="cloudfront">Add to compare</button><a class="provider-source-link" href="https://www.aws.amazon.com/cloudfront/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-yellow">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/google-cloud-cdn.png" alt="Google Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Google Cloud CDN</h3><p class="provider-tagline">Google edge network with fine-grained cache control</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">Google Cloud CDN uses Google’s global edge network, supports any HTTP-capable origin, and provides controls for cache keys, TTLs, Cloud Armor, logs, and metrics.</p>
+          <p class="provider-best"><strong>Best for · </strong>Google Cloud, multi-cloud, or custom-origin workloads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/google-cloud-cdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Google Cloud CDN" data-provider-action="compare" data-provider-id="google-cloud-cdn">Add to compare</button><a class="provider-source-link" href="https://www.cloud.google.com/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/azure-front-door.svg" alt="Azure Front Door logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Azure Front Door</h3><p class="provider-tagline">Azure-native global application entry point</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">Azure Front Door combines global delivery, dynamic and static acceleration, WAF, bot protection, and DDoS protection in an Azure edge entry point.</p>
+          <p class="provider-best"><strong>Best for · </strong>Azure apps, hybrid origins, and global APIs</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/azure-front-door/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Azure Front Door" data-provider-action="compare" data-provider-id="azure-front-door">Add to compare</button><a class="provider-source-link" href="https://www.microsoft.com/azure" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/alibaba-cloud-cdn.svg" alt="Alibaba Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Alibaba Cloud CDN</h3><p class="provider-tagline">Cloud CDN for China and global workloads</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">Alibaba Cloud CDN offers acceleration for static content, downloads, video, and related workloads, with Alibaba Cloud origin, logging, monitoring, and security integrations.</p>
+          <p class="provider-best"><strong>Best for · </strong>Mainland China, APAC, and Alibaba Cloud workloads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/alibaba-cloud-cdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Alibaba Cloud CDN" data-provider-action="compare" data-provider-id="alibaba-cloud-cdn">Add to compare</button><a class="provider-source-link" href="https://www.alibabacloud.com/product/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-red">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/tencent-edgeone.svg" alt="Tencent Cloud EdgeOne logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Tencent Cloud EdgeOne</h3><p class="provider-tagline">Global CDN, edge security, and functions</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">EdgeOne positions itself as an integrated CDN, security, and edge-services product covering DDoS, web applications, bots, access control, and edge functions.</p>
+          <p class="provider-best"><strong>Best for · </strong>Games, SaaS, cross-border sites, and Tencent Cloud workloads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/tencent-edgeone/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Tencent Cloud EdgeOne" data-provider-action="compare" data-provider-id="tencent-edgeone">Add to compare</button><a class="provider-source-link" href="https://www.tencentcloud.com/products/teo" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/bunny.svg" alt="Bunny.net logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Bunny.net</h3><p class="provider-tagline">Developer-friendly content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Bunny.net combines CDN, storage, and video products for developers who want to ship static assets, downloads, or media delivery quickly.</p>
+          <p class="provider-best"><strong>Best for · </strong>Indie developers, static sites, and smaller media projects</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-13</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/bunny/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Bunny.net" data-provider-action="compare" data-provider-id="bunny">Add to compare</button><a class="provider-source-link" href="https://www.bunny.net/cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cdn77.png" alt="CDN77 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN77</h3><p class="provider-tagline">Video and large-scale content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">CDN77 provides content delivery with an emphasis on live video, on-demand media, and high-volume delivery, alongside security services.</p>
+          <p class="provider-best"><strong>Best for · </strong>Video platforms, downloads, and high-volume media</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdn77/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDN77" data-provider-action="compare" data-provider-id="cdn77">Add to compare</button><a class="provider-source-link" href="https://www.cdn77.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/gcore.png" alt="Gcore logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Gcore</h3><p class="provider-tagline">CDN, edge development, and cloud services</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Gcore offers CDN, dynamic acceleration, streaming, and FastEdge within its edge portfolio, alongside security and cloud services.</p>
+          <p class="provider-best"><strong>Best for · </strong>Projects evaluating delivery, edge logic, and cloud services</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/gcore/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Gcore" data-provider-action="compare" data-provider-id="gcore">Add to compare</button><a class="provider-source-link" href="https://gcore.com/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cachefly.png" alt="CacheFly logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CacheFly</h3><p class="provider-tagline">Media, games, and dedicated CDN delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">CacheFly emphasizes streaming, game launches, and media delivery, with origin shielding, log streaming, and private CDN services.</p>
+          <p class="provider-best"><strong>Best for · </strong>Media platforms, game distribution, and dedicated delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cachefly/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CacheFly" data-provider-action="compare" data-provider-id="cachefly">Add to compare</button><a class="provider-source-link" href="https://www.cachefly.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/imperva.png" alt="Imperva Secure CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Imperva Secure CDN</h3><p class="provider-tagline">Secure CDN integrated with application protection</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">Imperva Secure CDN combines caching and load balancing with web application and API protection. Evaluate delivery and legitimate-request handling together.</p>
+          <p class="provider-best"><strong>Best for · </strong>Enterprises evaluating application security and web delivery together</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/imperva/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Imperva Secure CDN" data-provider-action="compare" data-provider-id="imperva">Add to compare</button><a class="provider-source-link" href="https://www.imperva.com/products/content-delivery-network-cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/edgenext.png" alt="EdgeNext logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>EdgeNext</h3><p class="provider-tagline">Global delivery and edge infrastructure</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Cloud integration</span></div>
+          <p class="provider-intro">EdgeNext describes global CDN, static and dynamic acceleration, live streaming, cloud security, and compute services.</p>
+          <p class="provider-best"><strong>Best for · </strong>Cross-region web, media, and edge infrastructure projects</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/edgenext/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare EdgeNext" data-provider-action="compare" data-provider-id="edgenext">Add to compare</button><a class="provider-source-link" href="https://www.edgenext.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/keycdn.svg" alt="KeyCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>KeyCDN</h3><p class="provider-tagline">Static assets and image delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">KeyCDN documents CDN zones, cache purges, image processing, and API management for developer-led content delivery.</p>
+          <p class="provider-best"><strong>Best for · </strong>Static sites, image assets, and developer projects</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/keycdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare KeyCDN" data-provider-action="compare" data-provider-id="keycdn">Add to compare</button><a class="provider-source-link" href="https://www.keycdn.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/huawei-cloud.png" alt="Huawei Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Huawei Cloud CDN</h3><p class="provider-tagline">Website, download, and media acceleration</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Cloud integration</span></div>
+          <p class="provider-intro">Huawei Cloud CDN describes website, file-download, on-demand, and whole-site acceleration with caching and origin controls.</p>
+          <p class="provider-best"><strong>Best for · </strong>Huawei Cloud origins, downloads, and regional delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/huawei-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Huawei Cloud CDN" data-provider-action="compare" data-provider-id="huawei-cloud">Add to compare</button><a class="provider-source-link" href="https://www.huaweicloud.com/intl/en-us/product/cdn.html" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/byteplus.png" alt="BytePlus CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BytePlus CDN</h3><p class="provider-tagline">Global delivery, dynamic acceleration, and edge capabilities</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Programmable edge</span></div>
+          <p class="provider-intro">BytePlus CDN presents distributed caching, dynamic acceleration, security, and edge functions. Validate the actual products and target markets required.</p>
+          <p class="provider-best"><strong>Best for · </strong>Global applications, media, and dynamic delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/byteplus/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare BytePlus CDN" data-provider-action="compare" data-provider-id="byteplus">Add to compare</button><a class="provider-source-link" href="https://www.byteplus.com/en/product/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/baidu-cloud.png" alt="Baidu AI Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Baidu AI Cloud CDN</h3><p class="provider-tagline">Caching, prefetching, and cloud content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Cloud integration</span></div>
+          <p class="provider-intro">Baidu AI Cloud CDN describes cache management, purge and prefetch, access controls, analytics, and primary/backup origin configuration.</p>
+          <p class="provider-best"><strong>Best for · </strong>Chinese-language sites, downloads, and Baidu Cloud workloads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/baidu-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Baidu AI Cloud CDN" data-provider-action="compare" data-provider-id="baidu-cloud">Add to compare</button><a class="provider-source-link" href="https://cloud.baidu.com/product/cdn.html" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/upyun.png" alt="UPYUN 又拍云 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>UPYUN 又拍云</h3><p class="provider-tagline">Cloud delivery, image processing, and access protection</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Cloud integration</span></div>
+          <p class="provider-intro">UPYUN documents website, video, download, and mobile delivery with cache management, image processing, and security services.</p>
+          <p class="provider-best"><strong>Best for · </strong>Image-heavy sites and Chinese-language content</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/upyun/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare UPYUN 又拍云" data-provider-action="compare" data-provider-id="upyun">Add to compare</button><a class="provider-source-link" href="https://www.upyun.com/products/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/kingsoft-cloud.png" alt="Kingsoft Cloud CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Kingsoft Cloud CDN</h3><p class="provider-tagline">Static files, downloads, and live distribution</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Cloud integration</span></div>
+          <p class="provider-intro">Kingsoft Cloud describes static and live CDN delivery with content management, logs, analytics, and scheduling capabilities.</p>
+          <p class="provider-best"><strong>Best for · </strong>Media, game downloads, and cloud content distribution</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/kingsoft-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Kingsoft Cloud CDN" data-provider-action="compare" data-provider-id="kingsoft-cloud">Add to compare</button><a class="provider-source-link" href="https://www.ksyun.com/nv/product/CDN.html" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/medianova.svg" alt="Medianova logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Medianova</h3><p class="provider-tagline">Content delivery, streaming, and web security</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">Medianova describes static, dynamic, and large-file delivery with an EMEA-oriented network, media services, and application security.</p>
+          <p class="provider-best"><strong>Best for · </strong>Web and media workloads serving EMEA audiences</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/medianova/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Medianova" data-provider-action="compare" data-provider-id="medianova">Add to compare</button><a class="provider-source-link" href="https://www.medianova.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/blazingcdn.png" alt="BlazingCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BlazingCDN</h3><p class="provider-tagline">Video, software, and large-file delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">BlazingCDN positions its network around video, software, and media delivery. Evaluate complete downloads and the workload&#39;s real traffic model.</p>
+          <p class="provider-best"><strong>Best for · </strong>Software distribution, downloads, and video assets</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/blazingcdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare BlazingCDN" data-provider-action="compare" data-provider-id="blazingcdn">Add to compare</button><a class="provider-source-link" href="https://blazingcdn.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cdnsun.png" alt="CDNsun logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNsun</h3><p class="provider-tagline">Website and media content distribution</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">CDNsun offers content delivery and a trial entry point. Validate regional delivery, cache updates, HTTPS, and costs using your own resources.</p>
+          <p class="provider-best"><strong>Best for · </strong>Website assets and media delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdnsun/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDNsun" data-provider-action="compare" data-provider-id="cdnsun">Add to compare</button><a class="provider-source-link" href="https://cdnsun.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/belugacdn.png" alt="BelugaCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>BelugaCDN</h3><p class="provider-tagline">Usage-oriented content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">BelugaCDN describes delivery, cache purges, analytics, APIs, and custom-domain access controls. Vendor price or performance comparisons are not independent findings here.</p>
+          <p class="provider-best"><strong>Best for · </strong>Static assets and usage-based delivery projects</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/belugacdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare BelugaCDN" data-provider-action="compare" data-provider-id="belugacdn">Add to compare</button><a class="provider-source-link" href="https://www.belugacdn.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/sucuri.png" alt="Sucuri CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Sucuri CDN</h3><p class="provider-tagline">CDN integrated with website security</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">Sucuri presents CDN performance alongside website firewall and security services. Verify caching and dynamic-page compatibility for the intended site.</p>
+          <p class="provider-best"><strong>Best for · </strong>Website and CMS delivery and security</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/sucuri/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Sucuri CDN" data-provider-action="compare" data-provider-id="sucuri">Add to compare</button><a class="provider-source-link" href="https://sucuri.net/website-performance/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/jqcdn.png" alt="JQCDN / JetQuest CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>JQCDN / JetQuest CDN</h3><p class="provider-tagline">Hong Kong routing and secure delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">JQCDN targets Chinese-speaking developers with offshore onboarding, Hong Kong routing, and security services. Confirm eligibility and measured delivery separately.</p>
+          <p class="provider-best"><strong>Best for · </strong>Projects evaluating offshore onboarding and Chinese-language support</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/jqcdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare JQCDN / JetQuest CDN" data-provider-action="compare" data-provider-id="jqcdn">Add to compare</button><a class="provider-source-link" href="https://www.jqcdn.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/naver-cloud.png" alt="NAVER Cloud Global Edge logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>NAVER Cloud Global Edge</h3><p class="provider-tagline">Global delivery within NAVER Cloud</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Cloud integration</span></div>
+          <p class="provider-intro">NAVER Cloud Global Edge is documented as a global CDN service with delivery, metrics, and management APIs.</p>
+          <p class="provider-best"><strong>Best for · </strong>NAVER Cloud workloads and cross-region delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/naver-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare NAVER Cloud Global Edge" data-provider-action="compare" data-provider-id="naver-cloud">Add to compare</button><a class="provider-source-link" href="https://www.ncloud.com/product/networking/globalEdge" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/scaleway.svg" alt="Scaleway Edge Services logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Scaleway Edge Services</h3><p class="provider-tagline">HTTP caching, WAF, and cloud resource delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Cloud integration</span></div>
+          <p class="provider-intro">Scaleway Edge Services combines caching, WAF, certificates, and custom domains for HTTP resources, including object-storage websites and media.</p>
+          <p class="provider-best"><strong>Best for · </strong>Scaleway resources and object-storage websites</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/scaleway/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Scaleway Edge Services" data-provider-action="compare" data-provider-id="scaleway">Add to compare</button><a class="provider-source-link" href="https://www.scaleway.com/en/edge-services/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/vercel.png" alt="Vercel CDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Vercel CDN</h3><p class="provider-tagline">Application-platform integrated content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span><span>Cloud integration</span></div>
+          <p class="provider-intro">Vercel documents a CDN integrated with its application platform. Evaluate its deployment model rather than assuming it is equivalent to a standalone CDN plan.</p>
+          <p class="provider-best"><strong>Best for · </strong>Sites and applications deployed on Vercel</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/vercel/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Vercel CDN" data-provider-action="compare" data-provider-id="vercel">Add to compare</button><a class="provider-source-link" href="https://vercel.com/docs/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/netlify.svg" alt="Netlify Edge Network logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Netlify Edge Network</h3><p class="provider-tagline">Web deployments, caching, and edge networking</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Netlify describes global edge delivery, cache controls, image CDN, deployments, security, and functions as part of its application platform.</p>
+          <p class="provider-best"><strong>Best for · </strong>Netlify sites, preview deployments, and web applications</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/netlify/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Netlify Edge Network" data-provider-action="compare" data-provider-id="netlify">Add to compare</button><a class="provider-source-link" href="https://www.netlify.com/platform/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/cdn07.png" alt="CDN07 logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDN07</h3><p class="provider-tagline">Security-focused CDN for Asia-Pacific</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">Offers security-focused CDN, application protection and game SDK services. Published protection claims are vendor statements, not independent measurements.</p>
+          <p class="provider-best"><strong>Best for · </strong>Asia-Pacific websites, gaming and Chinese-speaking application teams</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdn07/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDN07" data-provider-action="compare" data-provider-id="cdn07">Add to compare</button><a class="provider-source-link" href="https://cdn07.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/stonecdn.png" alt="StoneCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>StoneCDN</h3><p class="provider-tagline">Game SDK protection and application delivery</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">StoneCDN identifies itself as a YewSafe brand, focused on Windows, Android and iOS protection SDKs, encrypted routing and application traffic protection. SDK integration differs from standard website CDN onboarding.</p>
+          <p class="provider-best"><strong>Best for · </strong>Games, mobile applications and real-time services with client integration</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/stonecdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare StoneCDN" data-provider-action="compare" data-provider-id="stonecdn">Add to compare</button><a class="provider-source-link" href="https://www.stonecdn.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cdnetworks.svg" alt="CDNetworks logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNetworks</h3><p class="provider-tagline">CDN Pro and configurable content delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">CDNetworks documents CDN Pro configuration, testing and deployment workflows, with APIs, caching controls and origin settings for delivery integrated into software releases.</p>
+          <p class="provider-best"><strong>Best for · </strong>Teams needing granular configuration, API management and regional delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdnetworks/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDNetworks" data-provider-action="compare" data-provider-id="cdnetworks">Add to compare</button><a class="provider-source-link" href="https://www.cdnetworks.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/qiniu.jpg" alt="七牛云 Qiniu logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>七牛云 Qiniu</h3><p class="provider-tagline">CDN integrated with object storage</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">Qiniu CDN documentation covers domain onboarding, origins, caching, HTTPS, access controls, purge, prefetch and logs. It fits teams already using Kodo storage or media processing.</p>
+          <p class="provider-best"><strong>Best for · </strong>Chinese-language services, media platforms and Kodo users</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/qiniu/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare 七牛云 Qiniu" data-provider-action="compare" data-provider-id="qiniu">Add to compare</button><a class="provider-source-link" href="https://www.qiniu.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/azion.svg" alt="Azion logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Azion</h3><p class="provider-tagline">Edge application platform for developers</p></div></div>
+          <div class="provider-tags"><span>Programmable edge</span><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">Azion combines application deployment, content delivery and application security for teams that process requests and manage caching at the edge.</p>
+          <p class="provider-best"><strong>Best for · </strong>Programmable web applications, APIs and edge deployments</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/azion/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Azion" data-provider-action="compare" data-provider-id="azion">Add to compare</button><a class="provider-source-link" href="https://www.azion.com/en/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/ovhcloud.svg" alt="OVHcloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>OVHcloud</h3><p class="provider-tagline">CDN integrated with Web Hosting</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">OVHcloud Shared CDN is an option for its Web Hosting plans, with different caching and optimization tiers. It is a hosting integration rather than a blanket promise of arbitrary-origin support.</p>
+          <p class="provider-best"><strong>Best for · </strong>Websites hosted on OVHcloud Web Hosting</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/ovhcloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare OVHcloud" data-provider-action="compare" data-provider-id="ovhcloud">Add to compare</button><a class="provider-source-link" href="https://www.ovhcloud.com/en/web-hosting/options/cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/tata.svg" alt="Tata Communications logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Tata Communications</h3><p class="provider-tagline">Media-focused content and video delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Tata Communications offers video CDN, live and on-demand delivery alongside professional media transport, connecting content workflows to audience delivery.</p>
+          <p class="provider-best"><strong>Best for · </strong>Broadcasters, OTT platforms and major live events</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/tata/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Tata Communications" data-provider-action="compare" data-provider-id="tata">Add to compare</button><a class="provider-source-link" href="https://www.tatacommunications.com/media-entertainment" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/selectel.svg" alt="Selectel logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Selectel</h3><p class="provider-tagline">Cloud CDN for static asset delivery</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">Selectel CDN targets websites, game updates and static delivery, listing HTTPS, CORS, compression, origin shielding and logs for cloud workloads.</p>
+          <p class="provider-best"><strong>Best for · </strong>Cloud workloads serving Russia and nearby markets</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/selectel/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Selectel" data-provider-action="compare" data-provider-id="selectel">Add to compare</button><a class="provider-source-link" href="https://selectel.ru/services/additional/cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/cdnvideo.svg" alt="CDNvideo logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>CDNvideo</h3><p class="provider-tagline">Live, on-demand and regional delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">CDNvideo offers live streaming, video on demand, web acceleration and origin protection, with regional solutions including Asia, Russia and CIS markets. Streaming and downloads need distinct tests.</p>
+          <p class="provider-best"><strong>Best for · </strong>Video platforms, live events, game distribution and regional websites</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cdnvideo/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare CDNvideo" data-provider-action="compare" data-provider-id="cdnvideo">Add to compare</button><a class="provider-source-link" href="https://www.cdnvideo.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/5centscdn.svg" alt="5centsCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>5centsCDN</h3><p class="provider-tagline">CDN, live transcoding and multistreaming</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">5centsCDN combines live streaming, VOD, transcoding, multistreaming and content delivery, with website acceleration in the same product portfolio.</p>
+          <p class="provider-best"><strong>Best for · </strong>Live production, education video and smaller media services</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/5centscdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare 5centsCDN" data-provider-action="compare" data-provider-id="5centscdn">Add to compare</button><a class="provider-source-link" href="https://www.5centscdn.net/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/quic-cloud.png" alt="QUIC.cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>QUIC.cloud</h3><p class="provider-tagline">WordPress page caching and optimization</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">QUIC.cloud integrates with LiteSpeed Cache for WordPress static and dynamic page caching, intelligent purge and page optimization. It is designed around WordPress workflows.</p>
+          <p class="provider-best"><strong>Best for · </strong>WordPress publications, stores and LiteSpeed Cache users</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/quic-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare QUIC.cloud" data-provider-action="compare" data-provider-id="quic-cloud">Add to compare</button><a class="provider-source-link" href="https://www.quic.cloud/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cloudinary.png" alt="Cloudinary logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudinary</h3><p class="provider-tagline">Image and video processing with media delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Cloudinary provides upload, management, transformation and optimized delivery for images and video, including multi-CDN options for media-heavy products.</p>
+          <p class="provider-best"><strong>Best for · </strong>Commerce imagery, user uploads and media workflows</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cloudinary/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Cloudinary" data-provider-action="compare" data-provider-id="cloudinary">Add to compare</button><a class="provider-source-link" href="https://cloudinary.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/imagekit.svg" alt="ImageKit logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>ImageKit</h3><p class="provider-tagline">Media optimization over existing storage</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">ImageKit combines image transformations, video delivery and asset management, connecting to existing storage such as S3, Google Cloud Storage and Azure Blob.</p>
+          <p class="provider-best"><strong>Best for · </strong>Product imagery, responsive media and teams with object storage</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/imagekit/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare ImageKit" data-provider-action="compare" data-provider-id="imagekit">Add to compare</button><a class="provider-source-link" href="https://imagekit.io/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/imgix.webp" alt="Imgix logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Imgix</h3><p class="provider-tagline">Image transformation API and global delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Imgix centers on image sources, transformation APIs and content delivery to produce device-appropriate media variants, with video optimization capabilities.</p>
+          <p class="provider-best"><strong>Best for · </strong>Image-heavy applications, commerce and content platforms</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/imgix/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Imgix" data-provider-action="compare" data-provider-id="imgix">Add to compare</button><a class="provider-source-link" href="https://www.imgix.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/uploadcare.svg" alt="Uploadcare logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Uploadcare</h3><p class="provider-tagline">File upload, media processing and delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Uploadcare connects file ingestion to presentation with upload components, image and video CDN, processing APIs and adaptive delivery.</p>
+          <p class="provider-best"><strong>Best for · </strong>User-generated content, product media and application uploads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/uploadcare/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Uploadcare" data-provider-action="compare" data-provider-id="uploadcare">Add to compare</button><a class="provider-source-link" href="https://uploadcare.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/gumlet.svg" alt="Gumlet logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Gumlet</h3><p class="provider-tagline">Video hosting, processing and CDN delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Gumlet focuses on video hosting and streaming delivery with player, analytics and content-protection capabilities. Evaluate encoding, viewing experience and delivery costs together.</p>
+          <p class="provider-best"><strong>Best for · </strong>Course video, marketing video and paid-content platforms</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/gumlet/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Gumlet" data-provider-action="compare" data-provider-id="gumlet">Add to compare</button><a class="provider-source-link" href="https://www.gumlet.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/digitalocean.svg" alt="DigitalOcean logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>DigitalOcean</h3><p class="provider-tagline">Built-in CDN for Spaces object storage</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">DigitalOcean Spaces is S3-compatible object storage with a built-in CDN for public objects. It suits assets and media rather than arbitrary dynamic-origin proxying.</p>
+          <p class="provider-best"><strong>Best for · </strong>Development teams using Spaces and static asset delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/digitalocean/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare DigitalOcean" data-provider-action="compare" data-provider-id="digitalocean">Add to compare</button><a class="provider-source-link" href="https://www.digitalocean.com/products/spaces" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/ibm-cloud.png" alt="IBM Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>IBM Cloud</h3><p class="provider-tagline">Cloud Internet Services security and delivery</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">IBM Cloud Internet Services combines CDN, DNS and application security. Existing IBM Cloud users should assess domain migration, edge policies and service tiers.</p>
+          <p class="provider-best"><strong>Best for · </strong>IBM Cloud enterprise workloads, websites and internet applications</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/ibm-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare IBM Cloud" data-provider-action="compare" data-provider-id="ibm-cloud">Add to compare</button><a class="provider-source-link" href="https://www.ibm.com/products/cloud-internet-services" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/bizflycloud.png" alt="Bizfly Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Bizfly Cloud</h3><p class="provider-tagline">Content delivery focused on Vietnam</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">Bizfly Cloud CDN delivers images, CSS, JavaScript, video and downloads, with official materials focused on Vietnamese audiences and data-transfer billing.</p>
+          <p class="provider-best"><strong>Best for · </strong>Vietnamese websites, commerce and local content platforms</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/bizflycloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Bizfly Cloud" data-provider-action="compare" data-provider-id="bizflycloud">Add to compare</button><a class="provider-source-link" href="https://bizflycloud.vn/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/sirv.png" alt="Sirv logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Sirv</h3><p class="provider-tagline">Image CDN and 360-degree product views</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Sirv offers image management, real-time transformations and image CDN alongside 360-degree product viewers for commerce experiences.</p>
+          <p class="provider-best"><strong>Best for · </strong>Product catalogs, 360-degree views and commerce imagery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/sirv/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Sirv" data-provider-action="compare" data-provider-id="sirv">Add to compare</button><a class="provider-source-link" href="https://sirv.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/nhn-cloud.svg" alt="NHN Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>NHN Cloud</h3><p class="provider-tagline">Cloud-platform CDN and media delivery</p></div></div>
+          <div class="provider-tags"><span>Cloud integration</span><span>Content delivery</span></div>
+          <p class="provider-intro">NHN Cloud offers CDN in its content-delivery portfolio for web and media distribution, alongside object storage and Image Manager workflows.</p>
+          <p class="provider-best"><strong>Best for · </strong>Korean and Asian workloads and NHN Cloud users</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/nhn-cloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare NHN Cloud" data-provider-action="compare" data-provider-id="nhn-cloud">Add to compare</button><a class="provider-source-link" href="https://www.nhncloud.com/kr/service/content-delivery/cdn" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/qwilt.png" alt="Qwilt logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Qwilt</h3><p class="provider-tagline">Operator-edge delivery and Open Caching</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Qwilt delivers content through an operator-partnered Open Edge network for OTT, software delivery and gaming workloads, with onboarding tailored to publisher scale.</p>
+          <p class="provider-best"><strong>Best for · </strong>OTT, game publishers and large content owners</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/qwilt/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Qwilt" data-provider-action="compare" data-provider-id="qwilt">Add to compare</button><a class="provider-source-link" href="https://qwilt.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/rocketcdn.svg" alt="RocketCDN logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>RocketCDN</h3><p class="provider-tagline">Managed CDN for WordPress workflows</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">RocketCDN provides automatic configuration and WordPress plugin integration, using Bunny.net for delivery according to its website. Assess its integration, support and service terms.</p>
+          <p class="provider-best"><strong>Best for · </strong>WordPress and CMS sites seeking simpler setup</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/rocketcdn/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare RocketCDN" data-provider-action="compare" data-provider-id="rocketcdn">Add to compare</button><a class="provider-source-link" href="https://rocketcdn.me/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark logo-dark"><img src="../../assets/logos/myra-security.svg" alt="Myra Security logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Myra Security</h3><p class="provider-tagline">German security platform with CDN</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">Myra Security offers CDN, DDoS mitigation and web application security, with its CDN materials emphasizing caching, availability and data-processing requirements.</p>
+          <p class="provider-best"><strong>Best for · </strong>Enterprise websites, commerce and workloads with data-processing constraints</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/myra-security/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Myra Security" data-provider-action="compare" data-provider-id="myra-security">Add to compare</button><a class="provider-source-link" href="https://www.myrasecurity.com/en/saasp/application-security/high-performance-cdn/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/ddos-guard.svg" alt="DDoS-Guard logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>DDoS-Guard</h3><p class="provider-tagline">DDoS protection with CDN and DNS</p></div></div>
+          <div class="provider-tags"><span>Security &amp; protection</span><span>Content delivery</span></div>
+          <p class="provider-intro">DDoS-Guard lists CDN and DNS in its L7-protected products, covering website proxy protection and protected hosting resources. It targets protection-led workloads.</p>
+          <p class="provider-best"><strong>Best for · </strong>Websites facing application-layer attacks and protected hosting workloads</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/ddos-guard/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare DDoS-Guard" data-provider-action="compare" data-provider-id="ddos-guard">Add to compare</button><a class="provider-source-link" href="https://ddos-guard.net/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/baishancloud.png" alt="白山云 Baishan Cloud logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>白山云 Baishan Cloud</h3><p class="provider-tagline">Download, dynamic-site and streaming delivery</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Security &amp; protection</span></div>
+          <p class="provider-intro">Baishan Cloud lists download acceleration, dynamic-site delivery, live and on-demand streaming, and SCDN security acceleration. Distinguish domestic services and overseas brands by contract.</p>
+          <p class="provider-best"><strong>Best for · </strong>Chinese internet workloads, download distribution and media platforms</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/baishancloud/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare 白山云 Baishan Cloud" data-provider-action="compare" data-provider-id="baishancloud">Add to compare</button><a class="provider-source-link" href="https://www.baishan.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-green">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/advancedhosting.svg" alt="Advanced Hosting logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Advanced Hosting</h3><p class="provider-tagline">CDN for video and static assets</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Advanced Hosting offers video delivery and Anycast CDN for smaller assets alongside infrastructure services, supporting joint origin and delivery planning.</p>
+          <p class="provider-best"><strong>Best for · </strong>Video sites, game assets and static file delivery</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/advancedhosting/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Advanced Hosting" data-provider-action="compare" data-provider-id="advancedhosting">Add to compare</button><a class="provider-source-link" href="https://advancedhosting.com/cdn-2026/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-purple">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/cloudimage.png" alt="Cloudimage logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Cloudimage</h3><p class="provider-tagline">Scaleflex image optimization and CDN</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Cloudimage is a Scaleflex media optimization product with URL-based image resizing, compression, format generation and CDN delivery for existing asset origins.</p>
+          <p class="provider-best"><strong>Best for · </strong>Commerce imagery, responsive sites and asset-management integrations</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/cloudimage/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Cloudimage" data-provider-action="compare" data-provider-id="cloudimage">Add to compare</button><a class="provider-source-link" href="https://www.cloudimage.io/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-orange">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/optimole.svg" alt="Optimole logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Optimole</h3><p class="provider-tagline">WordPress image processing and CDN</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span></div>
+          <p class="provider-intro">Optimole provides real-time image processing, adaptive sizing, format optimization and CDN delivery, with WordPress integration and media management.</p>
+          <p class="provider-best"><strong>Best for · </strong>WordPress image optimization, publications and online stores</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/optimole/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Optimole" data-provider-action="compare" data-provider-id="optimole">Add to compare</button><a class="provider-source-link" href="https://optimole.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-cyan">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/mux.svg" alt="Mux logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>Mux</h3><p class="provider-tagline">Video infrastructure for developers</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">Mux provides APIs for video ingestion, encoding, streaming and viewing analytics. This profile covers a video-delivery platform rather than a general website proxy CDN.</p>
+          <p class="provider-best"><strong>Best for · </strong>In-app video, on-demand content and developer video products</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/mux/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare Mux" data-provider-action="compare" data-provider-id="mux">Add to compare</button><a class="provider-source-link" href="https://www.mux.com/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article>
+        <article class="provider-card provider-tone-blue">
+          <div class="provider-card-top"><span class="provider-mark"><img src="../../assets/logos/api-video.svg" alt="api.video logo" width="86" height="48" loading="lazy"></span><div class="provider-card-heading"><h3>api.video</h3><p class="provider-tagline">Video APIs and delivery within OVHcloud</p></div></div>
+          <div class="provider-tags"><span>Content delivery</span><span>Programmable edge</span></div>
+          <p class="provider-intro">api.video provides video upload, management, playback and CDN delivery with OVHcloud co-branding on its official site, enabling API-based video integration.</p>
+          <p class="provider-best"><strong>Best for · </strong>Application video, educational content and embedded playback</p>
+          <span class="provider-source-date">Sources consulted: 2026-10-14</span>
+          <div class="provider-actions"><a class="provider-profile-button" href="../../en/providers/api-video/">View selection profile ↗</a><button type="button" class="compare-button" aria-pressed="false" aria-label="Compare api.video" data-provider-action="compare" data-provider-id="api-video">Add to compare</button><a class="provider-source-link" href="https://api.video/" target="_blank" rel="noreferrer noopener">Official source ↗</a></div>
+        </article></div>
+  <p class="source-disclaimer" data-i18n="directoryDisclaimer">Capabilities are summarized from official materials; confirm plan availability with vendors. Selection advice is editorial analysis, not independent performance or attack-protection verification.</p>
+  
+</section>
+  </main>
+  
+  <footer><a class="footer-brand" href="../../en/">CDN Bench<span> / </span>LAB</a><span data-i18n="footer">Built for your network. Not for the hype.</span><a href="#main" data-i18n="backTop">Back to top ↑</a></footer>
+</body>
+</html>

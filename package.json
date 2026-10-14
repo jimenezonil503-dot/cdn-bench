@@ -1,0 +1,18 @@
+{
+  "name": "cdn-bench",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A bilingual CDN provider directory, review blog, and browser-local benchmark lab",
+  "scripts": {
+    "admin:setup": "node tools/setup-admin.mjs",
+    "build": "node tools/build-pages.mjs",
+    "build:pages": "node tools/export-pages.mjs",
+    "start": "node tools/build-pages.mjs && node tools/serve.mjs",
+    "test": "node tools/build-pages.mjs && node --test tests/*.test.js",
+    "editorial:build": "node tools/build-editorial.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

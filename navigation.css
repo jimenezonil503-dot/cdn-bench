@@ -1,0 +1,38 @@
+:root{--site-width:1264px;--site-gutter:44px}
+.site-header.premium-header{position:sticky;top:18px;z-index:50;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:24px;width:calc(100% - 2 * var(--site-gutter));max-width:var(--site-width);min-height:82px;margin:20px auto 18px;padding:15px 22px;background:rgba(255,255,252,.94);border:1px solid #dce4d7;border-radius:18px;box-shadow:0 4px 6px #173b2903,0 14px 40px #173b2908;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.premium-header .brand{gap:11px;font-size:24px;letter-spacing:-1px;font-weight:750;flex:none;color:#183c2d}
+.premium-header .brand-symbol{width:43px;height:43px;border-radius:12px;background:#1b402e;color:#d5e9b8;box-shadow:inset 0 1px 0 #ffffff20}
+.premium-header .brand-symbol svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.1}
+.premium-header .brand-wordmark{display:flex;flex-direction:column;line-height:1.25;gap:4px}
+.premium-header .brand-wordmark>small{font:500 7px/1.4 "Segoe UI",sans-serif;letter-spacing:1.55px;color:#7a8b78}
+.premium-header .brand-light{font-weight:400}.premium-header .brand-tag{font-size:7px;letter-spacing:1px;border:1px solid #d2dec8;background:#f2f6ed;border-radius:4px;padding:3px 4px;margin-left:8px;vertical-align:middle}
+.premium-header .header-nav{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;flex-basis:auto;gap:3px;padding:5px;margin:0;width:auto;border:1px solid #e8ede2;border-radius:11px;background:#f3f5ef;font-size:13px;font-weight:500;color:#5c6c60}
+.premium-header .header-nav a{position:relative;display:flex;align-items:center;gap:8px;padding:10px 13px;line-height:1.3;border-radius:7px;white-space:nowrap;transition:background .2s,color .2s,box-shadow .2s}
+.premium-header .header-nav a::after{display:none}.premium-header .header-nav a:hover{background:#e8eee1;color:#1a402d}
+.premium-header .header-nav a[aria-current]{background:#fff;color:#1c422f;box-shadow:0 1px 4px #193d2910,inset 0 0 0 1px #dde5d6;font-weight:650}
+.premium-header .header-nav a[aria-current]::before{content:"";width:5px;height:5px;border-radius:50%;background:#64874e;flex:none}
+.premium-header .header-actions{display:flex;align-items:center;gap:14px;margin:0;flex:none}
+.premium-header .language-button{display:flex;align-items:center;justify-content:center;min-height:42px;padding:8px 4px;border:0;background:transparent;border-radius:6px;color:#667761;font-size:11px;font-weight:600;letter-spacing:.7px;white-space:nowrap}
+.premium-header .language-button:hover{color:#173f2a;background:#f2f5ed}
+.premium-header .contact-button{display:flex;align-items:center;justify-content:center;gap:20px;min-height:43px;padding:11px 17px;border:1px solid #1d432f;border-radius:9px;background:#1d432f;color:#f6faef;font-size:12px;font-weight:550;white-space:nowrap;transition:background .2s,box-shadow .2s}
+.premium-header .contact-button:hover{background:#30573a;box-shadow:0 4px 12px #1d432f20}.premium-header .contact-button svg{width:17px;height:17px;fill:none;stroke:#d5e9b8;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.premium-header .menu-toggle,.premium-header .header-nav .mobile-contact,.premium-header .mobile-nav-note{display:none}
+.premium-header a:focus-visible,.premium-header button:focus-visible{outline:2px solid #608244;outline-offset:4px}
+html{scroll-padding-top:125px}.skip-link{z-index:80}
+@media(max-width:1180px){:root{--site-gutter:28px}.site-header.premium-header{padding:14px 18px;gap:15px}.premium-header .brand{font-size:22px}.premium-header .brand-wordmark>small{font-size:6px;letter-spacing:1.25px}.premium-header .header-nav a{padding:10px 10px}.premium-header .header-actions{gap:12px}.premium-header .contact-button{gap:13px;padding:11px 14px}}
+@media(max-width:1000px){.site-header.premium-header{top:12px;min-height:76px;margin:14px auto 18px;border-radius:15px;padding:14px 18px}.premium-header .header-nav{display:none;position:absolute;top:calc(100% + 10px);left:0;right:0;width:auto;padding:16px;flex-basis:auto;flex-direction:column;align-items:stretch;gap:5px;background:#fffffc;border:1px solid #dce4d7;border-radius:15px;box-shadow:0 22px 45px #173b2918}.premium-header.menu-open .header-nav{display:flex}.premium-header .header-nav a{padding:14px 16px;font-size:15px;line-height:1.5}.premium-header .header-nav a[aria-current]{background:#eef3e7;box-shadow:none}.premium-header .header-nav .mobile-contact{display:flex;justify-content:space-between;margin-top:8px;border-top:1px solid #e3e9db;border-radius:0;padding-top:18px;color:#254a32}.premium-header .mobile-nav-note{display:block;padding:18px 16px 6px;font-size:8px;letter-spacing:1.7px;color:#8c9b85}.premium-header .header-actions{margin-left:auto;gap:16px}.premium-header .menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;width:43px;height:43px;padding:0;border:1px solid #dce4d5;border-radius:9px;background:#f6f8f1;color:#24432f}.premium-header .menu-toggle span{display:block;width:17px;height:1px;background:currentColor;transition:transform .2s}.premium-header.menu-open .menu-toggle span:first-child{transform:translateY(3.5px) rotate(45deg)}.premium-header.menu-open .menu-toggle span:last-child{transform:translateY(-3.5px) rotate(-45deg)}}
+@media(max-width:600px){:root{--site-gutter:16px}.site-header.premium-header{top:10px;margin:12px auto 16px;padding:12px 14px;min-height:72px;gap:10px}.premium-header .brand{font-size:22px;gap:9px}.premium-header .brand-symbol{width:38px;height:38px;border-radius:10px}.premium-header .brand-symbol svg{width:26px;height:26px}.premium-header .brand-wordmark>small{font-size:5.5px;letter-spacing:1.1px}.premium-header .brand-tag{display:none}.premium-header .header-actions{gap:12px}.premium-header .header-actions>.contact-button{display:none}.premium-header .language-button{font-size:10px;min-height:38px}.premium-header .menu-toggle{width:38px;height:38px}}
+@media(prefers-reduced-motion:reduce){.premium-header *{transition:none!important}html{scroll-behavior:auto}}
+
+/* All public pages share the header's outer width and responsive gutters. */
+body > #main,
+body > .site-ad-slot,
+body > footer:not(.provider-source){width:calc(100% - 2 * var(--site-gutter));max-width:var(--site-width);margin-inline:auto}
+body > #main,
+body > footer:not(.provider-source){padding-inline:0}
+
+/* Detail-page containers fill the same frame as directory and journal pages. */
+body > #main .article-reader{width:100%;max-width:none;padding-inline:0}
+body > #main .article-reader > :is(.article-header,.article-byline,.article-body,.article-sources,.article-toc,.article-related,.article-breadcrumb){max-width:none}
+body > #main :is(.provider-article,.provider-related){width:100%;max-width:none}
+body > #main :is(.provider-related,.provider-breadcrumb){padding-inline:0}
