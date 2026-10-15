@@ -22,6 +22,31 @@ const routes = [
   ...ARTICLES.flatMap(item => [`article/${item.id}/`, `en/article/${item.id}/`]),
 ];
 
+const escapeHtml = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+
+async function writeLegacyRedirects(destination, siteUrl) {
+  // The original project site used /cdn-bench/. Keep every published route usable
+  // when the same site is deployed at the account root.
+  if (new URL(siteUrl).pathname !== '/') return 0;
+  await writeFile(resolve(destination, 'legacy-redirect.js'), `const target = new URL(document.currentScript.dataset.destination, location.origin);
+target.search = location.search;
+target.hash = location.hash;
+location.replace(target.href);
+`);
+  for (const route of routes) {
+    const english = route.startsWith('en/');
+    const target = `${siteUrl}/${route}`;
+    const label = english ? 'Continue to this page' : '继续访问此页面';
+    const title = english ? 'Opening page · CDN Bench' : '正在打开页面 · CDN Bench';
+    const html = `<!doctype html>
+<html lang="${english ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><link rel="canonical" href="${escapeHtml(target)}"><script src="/legacy-redirect.js" data-destination="${escapeHtml(target)}"></script><meta http-equiv="refresh" content="0;url=${escapeHtml(target)}"><title>${title}</title></head><body><main><p><a href="${escapeHtml(target)}">${label} →</a></p></main></body></html>\n`;
+    const filename = resolve(destination, 'cdn-bench', route, 'index.html');
+    await mkdir(dirname(filename), { recursive: true });
+    await writeFile(filename, html);
+  }
+  return routes.length;
+}
+
 export async function exportPages({ outputRoot, siteUrl }) {
   const destination = resolve(outputRoot);
   const normalizedUrl = normalizeSiteUrl(siteUrl);
@@ -45,7 +70,8 @@ export async function exportPages({ outputRoot, siteUrl }) {
   }
   const settingsPath = resolve(destination, 'site-settings.js');
   await writeFile(settingsPath, `export const contactSettings = null;\nexport const advertisingSettings = ${JSON.stringify(publicAdvertising(advertisingSettings)).replaceAll('<', '\\u003c')};\n`);
-  return { pages: routes.length, assets: assets.size };
+  const redirects = await writeLegacyRedirects(destination, normalizedUrl);
+  return { pages: routes.length, assets: assets.size, redirects };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -56,7 +82,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (dirname(destination) !== resolve(root)) throw new Error('Invalid export destination.');
     await rm(destination, { recursive: true, force: true });
     await rename(staging, destination);
-    console.log(`Exported ${result.pages} pages and ${result.assets} assets to _site.`);
+    console.log(`Exported ${result.pages} pages, ${result.assets} assets and ${result.redirects} legacy redirects to _site.`);
   } finally {
     if (dirname(staging) !== resolve(root)) throw new Error('Invalid export staging directory.');
     await rm(staging, { recursive: true, force: true });

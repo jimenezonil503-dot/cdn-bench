@@ -64,6 +64,8 @@ node tools/build-pages.mjs
 
 GitHub Pages 使用用户站点仓库 `jimenezonil503-dot.github.io`，网址为 https://jimenezonil503-dot.github.io/ 。`.github/workflows/pages.yml` 自动部署：仓库 Settings → Pages 的 Source 选择 GitHub Actions；推送到 `main` 后先运行检查，再通过 `tools/export-pages.mjs` 生成 `_site` 并部署。`SITE_URL` 使用根地址，不附加仓库路径，自动生成 canonical、双语互链和 sitemap。
 
+导出时为原 `/cdn-bench/` 下的全部公开页面生成兼容跳转，包括中英文栏目、厂商详情和文章。旧地址会进入根地址下的对应页面，并保留查询参数和页内锚点；禁用 JavaScript 时也有 HTML 跳转及可点击链接。兼容页面标记为不收录且指向新 canonical，不进入 sitemap，不重新开放已移除的联系页或后台。
+
 中英文桌面及手机页面均已移除“联系我们”入口、联系表单页面和文章纠错联系链接，不进行外站跳转。`/contact/` 与 `/en/contact/` 不再生成，也不出现在 sitemap 中。
 
 Pages 部署包只包含公开页面、前端脚本和当前公开内容使用的图片，不包含后台界面、服务器代码、测试、未使用的广告素材或 `.admin/`。后台凭据、访客留言和私有草稿不得提交到 GitHub，`.gitignore` 已排除整个 `.admin/` 目录。公开仓库中的后台源码供后续服务器部署使用，GitHub Pages 不运行后台接口。
