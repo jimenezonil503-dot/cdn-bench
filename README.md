@@ -62,7 +62,7 @@ node tools/build-pages.mjs
 
 厂商官网链接使用官方 HTTPS 入口。AWS、Google Cloud、Bunny.net 等服务可能自行重定向到官方的非 www 域名；本站不能控制对方的跳转策略。Azure 使用 Microsoft 的 www 官网入口，跳转到 Azure 官网。Logo 是厂商或母品牌的官方标识，来源见 `assets/logos/README.md`。
 
-GitHub Pages 使用 `.github/workflows/pages.yml` 自动部署。仓库 Settings → Pages 的 Source 选择 GitHub Actions；推送到 `main` 后先运行检查，再通过 `tools/export-pages.mjs` 生成 `_site` 并部署。`SITE_URL` 使用账号的 GitHub Pages 地址及仓库路径，自动生成 canonical、双语互链和 sitemap。
+GitHub Pages 使用用户站点仓库 `jimenezonil503-dot.github.io`，网址为 https://jimenezonil503-dot.github.io/ 。`.github/workflows/pages.yml` 自动部署：仓库 Settings → Pages 的 Source 选择 GitHub Actions；推送到 `main` 后先运行检查，再通过 `tools/export-pages.mjs` 生成 `_site` 并部署。`SITE_URL` 使用根地址，不附加仓库路径，自动生成 canonical、双语互链和 sitemap。
 
 中英文桌面及手机页面均已移除“联系我们”入口、联系表单页面和文章纠错联系链接，不进行外站跳转。`/contact/` 与 `/en/contact/` 不再生成，也不出现在 sitemap 中。
 
@@ -71,7 +71,7 @@ Pages 部署包只包含公开页面、前端脚本和当前公开内容使用�
 本地生成同一部署包（PowerShell）：
 
 ```powershell
-$env:SITE_URL = 'https://jimenezonil503-dot.github.io/cdn-bench'
+$env:SITE_URL = 'https://jimenezonil503-dot.github.io'
 node tools/export-pages.mjs
 ```
 
@@ -121,7 +121,7 @@ CDN Bench is a dependency-free bilingual CDN review and selection platform with 
 
 Measurements run in the browser directly against public CDN URLs. Response time is observed time to response headers, not ICMP Ping. Effective throughput uses decoded bytes over complete request duration, not wire bandwidth. Only successful requests contribute to medians. Network/CORS failures, timeouts, size limits and user cancellations remain explicit. Results are not uploaded; CDN operators still see normal request metadata, including the user's IP.
 
-After preview approval, generate the static pages and publish the directory as a GitHub Pages project site. Set `SITE_URL` to the actual site root, including the repository path for project sites, to generate canonical/hreflang links and a 146-page sitemap for the initial content. Generated files need no runtime build or dependency installation. Search indexing or ranking is not guaranteed.
+The GitHub Pages user site is published from `jimenezonil503-dot.github.io` at https://jimenezonil503-dot.github.io/ . Set `SITE_URL` to this root address without a repository path to generate canonical/hreflang links and the sitemap. Generated files need no runtime build or dependency installation. Search indexing or ranking is not guaranteed.
 
 ### 长文与正文引用（2026-10-14）
 
